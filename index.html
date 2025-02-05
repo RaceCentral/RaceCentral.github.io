@@ -11,7 +11,7 @@
   
   <!-- CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Use a relative path so the CSS file is found -->
+  <!-- Use relative path -->
   <link href="src/styles/main.css" rel="stylesheet" />
 </head>
 <body>
@@ -32,40 +32,28 @@
   </header>
 
   <main class="container">
-    <!-- Upcoming Event Card -->
-    <section id="upcoming-event" class="upcoming-event fade-in">
-      <div class="row align-items-center">
-        <div class="col-md-8">
-          <h2 class="upcoming-title mb-3">Next Race</h2>
-          <div class="upcoming-details"></div>
+    <!-- Upcoming Races Section (Next Race for all three series) -->
+    <section id="upcoming-races" class="upcoming-event fade-in">
+      <div class="row">
+        <div class="col-md-4">
+          <h3>Next Formula 1 Race</h3>
+          <div class="upcoming-details" id="nextF1"></div>
+          <div class="countdown" id="countdownF1"></div>
         </div>
-        <div class="col-md-4 text-center">
-          <div class="countdown" id="countdown"></div>
+        <div class="col-md-4">
+          <h3>Next IndyCar Race</h3>
+          <div class="upcoming-details" id="nextIndy"></div>
+          <div class="countdown" id="countdownIndy"></div>
+        </div>
+        <div class="col-md-4">
+          <h3>Next NASCAR Race</h3>
+          <div class="upcoming-details" id="nextNascar"></div>
+          <div class="countdown" id="countdownNascar"></div>
         </div>
       </div>
     </section>
 
-    <!-- Quick Stats -->
-    <div class="row mb-4">
-      <div class="col-md-4">
-        <div class="stat-card">
-          <h3>F1 Leader</h3>
-          <div id="f1-leader" class="stat-value"></div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="stat-card">
-          <h3>IndyCar Leader</h3>
-          <div id="indy-leader" class="stat-value"></div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="stat-card">
-          <h3>NASCAR Leader</h3>
-          <div id="nascar-leader" class="stat-value"></div>
-        </div>
-      </div>
-    </div>
+    <!-- (Leader Section Removed) -->
 
     <!-- Search -->
     <div class="search-container mb-4">
@@ -175,24 +163,24 @@
       </div>
     </div>
 
-    <!-- Latest News Section -->
+    <!-- Racing News Section -->
     <section class="news-section mt-5">
       <h2 class="section-title">Latest Racing News</h2>
       <div class="row g-4 mt-3" id="newsGrid"></div>
     </section>
 
-    <!-- Past Results Section -->
+    <!-- 2024 Season Review (All collapsed by default) -->
     <section class="past-results mt-5">
       <h2 class="section-title">2024 Season Review</h2>
       <div class="accordion mt-3" id="pastResultsAccordion">
         <!-- F1 Past Results -->
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1PastResults">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f1PastResults">
               Formula 1
             </button>
           </h2>
-          <div id="f1PastResults" class="accordion-collapse collapse show" data-bs-parent="#pastResultsAccordion">
+          <div id="f1PastResults" class="accordion-collapse collapse" data-bs-parent="#pastResultsAccordion">
             <div class="accordion-body">
               <h4>Championship Standings</h4>
               <table class="table" id="f1PastStandingsTable">
@@ -377,13 +365,13 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Use a relative path in the module import -->
+  <!-- Use relative path for module import -->
   <script type="module">
     import { scheduleData, resultsData, parseEventDate, enhanceEventData } from './src/js/data.js';
 
     // --- Helper Functions ---
 
-    // Populate schedule tables
+    // Populate schedule tables (unchanged)
     function populateTable(tableId, events, columns = ['date', 'race', 'circuit', 'time', 'city']) {
       const tbody = document.getElementById(tableId);
       tbody.innerHTML = '';
@@ -492,46 +480,84 @@
       }
     }
 
-    // Initialize the upcoming event using the enhanced event data
-    function initializeUpcomingEvent(allEvents) {
+    // Instead of one upcoming event, initialize upcoming races for each series
+    function initializeUpcomingRaces() {
       const now = new Date();
-      const nextEvent = allEvents.find(event => event.start > now);
-      if (nextEvent) {
-        const upcomingDetails = document.querySelector('.upcoming-details');
-        upcomingDetails.innerHTML = `
-          <h3>${nextEvent.race}</h3>
-          <p class="series-badge">${nextEvent.series}</p>
-          <p>${nextEvent.circuit || nextEvent.venue}</p>
-          <p>${nextEvent.date} ${nextEvent.time ? `at ${nextEvent.time}` : ''}</p>
+      const nextF1 = scheduleData.f1Events.filter(e => e.start > now).sort((a, b) => a.start - b.start)[0];
+      const nextIndy = scheduleData.indyEvents.filter(e => e.start > now).sort((a, b) => a.start - b.start)[0];
+      const nascarEvents = [...scheduleData.nascarRegularEvents, ...scheduleData.nascarPlayoffEvents];
+      const nextNascar = nascarEvents.filter(e => e.start > now).sort((a, b) => a.start - b.start)[0];
+
+      if (nextF1) {
+        document.getElementById('nextF1').innerHTML = `
+          <p>${nextF1.race}</p>
+          <p class="series-badge">${nextF1.series}</p>
+          <p>${nextF1.circuit || nextF1.venue}</p>
+          <p>${nextF1.date} ${nextF1.time ? `at ${nextF1.time}` : ''}</p>
         `;
-        startCountdown('countdown', nextEvent.start);
+        startCountdown('countdownF1', nextF1.start);
+      }
+      if (nextIndy) {
+        document.getElementById('nextIndy').innerHTML = `
+          <p>${nextIndy.race}</p>
+          <p class="series-badge">${nextIndy.series}</p>
+          <p>${nextIndy.venue}</p>
+          <p>${nextIndy.date} ${nextIndy.time ? `at ${nextIndy.time}` : ''}</p>
+        `;
+        startCountdown('countdownIndy', nextIndy.start);
+      }
+      if (nextNascar) {
+        document.getElementById('nextNascar').innerHTML = `
+          <p>${nextNascar.race}</p>
+          <p class="series-badge">${nextNascar.series}</p>
+          <p>${nextNascar.venue}</p>
+          <p>${nextNascar.date} ${nextNascar.time ? `at ${nextNascar.time}` : ''}</p>
+        `;
+        startCountdown('countdownNascar', nextNascar.start);
       }
     }
 
-    // Fetch news (replace YOUR_NEWS_API_ENDPOINT with a real endpoint)
+    // Instead of fetching from an API that might not return data,
+    // use dummy news data.
     async function fetchNews() {
       const newsGrid = document.getElementById('newsGrid');
-      try {
-        const response = await fetch('YOUR_NEWS_API_ENDPOINT');
-        const data = await response.json();
-        newsGrid.innerHTML = data.articles.slice(0, 6).map(article => `
-          <div class="col-md-4">
-            <div class="news-card">
-              <h5>${article.title}</h5>
-              <p>${article.description}</p>
-              <a href="${article.url}" target="_blank" class="btn btn-outline-primary btn-sm">Read More</a>
-            </div>
+      const dummyNews = [
+        {
+          title: "New Racing Tech Innovations",
+          description: "Latest breakthroughs in racing technology are set to revolutionize the sport.",
+          url: "#"
+        },
+        {
+          title: "F1 Season Preview",
+          description: "Experts share insights ahead of the upcoming Formula 1 season.",
+          url: "#"
+        },
+        {
+          title: "IndyCar Update",
+          description: "IndyCar teams ramp up preparations for a thrilling season.",
+          url: "#"
+        },
+        {
+          title: "NASCAR Highlights",
+          description: "Catch up on the most exciting moments from NASCAR races.",
+          url: "#"
+        }
+      ];
+      newsGrid.innerHTML = dummyNews.map(article => `
+        <div class="col-md-4">
+          <div class="news-card">
+            <h5>${article.title}</h5>
+            <p>${article.description}</p>
+            <a href="${article.url}" target="_blank" class="btn btn-outline-primary btn-sm">Read More</a>
           </div>
-        `).join('');
-      } catch (error) {
-        newsGrid.innerHTML = '<p>Unable to load news at this time.</p>';
-      }
+        </div>
+      `).join('');
     }
 
     // --- Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
-      // Enhance all events with a proper Date object (for countdowns, etc.)
-      const allEvents = enhanceEventData();
+      // Enhance events (adds proper Date objects)
+      enhanceEventData();
 
       // Populate schedule tables
       populateTable('f1-table-body', scheduleData.f1Events, ['date', 'race', 'circuit', 'time', 'city']);
@@ -549,15 +575,13 @@
       populateResults('indyPastResultsTable', resultsData.indyPast.results);
       populateResults('nascarPastResultsTable', resultsData.nascarPast.results);
 
-      // Initialize the upcoming event
-      initializeUpcomingEvent(allEvents);
+      // Initialize upcoming races for each series
+      initializeUpcomingRaces();
 
       // Initialize theme from localStorage
       if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
       }
-
-      // Theme toggle
       document.getElementById('themeToggle').addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -582,7 +606,7 @@
         document.getElementById('playoffs-season').style.display = 'block';
       });
 
-      // Fetch news
+      // Fetch news using dummy data
       fetchNews();
     });
   </script>

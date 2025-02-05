@@ -7,7 +7,7 @@
   <!-- Bootstrap CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* Custom styling for the upcoming event box */
+    /* Styling for the upcoming event section */
     .upcoming-event {
       background-color: #f8f9fa;
       padding: 1rem;
@@ -15,39 +15,55 @@
       border: 2px dashed #007bff;
       border-radius: 5px;
     }
+    /* Dark mode styling */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    body.dark-mode .upcoming-event {
+      background-color: #333;
+      border-color: #66b0ff;
+    }
+    body.dark-mode .table {
+      color: #e0e0e0;
+    }
+    body.dark-mode .list-group-item {
+      background-color: #333;
+      border-color: #444;
+      color: #e0e0e0;
+    }
   </style>
 </head>
 <body>
   <div class="container my-4">
-    <header class="mb-4">
-      <h1 class="text-center">2025 Racing Schedules</h1>
-    </header>
+    <!-- Header with Dark Mode Toggle -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1>2025 Racing Schedules</h1>
+      <button id="themeToggle" class="btn btn-secondary">Toggle Dark Mode</button>
+    </div>
+
+    <!-- Upcoming Event Section with Countdown -->
+    <div id="upcoming-event" class="upcoming-event text-center"></div>
     
-    <!-- Upcoming event section -->
-    <div id="upcoming-event" class="upcoming-event text-center">
-      <!-- The next upcoming event info will be injected here -->
+    <!-- Global Search Filter -->
+    <div class="mb-3">
+      <input type="text" id="searchInput" class="form-control" placeholder="Search events...">
     </div>
     
-    <!-- Nav tabs for different series -->
+    <!-- Schedule Tabs -->
     <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="f1-tab" data-bs-toggle="tab" data-bs-target="#f1" type="button" role="tab" aria-controls="f1" aria-selected="true">
-          Formula 1
-        </button>
+        <button class="nav-link active" id="f1-tab" data-bs-toggle="tab" data-bs-target="#f1" type="button" role="tab" aria-controls="f1" aria-selected="true">Formula 1</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="indy-tab" data-bs-toggle="tab" data-bs-target="#indy" type="button" role="tab" aria-controls="indy" aria-selected="false">
-          IndyCar
-        </button>
+        <button class="nav-link" id="indy-tab" data-bs-toggle="tab" data-bs-target="#indy" type="button" role="tab" aria-controls="indy" aria-selected="false">IndyCar</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="nascar-tab" data-bs-toggle="tab" data-bs-target="#nascar" type="button" role="tab" aria-controls="nascar" aria-selected="false">
-          NASCAR Cup
-        </button>
+        <button class="nav-link" id="nascar-tab" data-bs-toggle="tab" data-bs-target="#nascar" type="button" role="tab" aria-controls="nascar" aria-selected="false">NASCAR Cup</button>
       </li>
     </ul>
     
-    <!-- Tab content -->
+    <!-- Tab Contents -->
     <div class="tab-content" id="scheduleTabsContent">
       <!-- Formula 1 Tab -->
       <div class="tab-pane fade show active" id="f1" role="tabpanel" aria-labelledby="f1-tab">
@@ -62,7 +78,7 @@
               </tr>
             </thead>
             <tbody id="f1-table-body">
-              <!-- Formula 1 events will be injected here -->
+              <!-- F1 events will be injected here -->
             </tbody>
           </table>
         </div>
@@ -125,182 +141,217 @@
         </div>
       </div>
     </div>
+    
+    <!-- Driver Standings & News Section -->
+    <section id="additional-info" class="mt-5">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Driver Standings (Formula 1)</h3>
+          <table class="table table-striped" id="driverStandingsTable">
+            <thead>
+              <tr>
+                <th>Position</th>
+                <th>Driver</th>
+                <th>Points</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dummy standings -->
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-6">
+          <h3>Latest News</h3>
+          <ul id="newsList" class="list-group">
+            <!-- Dummy news headlines -->
+          </ul>
+        </div>
+      </div>
+    </section>
   </div>
-
+  
+  <!-- Event Detail Modal -->
+  <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Event Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p id="modalEventSeries"></p>
+          <p id="modalEventDate"></p>
+          <p id="modalEventRace"></p>
+          <p id="modalEventLocation"></p>
+          <p id="modalEventTime"></p>
+          <div id="modalCountdown" class="mb-3"></div>
+          <!-- Add to Calendar Button -->
+          <button id="addToCalendarBtn" class="btn btn-primary mb-2">Add to Calendar</button>
+          <!-- Weather Forecast Section -->
+          <div id="weatherSection" class="mb-2">
+            <button id="fetchWeatherBtn" class="btn btn-info">Show Weather Forecast</button>
+            <div id="weatherResult" class="mt-2"></div>
+          </div>
+          <!-- Social Sharing Buttons -->
+          <div id="socialShare">
+            <p>Share this event:</p>
+            <a href="#" id="shareTwitter" target="_blank" class="btn btn-outline-primary btn-sm">Twitter</a>
+            <a href="#" id="shareFacebook" target="_blank" class="btn btn-outline-primary btn-sm">Facebook</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    /*******************************
-     * Data and Helper Functions
-     *******************************/
+    /*********************************
+     * CONFIG & DATA DEFINITIONS
+     *********************************/
+    // To enable live weather data, insert your OpenWeatherMap API key below.
+    const OPENWEATHER_API_KEY = ""; // <-- Add your API key here
     
-    /**
-     * Helper function to parse date strings like "Mar 13-15" or "Mar 2".
-     * We assume the first day is the start day and use the year 2025.
-     */
-    function parseEventDate(dateStr) {
-      // Split the string (e.g., "Mar 13-15" -> ["Mar", "13-15"])
-      const parts = dateStr.split(" ");
-      const monthStr = parts[0];
-      const dayPart = parts[1]; // Could be "13-15" or "2"
-      // Use the first number as the day
-      let day = dayPart.split("-")[0];
-      const months = {
-        "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3,
-        "May": 4, "Jun": 5, "Jul": 6, "Aug": 7,
-        "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
-      };
-      const month = months[monthStr];
-      return new Date(2025, month, parseInt(day));
-    }
-    
-    // Formula 1 events
+    // For demonstration, the Formula 1 events now include a "city" property (for weather)
     const f1Events = [
-      { date: "Mar 13-15", race: "Australian GP", circuit: "Melbourne Grand Prix Circuit", time: "9:00 PM" },
-      { date: "Mar 20-23", race: "Chinese GP", circuit: "Shanghai International Circuit", time: "12:00 AM" },
-      { date: "Apr 3-5",  race: "Japanese GP", circuit: "Suzuka International Racing Course", time: "10:00 PM" },
-      { date: "Apr 11-13", race: "Bahrain GP", circuit: "Bahrain International Circuit", time: "8:00 AM" },
-      { date: "Apr 18-20", race: "Saudi Arabian GP", circuit: "Jeddah Street Circuit", time: "10:00 AM" },
-      { date: "May 2-4",   race: "Miami GP", circuit: "Miami International Autodrome", time: "1:00 PM" },
-      { date: "May 16-18", race: "Emilia Romagna GP", circuit: "Autodromo Enzo e Dino Ferrari", time: "6:00 AM" },
-      { date: "May 23-25", race: "Monaco GP", circuit: "Circuit de Monaco", time: "6:00 AM" },
-      { date: "May 30-Jun 1", race: "Spanish GP", circuit: "Circuit de Barcelona-Catalunya", time: "6:00 AM" },
-      { date: "Jun 13-15", race: "Canadian GP", circuit: "Circuit Gilles-Villeneuve", time: "11:00 AM" },
-      { date: "Jun 27-29", race: "Austrian GP", circuit: "Red Bull Ring", time: "6:00 AM" },
-      { date: "Jul 4-6", race: "British GP", circuit: "Silverstone Circuit", time: "7:00 AM" },
-      { date: "Jul 25-27", race: "Belgian GP", circuit: "Circuit de Spa-Francorchamps", time: "6:00 AM" },
-      { date: "Aug 1-3", race: "Hungarian GP", circuit: "Hungaroring", time: "6:00 AM" },
-      { date: "Aug 29-31", race: "Dutch GP", circuit: "Circuit Park Zandvoort", time: "6:00 AM" },
-      { date: "Sep 5-7", race: "Italian GP", circuit: "Autodromo Nazionale Monza", time: "6:00 AM" },
-      { date: "Sep 19-21", race: "Azerbaijan GP", circuit: "Baku City Circuit", time: "4:00 AM" },
-      { date: "Oct 3-5", race: "Singapore GP", circuit: "Marina Bay Street Circuit", time: "5:00 AM" },
-      { date: "Oct 17-19", race: "United States GP", circuit: "Circuit of the Americas", time: "12:00 PM" },
-      { date: "Oct 24-26", race: "Mexico City GP", circuit: "Autodromo Hermanos Rodriguez", time: "1:00 PM" },
-      { date: "Nov 7-9", race: "São Paulo GP", circuit: "Autodromo Jose Carlos Pace", time: "9:00 AM" },
-      { date: "Nov 20-22", race: "Las Vegas GP", circuit: "Las Vegas Street Circuit", time: "8:00 PM" },
-      { date: "Nov 28-30", race: "Qatar GP", circuit: "Losail International Circuit", time: "8:00 AM" },
-      { date: "Dec 5-7", race: "Abu Dhabi GP", circuit: "Yas Marina Circuit", time: "5:00 AM" }
+      { date: "Mar 13-15", race: "Australian GP", circuit: "Melbourne Grand Prix Circuit", time: "9:00 PM", series: "Formula 1", city: "Melbourne" },
+      { date: "Mar 20-23", race: "Chinese GP", circuit: "Shanghai International Circuit", time: "12:00 AM", series: "Formula 1", city: "Shanghai" },
+      { date: "Apr 3-5",  race: "Japanese GP", circuit: "Suzuka International Racing Course", time: "10:00 PM", series: "Formula 1", city: "Suzuka" },
+      { date: "Apr 11-13", race: "Bahrain GP", circuit: "Bahrain International Circuit", time: "8:00 AM", series: "Formula 1", city: "Manama" },
+      { date: "Apr 18-20", race: "Saudi Arabian GP", circuit: "Jeddah Street Circuit", time: "10:00 AM", series: "Formula 1", city: "Jeddah" },
+      { date: "May 2-4",  race: "Miami GP", circuit: "Miami International Autodrome", time: "1:00 PM", series: "Formula 1", city: "Miami" },
+      { date: "May 16-18", race: "Emilia Romagna GP", circuit: "Autodromo Enzo e Dino Ferrari", time: "6:00 AM", series: "Formula 1", city: "Imola" },
+      { date: "May 23-25", race: "Monaco GP", circuit: "Circuit de Monaco", time: "6:00 AM", series: "Formula 1", city: "Monte Carlo" },
+      { date: "May 30-Jun 1", race: "Spanish GP", circuit: "Circuit de Barcelona-Catalunya", time: "6:00 AM", series: "Formula 1", city: "Barcelona" },
+      { date: "Jun 13-15", race: "Canadian GP", circuit: "Circuit Gilles-Villeneuve", time: "11:00 AM", series: "Formula 1", city: "Montreal" },
+      { date: "Jun 27-29", race: "Austrian GP", circuit: "Red Bull Ring", time: "6:00 AM", series: "Formula 1", city: "Spielberg" },
+      { date: "Jul 4-6", race: "British GP", circuit: "Silverstone Circuit", time: "7:00 AM", series: "Formula 1", city: "Silverstone" },
+      { date: "Jul 25-27", race: "Belgian GP", circuit: "Circuit de Spa-Francorchamps", time: "6:00 AM", series: "Formula 1", city: "Spa" },
+      { date: "Aug 1-3", race: "Hungarian GP", circuit: "Hungaroring", time: "6:00 AM", series: "Formula 1", city: "Budapest" },
+      { date: "Aug 29-31", race: "Dutch GP", circuit: "Circuit Park Zandvoort", time: "6:00 AM", series: "Formula 1", city: "Zandvoort" },
+      { date: "Sep 5-7", race: "Italian GP", circuit: "Autodromo Nazionale Monza", time: "6:00 AM", series: "Formula 1", city: "Monza" },
+      { date: "Sep 19-21", race: "Azerbaijan GP", circuit: "Baku City Circuit", time: "4:00 AM", series: "Formula 1", city: "Baku" },
+      { date: "Oct 3-5", race: "Singapore GP", circuit: "Marina Bay Street Circuit", time: "5:00 AM", series: "Formula 1", city: "Singapore" },
+      { date: "Oct 17-19", race: "United States GP", circuit: "Circuit of the Americas", time: "12:00 PM", series: "Formula 1", city: "Austin" },
+      { date: "Oct 24-26", race: "Mexico City GP", circuit: "Autodromo Hermanos Rodriguez", time: "1:00 PM", series: "Formula 1", city: "Mexico City" },
+      { date: "Nov 7-9", race: "São Paulo GP", circuit: "Autodromo Jose Carlos Pace", time: "9:00 AM", series: "Formula 1", city: "São Paulo" },
+      { date: "Nov 20-22", race: "Las Vegas GP", circuit: "Las Vegas Street Circuit", time: "8:00 PM", series: "Formula 1", city: "Las Vegas" },
+      { date: "Nov 28-30", race: "Qatar GP", circuit: "Losail International Circuit", time: "8:00 AM", series: "Formula 1", city: "Doha" },
+      { date: "Dec 5-7", race: "Abu Dhabi GP", circuit: "Yas Marina Circuit", time: "5:00 AM", series: "Formula 1", city: "Abu Dhabi" }
     ];
     
     // IndyCar events
     const indyEvents = [
-      { date: "Mar 2", race: "Grand Prix of St. Petersburg", venue: "Streets of St. Petersburg", network: "FOX" },
-      { date: "Mar 23", race: "Grand Prix of Thermal", venue: "The Thermal Club", network: "FOX" },
-      { date: "Apr 13", race: "Grand Prix of Long Beach", venue: "Streets of Long Beach", network: "FOX" },
-      { date: "May 4", race: "Grand Prix of Alabama", venue: "Barber Motorsports Park", network: "FOX" },
-      { date: "May 10", race: "Grand Prix of Indianapolis", venue: "Indianapolis Motor Speedway Road Course", network: "FOX" },
-      { date: "May 25", race: "Indianapolis 500", venue: "Indianapolis Motor Speedway", network: "FOX" },
-      { date: "Jun 1", race: "Grand Prix of Detroit", venue: "Detroit Street Circuit", network: "FOX" },
-      { date: "Jun 15", race: "Grand Prix of Illinois", venue: "World Wide Technology Raceway", network: "FOX" },
-      { date: "Jun 22", race: "Grand Prix of Road America", venue: "Road America", network: "FOX" },
-      { date: "Jul 6", race: "Grand Prix of Mid-Ohio", venue: "Mid-Ohio Sports Car Course", network: "FOX" },
-      { date: "Jul 12", race: "Grand Prix of Iowa Race 1", venue: "Iowa Speedway", network: "FOX" },
-      { date: "Jul 13", race: "Grand Prix of Iowa Race 2", venue: "Iowa Speedway", network: "FOX" },
-      { date: "Jul 20", race: "Grand Prix of Toronto", venue: "Streets of Toronto", network: "FOX" },
-      { date: "Jul 27", race: "Grand Prix of Monterey", venue: "Weathertech Raceway Laguna Seca", network: "FOX" },
-      { date: "Aug 10", race: "Grand Prix of Portland", venue: "Portland International Raceway", network: "FOX" },
-      { date: "Aug 24", race: "Grand Prix of Milwaukee", venue: "The Milwaukee Mile", network: "FOX" },
-      { date: "Aug 31", race: "Grand Prix of Nashville", venue: "Nashville Superspeedway", network: "FOX" }
+      { date: "Mar 2", race: "Grand Prix of St. Petersburg", venue: "Streets of St. Petersburg", network: "FOX", series: "IndyCar" },
+      { date: "Mar 23", race: "Grand Prix of Thermal", venue: "The Thermal Club", network: "FOX", series: "IndyCar" },
+      { date: "Apr 13", race: "Grand Prix of Long Beach", venue: "Streets of Long Beach", network: "FOX", series: "IndyCar" },
+      { date: "May 4", race: "Grand Prix of Alabama", venue: "Barber Motorsports Park", network: "FOX", series: "IndyCar" },
+      { date: "May 10", race: "Grand Prix of Indianapolis", venue: "Indianapolis Motor Speedway Road Course", network: "FOX", series: "IndyCar" },
+      { date: "May 25", race: "Indianapolis 500", venue: "Indianapolis Motor Speedway", network: "FOX", series: "IndyCar" },
+      { date: "Jun 1", race: "Grand Prix of Detroit", venue: "Detroit Street Circuit", network: "FOX", series: "IndyCar" },
+      { date: "Jun 15", race: "Grand Prix of Illinois", venue: "World Wide Technology Raceway", network: "FOX", series: "IndyCar" },
+      { date: "Jun 22", race: "Grand Prix of Road America", venue: "Road America", network: "FOX", series: "IndyCar" },
+      { date: "Jul 6", race: "Grand Prix of Mid-Ohio", venue: "Mid-Ohio Sports Car Course", network: "FOX", series: "IndyCar" },
+      { date: "Jul 12", race: "Grand Prix of Iowa Race 1", venue: "Iowa Speedway", network: "FOX", series: "IndyCar" },
+      { date: "Jul 13", race: "Grand Prix of Iowa Race 2", venue: "Iowa Speedway", network: "FOX", series: "IndyCar" },
+      { date: "Jul 20", race: "Grand Prix of Toronto", venue: "Streets of Toronto", network: "FOX", series: "IndyCar" },
+      { date: "Jul 27", race: "Grand Prix of Monterey", venue: "Weathertech Raceway Laguna Seca", network: "FOX", series: "IndyCar" },
+      { date: "Aug 10", race: "Grand Prix of Portland", venue: "Portland International Raceway", network: "FOX", series: "IndyCar" },
+      { date: "Aug 24", race: "Grand Prix of Milwaukee", venue: "The Milwaukee Mile", network: "FOX", series: "IndyCar" },
+      { date: "Aug 31", race: "Grand Prix of Nashville", venue: "Nashville Superspeedway", network: "FOX", series: "IndyCar" }
     ];
     
-    // NASCAR Cup Series - Regular Season
+    // NASCAR Cup Series – Regular Season
     const nascarRegularEvents = [
-      { date: "Feb 2", race: "Clash at Daytona", venue: "Daytona International Speedway", network: "FOX" },
-      { date: "Feb 15", race: "Duel #1 & #2", venue: "Daytona International Speedway", network: "FS1" },
-      { date: "Feb 18", race: "Daytona 500", venue: "Daytona International Speedway", network: "FOX" },
-      { date: "Feb 25", race: "Atlanta", venue: "Atlanta Motor Speedway", network: "FOX" },
-      { date: "Mar 3", race: "Las Vegas", venue: "Las Vegas Motor Speedway", network: "FOX" },
-      { date: "Mar 10", race: "Phoenix", venue: "Phoenix Raceway", network: "FOX" },
-      { date: "Mar 17", race: "Bristol Dirt", venue: "Bristol Motor Speedway", network: "FOX" },
-      { date: "Mar 24", race: "COTA", venue: "Circuit of The Americas", network: "FOX" },
-      { date: "Mar 31", race: "Richmond", venue: "Richmond Raceway", network: "Prime Video" },
-      { date: "Apr 7", race: "Martinsville", venue: "Martinsville Speedway", network: "Prime Video" },
-      { date: "Apr 14", race: "Texas", venue: "Texas Motor Speedway", network: "Prime Video" },
-      { date: "Apr 21", race: "Talladega", venue: "Talladega Superspeedway", network: "Prime Video" },
-      { date: "Apr 28", race: "Dover", venue: "Dover Motor Speedway", network: "Prime Video" },
-      { date: "May 5", race: "Kansas", venue: "Kansas Speedway", network: "Prime Video" },
-      { date: "May 12", race: "Darlington", venue: "Darlington Raceway", network: "TNT" },
-      { date: "May 19", race: "North Wilkesboro", venue: "North Wilkesboro Speedway", network: "TNT" },
-      { date: "May 26", race: "Charlotte", venue: "Charlotte Motor Speedway", network: "TNT" },
-      { date: "Jun 2", race: "Gateway", venue: "World Wide Technology Raceway", network: "TNT" },
-      { date: "Jun 9", race: "Sonoma", venue: "Sonoma Raceway", network: "TNT" },
-      { date: "Jun 16", race: "Iowa", venue: "Iowa Speedway", network: "USA Net" },
-      { date: "Jun 30", race: "Nashville", venue: "Nashville Superspeedway", network: "USA Net" },
-      { date: "Jul 7", race: "Chicago", venue: "Chicago Street Course", network: "USA Net" },
-      { date: "Jul 14", race: "Pocono", venue: "Pocono Raceway", network: "NBC" }
+      { date: "Feb 2", race: "Clash at Daytona", venue: "Daytona International Speedway", network: "FOX", series: "NASCAR Cup (Regular)" },
+      { date: "Feb 15", race: "Duel #1 & #2", venue: "Daytona International Speedway", network: "FS1", series: "NASCAR Cup (Regular)" },
+      { date: "Feb 18", race: "Daytona 500", venue: "Daytona International Speedway", network: "FOX", series: "NASCAR Cup (Regular)" },
+      { date: "Feb 25", race: "Atlanta", venue: "Atlanta Motor Speedway", network: "FOX", series: "NASCAR Cup (Regular)" },
+      { date: "Mar 3", race: "Las Vegas", venue: "Las Vegas Motor Speedway", network: "FOX", series: "NASCAR Cup (Regular)" },
+      { date: "Mar 10", race: "Phoenix", venue: "Phoenix Raceway", network: "FOX", series: "NASCAR Cup (Regular)" },
+      { date: "Mar 17", race: "Bristol Dirt", venue: "Bristol Motor Speedway", network: "FOX", series: "NASCAR Cup (Regular)" },
+      { date: "Mar 24", race: "COTA", venue: "Circuit of The Americas", network: "FOX", series: "NASCAR Cup (Regular)" },
+      { date: "Mar 31", race: "Richmond", venue: "Richmond Raceway", network: "Prime Video", series: "NASCAR Cup (Regular)" },
+      { date: "Apr 7", race: "Martinsville", venue: "Martinsville Speedway", network: "Prime Video", series: "NASCAR Cup (Regular)" },
+      { date: "Apr 14", race: "Texas", venue: "Texas Motor Speedway", network: "Prime Video", series: "NASCAR Cup (Regular)" },
+      { date: "Apr 21", race: "Talladega", venue: "Talladega Superspeedway", network: "Prime Video", series: "NASCAR Cup (Regular)" },
+      { date: "Apr 28", race: "Dover", venue: "Dover Motor Speedway", network: "Prime Video", series: "NASCAR Cup (Regular)" },
+      { date: "May 5", race: "Kansas", venue: "Kansas Speedway", network: "Prime Video", series: "NASCAR Cup (Regular)" },
+      { date: "May 12", race: "Darlington", venue: "Darlington Raceway", network: "TNT", series: "NASCAR Cup (Regular)" },
+      { date: "May 19", race: "North Wilkesboro", venue: "North Wilkesboro Speedway", network: "TNT", series: "NASCAR Cup (Regular)" },
+      { date: "May 26", race: "Charlotte", venue: "Charlotte Motor Speedway", network: "TNT", series: "NASCAR Cup (Regular)" },
+      { date: "Jun 2", race: "Gateway", venue: "World Wide Technology Raceway", network: "TNT", series: "NASCAR Cup (Regular)" },
+      { date: "Jun 9", race: "Sonoma", venue: "Sonoma Raceway", network: "TNT", series: "NASCAR Cup (Regular)" },
+      { date: "Jun 16", race: "Iowa", venue: "Iowa Speedway", network: "USA Net", series: "NASCAR Cup (Regular)" },
+      { date: "Jun 30", race: "Nashville", venue: "Nashville Superspeedway", network: "USA Net", series: "NASCAR Cup (Regular)" },
+      { date: "Jul 7", race: "Chicago", venue: "Chicago Street Course", network: "USA Net", series: "NASCAR Cup (Regular)" },
+      { date: "Jul 14", race: "Pocono", venue: "Pocono Raceway", network: "NBC", series: "NASCAR Cup (Regular)" }
     ];
     
-    // NASCAR Cup Series - Playoffs
+    // NASCAR Cup Series – Playoffs
     const nascarPlayoffEvents = [
-      { date: "Sep 1", race: "Darlington", venue: "Darlington Raceway", network: "USA Net" },
-      { date: "Sep 7", race: "Kansas", venue: "Kansas Speedway", network: "USA Net" },
-      { date: "Sep 14", race: "Bristol", venue: "Bristol Motor Speedway", network: "USA Net" },
-      { date: "Sep 22", race: "Texas", venue: "Texas Motor Speedway", network: "USA Net" },
-      { date: "Sep 29", race: "Talladega", venue: "Talladega Superspeedway", network: "NBC" },
-      { date: "Oct 6", race: "Charlotte Roval", venue: "Charlotte Motor Speedway Road Course", network: "NBC" },
-      { date: "Oct 13", race: "Las Vegas", venue: "Las Vegas Motor Speedway", network: "NBC" },
-      { date: "Oct 20", race: "Homestead-Miami", venue: "Homestead-Miami Speedway", network: "NBC" },
-      { date: "Oct 27", race: "Martinsville", venue: "Martinsville Speedway", network: "NBC" },
-      { date: "Nov 3", race: "Phoenix", venue: "Phoenix Raceway", network: "NBC" }
+      { date: "Sep 1", race: "Darlington", venue: "Darlington Raceway", network: "USA Net", series: "NASCAR Cup (Playoffs)" },
+      { date: "Sep 7", race: "Kansas", venue: "Kansas Speedway", network: "USA Net", series: "NASCAR Cup (Playoffs)" },
+      { date: "Sep 14", race: "Bristol", venue: "Bristol Motor Speedway", network: "USA Net", series: "NASCAR Cup (Playoffs)" },
+      { date: "Sep 22", race: "Texas", venue: "Texas Motor Speedway", network: "USA Net", series: "NASCAR Cup (Playoffs)" },
+      { date: "Sep 29", race: "Talladega", venue: "Talladega Superspeedway", network: "NBC", series: "NASCAR Cup (Playoffs)" },
+      { date: "Oct 6", race: "Charlotte Roval", venue: "Charlotte Motor Speedway Road Course", network: "NBC", series: "NASCAR Cup (Playoffs)" },
+      { date: "Oct 13", race: "Las Vegas", venue: "Las Vegas Motor Speedway", network: "NBC", series: "NASCAR Cup (Playoffs)" },
+      { date: "Oct 20", race: "Homestead-Miami", venue: "Homestead-Miami Speedway", network: "NBC", series: "NASCAR Cup (Playoffs)" },
+      { date: "Oct 27", race: "Martinsville", venue: "Martinsville Speedway", network: "NBC", series: "NASCAR Cup (Playoffs)" },
+      { date: "Nov 3", race: "Phoenix", venue: "Phoenix Raceway", network: "NBC", series: "NASCAR Cup (Playoffs)" }
     ];
     
-    /**
-     * Generic function to populate a table body with event data.
-     * @param {string} tableBodyId - The id of the tbody element.
-     * @param {Array} events - Array of event objects.
-     * @param {Array} columns - Array of keys (strings) corresponding to the columns.
-     */
+    // Combine all events for upcoming event and filtering
+    let allEvents = [];
+    function parseEventDate(dateStr) {
+      // For ranges like "Mar 13-15" or single dates like "Mar 2", we use the first day as the start.
+      const parts = dateStr.split(" ");
+      const monthStr = parts[0];
+      const dayPart = parts[1];
+      let day = dayPart.split("-")[0];
+      const months = { "Jan":0, "Feb":1, "Mar":2, "Apr":3, "May":4, "Jun":5, "Jul":6, "Aug":7, "Sep":8, "Oct":9, "Nov":10, "Dec":11 };
+      return new Date(2025, months[monthStr], parseInt(day));
+    }
+    
+    f1Events.forEach(e => { e.start = parseEventDate(e.date); allEvents.push(e); });
+    indyEvents.forEach(e => { e.start = parseEventDate(e.date); allEvents.push(e); });
+    nascarRegularEvents.forEach(e => { e.start = parseEventDate(e.date); allEvents.push(e); });
+    nascarPlayoffEvents.forEach(e => { e.start = parseEventDate(e.date); allEvents.push(e); });
+    
+    /*********************************
+     * POPULATE TABLES & GLOBAL FUNCTIONS
+     *********************************/
+    
+    // Helper: Populate a table with event rows.
     function populateTable(tableBodyId, events, columns) {
       const tbody = document.getElementById(tableBodyId);
       events.forEach(event => {
         const tr = document.createElement("tr");
-        // Save a data attribute with the start date (for upcoming event calculations)
-        const eventStartDate = parseEventDate(event.date);
-        tr.setAttribute("data-start", eventStartDate.toISOString());
-        
+        tr.setAttribute("data-start", event.start.toISOString());
+        tr.classList.add("event-row");
+        // Save the event data for use in the modal.
+        tr.dataset.event = JSON.stringify(event);
         columns.forEach(col => {
           const td = document.createElement("td");
-          td.textContent = event[col];
+          td.textContent = event[col] || "";
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
       });
     }
     
-    /*******************************
-     * Populate Tables & Upcoming Event
-     *******************************/
-    
     document.addEventListener("DOMContentLoaded", function() {
-      // Populate each schedule table
+      // Populate schedule tables.
       populateTable("f1-table-body", f1Events, ["date", "race", "circuit", "time"]);
       populateTable("indy-table-body", indyEvents, ["date", "race", "venue", "network"]);
       populateTable("nascar-regular-table-body", nascarRegularEvents, ["date", "race", "venue", "network"]);
       populateTable("nascar-playoffs-table-body", nascarPlayoffEvents, ["date", "race", "venue", "network"]);
       
-      // Gather all events into a single list with a "series" property
-      let allEvents = [];
-      
-      f1Events.forEach(e => {
-        allEvents.push({ series: "Formula 1", ...e, start: parseEventDate(e.date) });
-      });
-      indyEvents.forEach(e => {
-        allEvents.push({ series: "IndyCar", ...e, start: parseEventDate(e.date) });
-      });
-      nascarRegularEvents.forEach(e => {
-        allEvents.push({ series: "NASCAR Cup (Regular)", ...e, start: parseEventDate(e.date) });
-      });
-      nascarPlayoffEvents.forEach(e => {
-        allEvents.push({ series: "NASCAR Cup (Playoffs)", ...e, start: parseEventDate(e.date) });
-      });
-      
-      // Sort events by their start date (earliest first)
+      // Determine and display the upcoming event (with countdown).
       allEvents.sort((a, b) => a.start - b.start);
-      
-      // Find the first event that is yet to start
       const now = new Date();
       let nextEvent = allEvents.find(event => event.start >= now);
-      
       const upcomingDiv = document.getElementById("upcoming-event");
       if (nextEvent) {
         upcomingDiv.innerHTML = `
@@ -310,11 +361,170 @@
           <p><strong>Race:</strong> ${nextEvent.race}</p>
           <p><strong>Location:</strong> ${nextEvent.circuit || nextEvent.venue}</p>
           ${ nextEvent.time ? `<p><strong>Time (ET):</strong> ${nextEvent.time}</p>` : "" }
+          <div id="upcomingCountdown"></div>
         `;
+        startCountdown("upcomingCountdown", nextEvent.start);
       } else {
         upcomingDiv.innerHTML = "<p>No upcoming events.</p>";
       }
+      
+      // Clicking an event row opens the detail modal.
+      document.querySelectorAll(".event-row").forEach(row => {
+        row.addEventListener("click", function() {
+          const eventData = JSON.parse(this.dataset.event);
+          openEventModal(eventData);
+        });
+      });
+      
+      // Global search filter.
+      document.getElementById("searchInput").addEventListener("keyup", function() {
+        const searchTerm = this.value.toLowerCase();
+        document.querySelectorAll(".event-row").forEach(row => {
+          row.style.display = row.textContent.toLowerCase().includes(searchTerm) ? "" : "none";
+        });
+      });
+      
+      // Dummy Driver Standings for Formula 1.
+      const standings = [
+        { position: 1, driver: "Max Verstappen", points: 350 },
+        { position: 2, driver: "Lewis Hamilton", points: 290 },
+        { position: 3, driver: "Charles Leclerc", points: 250 },
+        { position: 4, driver: "George Russell", points: 230 },
+        { position: 5, driver: "Sergio Perez", points: 210 }
+      ];
+      const standingsTbody = document.querySelector("#driverStandingsTable tbody");
+      standings.forEach(s => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${s.position}</td><td>${s.driver}</td><td>${s.points}</td>`;
+        standingsTbody.appendChild(tr);
+      });
+      
+      // Dummy News Headlines.
+      const newsItems = [
+        { title: "Max Verstappen dominates the season opener!", url: "#" },
+        { title: "Lewis Hamilton makes a stunning comeback.", url: "#" },
+        { title: "New regulations shake up Formula 1 dynamics.", url: "#" }
+      ];
+      const newsList = document.getElementById("newsList");
+      newsItems.forEach(item => {
+        const li = document.createElement("li");
+        li.classList.add("list-group-item");
+        li.innerHTML = `<a href="${item.url}" target="_blank">${item.title}</a>`;
+        newsList.appendChild(li);
+      });
+      
+      // Theme toggle button.
+      document.getElementById("themeToggle").addEventListener("click", function() {
+        document.body.classList.toggle("dark-mode");
+      });
     });
+    
+    // Countdown timer function.
+    function startCountdown(elementId, eventDate) {
+      const countdownEl = document.getElementById(elementId);
+      function updateCountdown() {
+        const now = new Date();
+        const diff = eventDate - now;
+        if (diff <= 0) {
+          countdownEl.textContent = "Event is starting now!";
+          clearInterval(timer);
+          return;
+        }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        countdownEl.textContent = `Starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+      updateCountdown();
+      const timer = setInterval(updateCountdown, 1000);
+    }
+    
+    // Open the event detail modal and populate its data.
+    function openEventModal(eventData) {
+      const modal = new bootstrap.Modal(document.getElementById("eventDetailModal"));
+      document.getElementById("modalTitle").textContent = eventData.race;
+      document.getElementById("modalEventSeries").innerHTML = `<strong>Series:</strong> ${eventData.series}`;
+      document.getElementById("modalEventDate").innerHTML = `<strong>Date:</strong> ${eventData.date}`;
+      document.getElementById("modalEventRace").innerHTML = `<strong>Race:</strong> ${eventData.race}`;
+      document.getElementById("modalEventLocation").innerHTML = `<strong>Location:</strong> ${eventData.circuit || eventData.venue}`;
+      document.getElementById("modalEventTime").innerHTML = eventData.time ? `<strong>Time (ET):</strong> ${eventData.time}` : "";
+      
+      // Set up the modal countdown timer.
+      startCountdown("modalCountdown", eventData.start);
+      
+      // Configure the "Add to Calendar" button.
+      document.getElementById("addToCalendarBtn").onclick = function() {
+        generateICS(eventData);
+      };
+      
+      // Setup social share links.
+      const text = encodeURIComponent(`Check out the upcoming ${eventData.series} event: ${eventData.race} on ${eventData.date}`);
+      document.getElementById("shareTwitter").href = `https://twitter.com/intent/tweet?text=${text}`;
+      document.getElementById("shareFacebook").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+      
+      // Configure the weather forecast button.
+      document.getElementById("fetchWeatherBtn").onclick = function() {
+        fetchWeather(eventData.city);
+      };
+      
+      modal.show();
+    }
+    
+    // Generate and download an ICS file for calendar integration.
+    function generateICS(eventData) {
+      const dtstamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + "Z";
+      const dtstart = eventData.start.toISOString().replace(/[-:]/g, '').split('.')[0] + "Z";
+      // Assume a 2‑hour duration for the event.
+      const dtend = new Date(eventData.start.getTime() + 2 * 60 * 60 * 1000).toISOString().replace(/[-:]/g, '').split('.')[0] + "Z";
+      const description = `Event: ${eventData.race} - ${eventData.series}`;
+      const location = eventData.circuit || eventData.venue;
+      
+      const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Site//EN
+BEGIN:VEVENT
+UID:${dtstamp}@yourdomain.com
+DTSTAMP:${dtstamp}
+DTSTART:${dtstart}
+DTEND:${dtend}
+SUMMARY:${eventData.race} (${eventData.series})
+DESCRIPTION:${description}
+LOCATION:${location}
+END:VEVENT
+END:VCALENDAR`;
+      
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${eventData.race.replace(/\s+/g, '_')}.ics`;
+      link.click();
+    }
+    
+    // Fetch weather forecast using OpenWeatherMap (if API key is provided).
+    function fetchWeather(city) {
+      const weatherResult = document.getElementById("weatherResult");
+      if (!OPENWEATHER_API_KEY) {
+        weatherResult.textContent = "OpenWeatherMap API key is not set.";
+        return;
+      }
+      if (!city) {
+        weatherResult.textContent = "No city information available for this event.";
+        return;
+      }
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_API_KEY}&units=metric`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.cod !== 200) {
+            weatherResult.textContent = "Weather data not available.";
+            return;
+          }
+          weatherResult.innerHTML = `<p><strong>Weather in ${city}:</strong> ${data.weather[0].description}, Temp: ${data.main.temp}°C</p>`;
+        })
+        .catch(err => {
+          weatherResult.textContent = "Error fetching weather data.";
+        });
+    }
   </script>
 </body>
 </html>

@@ -1,0 +1,276 @@
+:root {
+  --primary-color: #e10600;      /* F1 Red */
+  --secondary-color: #1e1e1e;    /* Dark Gray */
+  --accent-color: #00a19c;       /* Turquoise */
+  --background-light: #ffffff;
+  --background-dark: #121212;
+  --text-light: #333333;
+  --text-dark: #e0e0e0;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition-speed: 0.3s;
+}
+
+/* Base Styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+  background-color: var(--background-light);
+  color: var(--text-light);
+}
+
+body.dark-mode {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+/* Header Styles */
+.site-header {
+  padding: 1.5rem 0;
+  border-bottom: 3px solid var(--primary-color);
+  margin-bottom: 2rem;
+}
+
+.site-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+/* Navigation/Tabs */
+.nav-tabs {
+  border-bottom: 2px solid var(--accent-color);
+  gap: 0.5rem;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-radius: 8px 8px 0 0;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  color: var(--text-light);
+  transition: all var(--transition-speed);
+}
+
+.dark-mode .nav-tabs .nav-link {
+  color: var(--text-dark);
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: rgba(225, 6, 0, 0.1);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--primary-color);
+  background-color: transparent;
+  border-bottom: 3px solid var(--primary-color);
+}
+
+/* Card Styles */
+.race-card {
+  background: var(--background-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition-speed);
+}
+
+.dark-mode .race-card {
+  background: var(--secondary-color);
+}
+
+.race-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Tables */
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th {
+  background-color: var(--secondary-color);
+  color: var(--text-dark);
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .table td {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Table Improvements */
+.table tr.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.table tr.clickable-row:hover {
+  background-color: rgba(225, 6, 0, 0.05);
+}
+
+.dark-mode .table tr.clickable-row:hover {
+  background-color: rgba(225, 6, 0, 0.15);
+}
+
+/* Upcoming Event Section */
+.upcoming-event {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: var(--card-shadow);
+}
+
+.countdown {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+/* Series Badge */
+.series-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
+
+/* Upcoming Event Improvements */
+.upcoming-details h3 {
+  color: white;
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+}
+
+.upcoming-details p {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Weather Card */
+.weather-card {
+  background: var(--background-light);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  box-shadow: var(--card-shadow);
+}
+
+.dark-mode .weather-card {
+  background: var(--secondary-color);
+}
+
+/* Search Input */
+.search-input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid var(--accent-color);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  transition: all var(--transition-speed);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(225, 6, 0, 0.1);
+}
+
+/* Dark Mode Toggle */
+.theme-toggle {
+  background: var(--secondary-color);
+  color: var(--text-dark);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.theme-toggle:hover {
+  background: var(--primary-color);
+}
+
+/* Modal Styles */
+.modal-content {
+  border-radius: 12px;
+  border: none;
+}
+
+.dark-mode .modal-content {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+.modal-header {
+  border-bottom: 2px solid var(--primary-color);
+  padding: 1.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .site-title {
+    font-size: 2rem;
+  }
+  
+  .nav-tabs .nav-link {
+    padding: 0.75rem 1rem;
+  }
+  
+  .table {
+    font-size: 0.875rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.75rem;
+  }
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Utility Classes */
+.text-primary { color: var(--primary-color) !important; }
+.text-secondary { color: var(--secondary-color) !important; }
+.text-accent { color: var(--accent-color) !important; }
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-secondary { background-color: var(--secondary-color) !important; }
+.bg-accent { background-color: var(--accent-color) !important; }

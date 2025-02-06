@@ -29,7 +29,7 @@ body.dark-mode {
 body.dark-mode .input-group-text {
   background-color: var(--secondary-color);
   border-color: var(--accent-color);
-  color: var(--text-dark); /* Ensure text is visible in dark mode */
+  color: var(--text-dark);
 }
 
 body.dark-mode .search-input {
@@ -39,7 +39,6 @@ body.dark-mode .search-input {
 }
 
 body.dark-mode .upcoming-event {
-  /* Dark mode gradient; note: adjust if your CSS preprocessor supports darken() */
   background: linear-gradient(135deg, #b50500, #008f8a);
   color: var(--text-dark);
 }
@@ -60,13 +59,13 @@ body.dark-mode .nav-tabs .nav-link {
 
 /* Header Styles */
 .site-header {
-  padding: 1.5rem 0;
+  padding: 2rem 0; /* Increased vertical padding */
   border-bottom: 3px solid var(--primary-color);
   margin-bottom: 1.5rem;
 }
 
 .site-header h1 {
-  font-size: 2.2rem;
+  font-size: 2.8rem; /* Increased font size from 2.2rem */
   font-weight: 700;
   color: var(--primary-color);
   margin: 0;
@@ -122,19 +121,19 @@ body.dark-mode .nav-tabs .nav-link {
 }
 
 .table thead tr:first-child th:first-child {
-    border-top-left-radius: var(--border-radius-base);
+  border-top-left-radius: var(--border-radius-base);
 }
 
 .table thead tr:first-child th:last-child {
-    border-top-right-radius: var(--border-radius-base);
+  border-top-right-radius: var(--border-radius-base);
 }
 
 .table tbody tr:last-child td:first-child {
-    border-bottom-left-radius: var(--border-radius-base);
+  border-bottom-left-radius: var(--border-radius-base);
 }
 
 .table tbody tr:last-child td:last-child {
-    border-bottom-right-radius: var(--border-radius-base);
+  border-bottom-right-radius: var(--border-radius-base);
 }
 
 .table th {
@@ -247,7 +246,7 @@ body.dark-mode .nav-tabs .nav-link {
 }
 
 .dark-mode .input-group-text svg {
-    fill: var(--accent-color);
+  fill: var(--accent-color);
 }
 
 /* Theme Toggle Button */
@@ -259,19 +258,20 @@ body.dark-mode .nav-tabs .nav-link {
   border-radius: var(--border-radius-base);
   cursor: pointer;
   transition: all var(--transition-speed);
+  font-size: 1.2rem;
 }
 
 #themeToggle svg {
-    fill: var(--text-light);
+  fill: var(--text-light);
 }
 
 body.dark-mode #themeToggle {
-    color: var(--text-dark);
-    border-color: var(--accent-color);
+  color: var(--text-dark);
+  border-color: var(--accent-color);
 }
 
 body.dark-mode #themeToggle svg {
-    fill: var(--text-dark);
+  fill: var(--text-dark);
 }
 
 #themeToggle:hover {
@@ -280,7 +280,7 @@ body.dark-mode #themeToggle svg {
 }
 
 body.dark-mode #themeToggle:hover {
-    background-color: rgba(0, 161, 156, 0.3);
+  background-color: rgba(0, 161, 156, 0.3);
 }
 
 /* Modal Styles */

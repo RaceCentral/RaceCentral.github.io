@@ -159,7 +159,7 @@
           <div id="modalCountdown" class="mb-3"></div>
           <!-- Weather Forecast Section -->
           <div id="weatherSection" class="mb-2">
-            <button id="fetchWeatherBtn" class="btn btn-info">Show Weather Forecast</button>
+            <button id="fetchWeatherBtn" class="btn btn-info">Show Upcoming Weather Forecast</button>
             <div id="weatherResult" class="mt-2"></div>
           </div>
           <!-- Social Sharing Buttons -->
@@ -268,7 +268,7 @@
       const weatherDiv = document.getElementById("weatherResult");
       weatherDiv.innerHTML = "<p>Loading weather data...</p>";
       try {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=YOUR_API_KEY`);
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&{process.env.WEATHER_API_KEY}`);
         const data = await response.json();
         if (response.ok) {
           const temp = Math.round(data.main.temp);

@@ -24,6 +24,31 @@ body.dark-mode {
   color: var(--text-dark);
 }
 
+/* Dark Mode Overrides for New Components */
+body.dark-mode .input-group-text {
+  background-color: var(--secondary-color);
+  border-color: var(--accent-color);
+}
+
+body.dark-mode .search-input {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+  border-color: var(--accent-color);
+}
+
+body.dark-mode .race-card {
+  background: var(--secondary-color);
+}
+
+body.dark-mode .modal-content {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+body.dark-mode .nav-tabs .nav-link {
+  color: var(--text-dark);
+}
+
 /* Header Styles */
 .site-header {
   padding: 1.5rem 0;
@@ -53,10 +78,6 @@ body.dark-mode {
   transition: all var(--transition-speed);
 }
 
-.dark-mode .nav-tabs .nav-link {
-  color: var(--text-dark);
-}
-
 .nav-tabs .nav-link:hover {
   background-color: rgba(225, 6, 0, 0.1);
 }
@@ -75,10 +96,6 @@ body.dark-mode {
   margin-bottom: 1rem;
   box-shadow: var(--card-shadow);
   transition: transform var(--transition-speed);
-}
-
-.dark-mode .race-card {
-  background: var(--secondary-color);
 }
 
 .race-card:hover {
@@ -179,13 +196,29 @@ body.dark-mode {
   background: var(--secondary-color);
 }
 
-/* Search Input */
-.search-input {
-  width: 100%;
-  padding: 1rem;
+/* Search Input and Icon */
+/* Set a fixed height and center the content */
+.input-group {
+  align-items: stretch;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  padding: 0;
   border: 2px solid var(--accent-color);
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+}
+
+.search-input {
+  height: 2.5rem;
+  border: 2px solid var(--accent-color);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  padding: 0 1rem;
   font-size: 1rem;
   transition: all var(--transition-speed);
 }
@@ -194,6 +227,12 @@ body.dark-mode {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(225, 6, 0, 0.1);
+}
+
+.input-group-text svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: block;
 }
 
 /* Dark Mode Toggle */
@@ -215,11 +254,6 @@ body.dark-mode {
 .modal-content {
   border-radius: 12px;
   border: none;
-}
-
-.dark-mode .modal-content {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
 }
 
 .modal-header {

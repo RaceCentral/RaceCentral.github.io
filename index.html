@@ -479,7 +479,7 @@
       }
     }
 
-    // Instead of one upcoming event, initialize upcoming races for each series
+    // Initialize upcoming races for each series
     function initializeUpcomingRaces() {
       const now = new Date();
       const nextF1 = scheduleData.f1Events.filter(e => e.start > now).sort((a, b) => a.start - b.start)[0];
@@ -516,41 +516,73 @@
       }
     }
 
-    // Instead of fetching from an API that might not return data,
-    // use dummy news data.
+    // Helper function to fetch and parse an RSS feed
+    async function fetchRSS(url) {
+      const response = await fetch(url);
+      const text = await response.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(text, "application/xml");
+      const items = Array.from(xml.querySelectorAll("item")).slice(0, 5);
+      return items.map(item => ({
+        title: item.querySelector("title")?.textContent || "",
+        link: item.querySelector("link")?.textContent || "#",
+        pubDate: item.querySelector("pubDate")?.textContent || ""
+      }));
+    }
+
+    // Updated fetchNews: uses RSS feeds for F1, IndyCar, and NASCAR (top 5 items each)
     async function fetchNews() {
-      const newsGrid = document.getElementById('newsGrid');
-      const dummyNews = [
-        {
-          title: "New Racing Tech Innovations",
-          description: "Latest breakthroughs in racing technology are set to revolutionize the sport.",
-          url: "#"
-        },
-        {
-          title: "F1 Season Preview",
-          description: "Experts share insights ahead of the upcoming Formula 1 season.",
-          url: "#"
-        },
-        {
-          title: "IndyCar Update",
-          description: "IndyCar teams ramp up preparations for a thrilling season.",
-          url: "#"
-        },
-        {
-          title: "NASCAR Highlights",
-          description: "Catch up on the most exciting moments from NASCAR races.",
-          url: "#"
-        }
-      ];
-      newsGrid.innerHTML = dummyNews.map(article => `
-        <div class="col-md-4">
-          <div class="news-card">
-            <h5>${article.title}</h5>
-            <p>${article.description}</p>
-            <a href="${article.url}" target="_blank" class="btn btn-outline-primary btn-sm">Read More</a>
+      const f1Feed = "https://www.motorsport.com/rss/f1/news/";
+      const indyFeed = "https://www.motorsport.com/rss/indycar/news/";
+      const nascarFeed = "https://www.motorsport.com/rss/nascar-cup/news/";
+
+      try {
+        const [f1News, indyNews, nascarNews] = await Promise.all([
+          fetchRSS(f1Feed),
+          fetchRSS(indyFeed),
+          fetchRSS(nascarFeed)
+        ]);
+
+        const newsGrid = document.getElementById("newsGrid");
+        newsGrid.innerHTML = `
+          <div class="col-md-4">
+            <h5>F1 News</h5>
+            <ul class="list-unstyled">
+              ${f1News.map(item => `
+                <li>
+                  <a href="${item.link}" target="_blank">${item.title}</a>
+                  <br/><small>${item.pubDate}</small>
+                </li>
+              `).join('')}
+            </ul>
           </div>
-        </div>
-      `).join('');
+          <div class="col-md-4">
+            <h5>IndyCar News</h5>
+            <ul class="list-unstyled">
+              ${indyNews.map(item => `
+                <li>
+                  <a href="${item.link}" target="_blank">${item.title}</a>
+                  <br/><small>${item.pubDate}</small>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h5>NASCAR News</h5>
+            <ul class="list-unstyled">
+              ${nascarNews.map(item => `
+                <li>
+                  <a href="${item.link}" target="_blank">${item.title}</a>
+                  <br/><small>${item.pubDate}</small>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+      } catch (error) {
+        document.getElementById("newsGrid").innerHTML = "<p class='text-danger'>Unable to fetch news.</p>";
+        console.error("Error fetching news:", error);
+      }
     }
 
     // --- Initialization ---
@@ -605,7 +637,7 @@
         document.getElementById('playoffs-season').style.display = 'block';
       });
 
-      // Fetch news using dummy data
+      // Fetch news using RSS feeds
       fetchNews();
     });
   </script>

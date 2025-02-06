@@ -2,31 +2,32 @@
 // Data module for racing schedules and results
 
 // 2025 Schedule Data
+
 const f1Events = [
-    { date: "Mar 13-15", race: "Australian GP", circuit: "Melbourne Grand Prix Circuit", time: "9:00 PM", series: "Formula 1", city: "Melbourne", latitude: -37.8136, longitude: 144.9631 },
-    { date: "Mar 20-23", race: "Chinese GP", circuit: "Shanghai International Circuit", time: "12:00 AM", series: "Formula 1", city: "Shanghai", latitude: 31.2304, longitude: 121.4737 },
-    { date: "Apr 3-5",  race: "Japanese GP", circuit: "Suzuka International Racing Course", time: "10:00 PM", series: "Formula 1", city: "Suzuka", latitude: 34.8823, longitude: 136.5844 },
-    { date: "Apr 11-13", race: "Bahrain GP", circuit: "Bahrain International Circuit", time: "8:00 AM", series: "Formula 1", city: "Sakhir", latitude: 26.0325, longitude: 50.5106 },
-    { date: "Apr 18-20", race: "Saudi Arabian GP", circuit: "Jeddah Street Circuit", time: "10:00 AM", series: "Formula 1", city: "Jeddah", latitude: 21.4858, longitude: 39.1925 },
-    { date: "May 2-4",  race: "Miami GP", circuit: "Miami International Autodrome", time: "1:00 PM", series: "Formula 1", city: "Miami", latitude: 25.7617, longitude: -80.1918 },
-    { date: "May 16-18", race: "Emilia Romagna GP", circuit: "Autodromo Enzo e Dino Ferrari", time: "6:00 AM", series: "Formula 1", city: "Imola", latitude: 44.3559, longitude: 11.7161 },
-    { date: "May 23-25", race: "Monaco GP", circuit: "Circuit de Monaco", time: "6:00 AM", series: "Formula 1", city: "Monte Carlo", latitude: 43.7384, longitude: 7.4246 },
-    { date: "May 30-Jun 1", race: "Spanish GP", circuit: "Circuit de Barcelona-Catalunya", time: "6:00 AM", series: "Formula 1", city: "Barcelona", latitude: 41.3851, longitude: 2.1734 },
-    { date: "Jun 13-15", race: "Canadian GP", circuit: "Circuit Gilles-Villeneuve", time: "11:00 AM", series: "Formula 1", city: "Montreal", latitude: 45.5017, longitude: -73.5673 },
-    { date: "Jun 27-29", race: "Austrian GP", circuit: "Red Bull Ring", time: "6:00 AM", series: "Formula 1", city: "Spielberg", latitude: 47.2171, longitude: 14.7819 },
-    { date: "Jul 4-6", race: "British GP", circuit: "Silverstone Circuit", time: "7:00 AM", series: "Formula 1", city: "Silverstone", latitude: 52.0786, longitude: -1.0169 },
-    { date: "Jul 25-27", race: "Belgian GP", circuit: "Circuit de Spa-Francorchamps", time: "6:00 AM", series: "Formula 1", city: "Spa-Francorchamps", latitude: 50.4542, longitude: 5.9714 },
-    { date: "Aug 1-3", race: "Hungarian GP", circuit: "Hungaroring", time: "6:00 AM", series: "Formula 1", city: "Budapest", latitude: 47.4979, longitude: 19.0402 },
-    { date: "Aug 29-31", race: "Dutch GP", circuit: "Circuit Park Zandvoort", time: "6:00 AM", series: "Formula 1", city: "Zandvoort", latitude: 52.3833, longitude: 4.5333 },
-    { date: "Sep 5-7", race: "Italian GP", circuit: "Autodromo Nazionale Monza", time: "6:00 AM", series: "Formula 1", city: "Monza", latitude: 45.5845, longitude: 9.2744 },
-    { date: "Sep 19-21", race: "Azerbaijan GP", circuit: "Baku City Circuit", time: "4:00 AM", series: "Formula 1", city: "Baku", latitude: 40.4093, longitude: 49.8671 },
-    { date: "Oct 3-5", race: "Singapore GP", circuit: "Marina Bay Street Circuit", time: "5:00 AM", series: "Formula 1", city: "Singapore", latitude: 1.3521, longitude: 103.8198 },
-    { date: "Oct 17-19", race: "United States GP", circuit: "Circuit of the Americas", time: "12:00 PM", series: "Formula 1", city: "Austin", latitude: 30.2672, longitude: -97.7431 },
-    { date: "Oct 24-26", race: "Mexico City GP", circuit: "Autodromo Hermanos Rodriguez", time: "1:00 PM", series: "Formula 1", city: "Mexico City", latitude: 19.4326, longitude: -99.1332 },
-    { date: "Nov 7-9", race: "São Paulo GP", circuit: "Autodromo Jose Carlos Pace", time: "9:00 AM", series: "Formula 1", city: "São Paulo", latitude: -23.5505, longitude: -46.6333 },
-    { date: "Nov 20-22", race: "Las Vegas GP", circuit: "Las Vegas Street Circuit", time: "8:00 PM", series: "Formula 1", city: "Las Vegas", latitude: 36.1699, longitude: -115.1398 },
-    { date: "Nov 28-30", race: "Qatar GP", circuit: "Losail International Circuit", time: "8:00 AM", series: "Formula 1", city: "Lusail", latitude: 25.4181, longitude: 51.4904 },
-    { date: "Dec 5-7", race: "Abu Dhabi GP", circuit: "Yas Marina Circuit", time: "5:00 AM", series: "Formula 1", city: "Abu Dhabi", latitude: 24.4539, longitude: 54.3773 }
+    { date: "Mar 15", race: "Australian GP", circuit: "Melbourne Grand Prix Circuit", time: "9:00 PM", series: "Formula 1", city: "Melbourne", latitude: -37.8136, longitude: 144.9631 },
+    { date: "Mar 23", race: "Chinese GP", circuit: "Shanghai International Circuit", time: "12:00 AM", series: "Formula 1", city: "Shanghai", latitude: 31.2304, longitude: 121.4737 },
+    { date: "Apr 5",  race: "Japanese GP", circuit: "Suzuka International Racing Course", time: "10:00 PM", series: "Formula 1", city: "Suzuka", latitude: 34.8823, longitude: 136.5844 },
+    { date: "Apr 13", race: "Bahrain GP", circuit: "Bahrain International Circuit", time: "8:00 AM", series: "Formula 1", city: "Sakhir", latitude: 26.0325, longitude: 50.5106 },
+    { date: "Apr 20", race: "Saudi Arabian GP", circuit: "Jeddah Street Circuit", time: "10:00 AM", series: "Formula 1", city: "Jeddah", latitude: 21.4858, longitude: 39.1925 },
+    { date: "May 4",  race: "Miami GP", circuit: "Miami International Autodrome", time: "1:00 PM", series: "Formula 1", city: "Miami", latitude: 25.7617, longitude: -80.1918 },
+    { date: "May 18", race: "Emilia Romagna GP", circuit: "Autodromo Enzo e Dino Ferrari", time: "6:00 AM", series: "Formula 1", city: "Imola", latitude: 44.3559, longitude: 11.7161 },
+    { date: "May 25", race: "Monaco GP", circuit: "Circuit de Monaco", time: "6:00 AM", series: "Formula 1", city: "Monte Carlo", latitude: 43.7384, longitude: 7.4246 },
+    { date: "Jun 1", race: "Spanish GP", circuit: "Circuit de Barcelona-Catalunya", time: "6:00 AM", series: "Formula 1", city: "Barcelona", latitude: 41.3851, longitude: 2.1734 },
+    { date: "Jun 15", race: "Canadian GP", circuit: "Circuit Gilles-Villeneuve", time: "11:00 AM", series: "Formula 1", city: "Montreal", latitude: 45.5017, longitude: -73.5673 },
+    { date: "Jun 29", race: "Austrian GP", circuit: "Red Bull Ring", time: "6:00 AM", series: "Formula 1", city: "Spielberg", latitude: 47.2171, longitude: 14.7819 },
+    { date: "Jul 6", race: "British GP", circuit: "Silverstone Circuit", time: "7:00 AM", series: "Formula 1", city: "Silverstone", latitude: 52.0786, longitude: -1.0169 },
+    { date: "Jul 27", race: "Belgian GP", circuit: "Circuit de Spa-Francorchamps", time: "6:00 AM", series: "Formula 1", city: "Spa-Francorchamps", latitude: 50.4542, longitude: 5.9714 },
+    { date: "Aug 3", race: "Hungarian GP", circuit: "Hungaroring", time: "6:00 AM", series: "Formula 1", city: "Budapest", latitude: 47.4979, longitude: 19.0402 },
+    { date: "Aug 31", race: "Dutch GP", circuit: "Circuit Park Zandvoort", time: "6:00 AM", series: "Formula 1", city: "Zandvoort", latitude: 52.3833, longitude: 4.5333 },
+    { date: "Sep 7", race: "Italian GP", circuit: "Autodromo Nazionale Monza", time: "6:00 AM", series: "Formula 1", city: "Monza", latitude: 45.5845, longitude: 9.2744 },
+    { date: "Sep 21", race: "Azerbaijan GP", circuit: "Baku City Circuit", time: "4:00 AM", series: "Formula 1", city: "Baku", latitude: 40.4093, longitude: 49.8671 },
+    { date: "Oct 5", race: "Singapore GP", circuit: "Marina Bay Street Circuit", time: "5:00 AM", series: "Formula 1", city: "Singapore", latitude: 1.3521, longitude: 103.8198 },
+    { date: "Oct 19", race: "United States GP", circuit: "Circuit of the Americas", time: "12:00 PM", series: "Formula 1", city: "Austin", latitude: 30.2672, longitude: -97.7431 },
+    { date: "Oct 26", race: "Mexico City GP", circuit: "Autodromo Hermanos Rodriguez", time: "1:00 PM", series: "Formula 1", city: "Mexico City", latitude: 19.4326, longitude: -99.1332 },
+    { date: "Nov 9", race: "São Paulo GP", circuit: "Autodromo Jose Carlos Pace", time: "9:00 AM", series: "Formula 1", city: "São Paulo", latitude: -23.5505, longitude: -46.6333 },
+    { date: "Nov 22", race: "Las Vegas GP", circuit: "Las Vegas Street Circuit", time: "8:00 PM", series: "Formula 1", city: "Las Vegas", latitude: 36.1699, longitude: -115.1398 },
+    { date: "Nov 30", race: "Qatar GP", circuit: "Losail International Circuit", time: "8:00 AM", series: "Formula 1", city: "Lusail", latitude: 25.4181, longitude: 51.4904 },
+    { date: "Dec 7", race: "Abu Dhabi GP", circuit: "Yas Marina Circuit", time: "5:00 AM", series: "Formula 1", city: "Abu Dhabi", latitude: 24.4539, longitude: 54.3773 }
   ];
   
   const indyEvents = [
@@ -87,24 +88,28 @@ const f1Events = [
     { date: "Sep 13", race: "Bristol", venue: "Bristol Motor Speedway", network: "FOX", series: "NASCAR Cup (Playoffs)", city: "Bristol, TN", latitude: 36.5174, longitude: -82.5585 },
     { date: "Sep 21", race: "New Hampshire", venue: "New Hampshire Motor Speedway", network: "FOX", series: "NASCAR Cup (Playoffs)", city: "Loudon, NH", latitude: 43.3623, longitude: -71.4634 },
     { date: "Sep 28", race: "Kansas", venue: "Kansas Speedway", network: "FOX", series: "NASCAR Cup (Playoffs)", city: "Kansas City, KS", latitude: 39.1142, longitude: -94.6275 },
-    { date: "Oct 5", race: "Charlotte Roval", venue: "Charlotte Motor Speedway Roval", network: "FOX", series: "NASCAR Cup (Playoffs)", city: "Concord, NC", latitude: 35.4088, longitude: -80.5816 },
+    { date: "Oct 5", race: "Charlotte Roval", venue: "Charlotte Motor Speedway Road Course", network: "FOX", series: "NASCAR Cup (Playoffs)", city: "Concord, NC", latitude: 35.4088, longitude: -80.5816 },
     { date: "Oct 12", race: "Las Vegas", venue: "Las Vegas Motor Speedway", network: "FOX", series: "NASCAR Cup (Playoffs)", city: "Las Vegas, NV", latitude: 36.1699, longitude: -115.1398 },
     { date: "Oct 19", race: "Talladega", venue: "Talladega Superspeedway", network: "FOX", series: "NASCAR Cup (Playoffs)", city: "Talladega, AL", latitude: 33.5801, longitude: -86.1058 },
     { date: "Oct 26", race: "Martinsville", venue: "Martinsville Speedway", network: "FOX", series: "NASCAR Cup (Playoffs)", city: "Ridgeway, VA", latitude: 36.5782, longitude: -79.8511 },
     { date: "Nov 2", race: "Phoenix", venue: "Phoenix Raceway", network: "FOX", series: "NASCAR Cup (Playoffs)", city: "Avondale, AZ", latitude: 33.4356, longitude: -112.3496 }
   ];
   
-  // Helper function to parse dates correctly
+  // Helper function to parse date strings.
+  // For date ranges (e.g. "Mar 15-17"), we take the first day.
   export function parseEventDate(dateStr) {
-    // For date ranges like "May 30-Jun 1" we use the first date
     const parts = dateStr.split("-")[0].trim().split(" ");
     const monthStr = parts[0];
     const day = parseInt(parts[1]);
-    const months = { "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 };
+    const months = { 
+      "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, 
+      "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, 
+      "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 
+    };
     return new Date(2025, months[monthStr], day);
   }
-  
-  // Helper function to enhance event data with Date objects
+    
+  // Helper function to enhance event data with a "start" property.
   export function enhanceEventData() {
     const allEvents = [...f1Events, ...indyEvents, ...nascarRegularEvents, ...nascarPlayoffEvents];
     return allEvents.map(event => ({
@@ -114,7 +119,8 @@ const f1Events = [
   }
   
   // 2024 Past Season Data
-  // Standings Data (Top 3)
+  
+  // Standings Data
   const f1PastStandings = [
     { position: 1, driver: "Max Verstappen (Red Bull Racing Honda RBPT)", points: 437 },
     { position: 2, driver: "Lando Norris (McLaren Mercedes)", points: 374 },
@@ -168,7 +174,6 @@ const f1Events = [
     { race: "GMR Grand Prix", date: "May 12, 2024", winner: "Romain Grosjean", second: "Colton Herta", third: "Pato O'Ward" },
     { race: "Indianapolis 500", date: "May 26, 2024", winner: "Josef Newgarden", second: "Pato O'Ward", third: "Scott Dixon" },
     { race: "Chevrolet Detroit Grand Prix", date: "Jun 2, 2024", winner: "Álex Palou", second: "Will Power", third: "Marcus Ericsson" },
-    { race: "Sonsio Grand Prix at Road America", date: "Jun 16, 2024", winner: "Álex Palou", second: "Colton Herta", third: "Pato O'Ward" },
     { race: "Honda Indy 200 at Mid-Ohio", date: "Jul 7, 2024", winner: "Scott Dixon", second: "Álex Palou", third: "Josef Newgarden" },
     { race: "Honda Indy Toronto", date: "Jul 21, 2024", winner: "Colton Herta", second: "Kyle Kirkwood", third: "Scott Dixon" },
     { race: "Hy-Vee Homefront 250", date: "Jul 13, 2024", winner: "Josef Newgarden", second: "Will Power", third: "Pato O'Ward" },
@@ -220,21 +225,21 @@ const f1Events = [
     { race: "NASCAR Cup Series Championship", date: "Nov 10, 2024", winner: "Joey Logano", second: "Ryan Blaney", third: "William Byron" }
   ];
   
-  // Add a "start" property to each schedule event (for countdowns, etc.)
+  // Add a "start" property to each schedule event using parseEventDate.
   [f1Events, indyEvents, nascarRegularEvents, nascarPlayoffEvents].forEach(group => {
     group.forEach(e => {
       e.start = parseEventDate(e.date);
     });
   });
-  
-  // Export the schedule and results data
+    
+  // Export schedule and results data.
   export const scheduleData = {
     f1Events,
     indyEvents,
     nascarRegularEvents,
     nascarPlayoffEvents
   };
-  
+    
   export const resultsData = {
     f1Past: {
       standings: f1PastStandings,

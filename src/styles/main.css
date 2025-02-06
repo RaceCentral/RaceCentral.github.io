@@ -171,33 +171,7 @@ body.dark-mode .nav-tabs .nav-link {
   margin: 0.5rem 0;
 }
 
-/* Upcoming Event Improvements */
-.upcoming-details h3 {
-  color: white;
-  margin-bottom: 0.5rem;
-  font-size: 1.75rem;
-}
-
-.upcoming-details p {
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
-
-/* Weather Card */
-.weather-card {
-  background: var(--background-light);
-  padding: 1rem;
-  border-radius: 8px;
-  margin-top: 1rem;
-  box-shadow: var(--card-shadow);
-}
-
-.dark-mode .weather-card {
-  background: var(--secondary-color);
-}
-
 /* Search Input and Icon */
-/* Set a fixed height and center the content */
 .input-group {
   align-items: stretch;
 }

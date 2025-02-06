@@ -165,8 +165,7 @@
           <!-- Social Sharing Buttons -->
           <div id="socialShare">
             <p>Share this event:</p>
-            <a href="#" id="shareTwitter" target="_blank" class="btn btn-outline-primary btn-sm">Twitter</a>
-            <a href="#" id="shareFacebook" target="_blank" class="btn btn-outline-primary btn-sm">Facebook</a>
+            <a href="#" id="shareTwitter" target="_blank" class="btn btn-outline-primary btn-sm">X</a>
           </div>
         </div>
       </div>
@@ -259,7 +258,6 @@
       // Setup social share links (example text)
       const shareText = `Check out the ${event.race} on ${event.date}!`;
       document.getElementById("shareTwitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
-      document.getElementById("shareFacebook").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
       modal.show();
     }
 
@@ -268,7 +266,7 @@
       const weatherDiv = document.getElementById("weatherResult");
       weatherDiv.innerHTML = "<p>Loading weather data...</p>";
       try {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&76e88dcc2deedd45254cb828a080cb54`);
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=76e88dcc2deedd45254cb828a080cb54`);        
         const data = await response.json();
         if (response.ok) {
           const temp = Math.round(data.main.temp);

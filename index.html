@@ -8,13 +8,24 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom CSS -->
   <link href="src/styles/main.css" rel="stylesheet">
+  <style>
+    /* Additional inline styles for the upcoming event box */
+    .upcoming-event {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border: 2px dashed #007bff;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
   <div class="container my-4">
-    <header class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header with Theme Toggle -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <h1 class="text-center">2025 Racing Schedules</h1>
       <button id="themeToggle" class="btn btn-secondary">Toggle Dark Mode</button>
-    </header>
+    </div>
 
     <!-- Upcoming Event Section -->
     <div id="upcoming-event" class="upcoming-event text-center">
@@ -131,11 +142,42 @@
     </section>
   </div>
 
+  <!-- Event Detail Modal (includes weather forecast functionality) -->
+  <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Event Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p id="modalEventSeries"></p>
+          <p id="modalEventDate"></p>
+          <p id="modalEventRace"></p>
+          <p id="modalEventLocation"></p>
+          <p id="modalEventTime"></p>
+          <div id="modalCountdown" class="mb-3"></div>
+          <!-- Weather Forecast Section -->
+          <div id="weatherSection" class="mb-2">
+            <button id="fetchWeatherBtn" class="btn btn-info">Show Weather Forecast</button>
+            <div id="weatherResult" class="mt-2"></div>
+          </div>
+          <!-- Social Sharing Buttons -->
+          <div id="socialShare">
+            <p>Share this event:</p>
+            <a href="#" id="shareTwitter" target="_blank" class="btn btn-outline-primary btn-sm">Twitter</a>
+            <a href="#" id="shareFacebook" target="_blank" class="btn btn-outline-primary btn-sm">Facebook</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Application Script -->
   <script type="module">
-    // Import your real data from data.js
+    // Import your data from data.js
     import { scheduleData, resultsData, parseEventDate, enhanceEventData } from './src/js/data.js';
 
     /*******************************
@@ -176,7 +218,7 @@
       countdownElement.countdownInterval = setInterval(updateCountdown, 1000);
     }
 
-    // Populate table body with events; columns is an array of keys.
+    // Generic function to populate a table body with event data.
     function populateTable(tableBodyId, events, columns) {
       const tbody = document.getElementById(tableBodyId);
       events.forEach(event => {
@@ -188,18 +230,73 @@
           td.textContent = event[col];
           tr.appendChild(td);
         });
+        // Add click listener to open event detail modal with weather info
+        tr.addEventListener("click", () => openEventModal(event));
         tbody.appendChild(tr);
       });
     }
 
-    // Display the upcoming event based on enhanced event data.
+    // Open the event detail modal and populate with event data.
+    function openEventModal(event) {
+      const modal = new bootstrap.Modal(document.getElementById("eventDetailModal"));
+      document.getElementById("modalTitle").textContent = event.race;
+      document.getElementById("modalEventSeries").textContent = `Series: ${event.series}`;
+      document.getElementById("modalEventDate").textContent = `Date: ${event.date}`;
+      document.getElementById("modalEventRace").textContent = `Race: ${event.race}`;
+      document.getElementById("modalEventLocation").textContent = `Location: ${event.circuit || event.venue || "TBA"}`;
+      document.getElementById("modalEventTime").textContent = event.time ? `Time (ET): ${event.time}` : "";
+      // Start countdown in modal
+      const eventStart = parseEventDate(event.date).getTime();
+      startCountdown("modalCountdown", eventStart);
+      // Setup weather forecast button (if latitude & longitude are available)
+      document.getElementById("fetchWeatherBtn").onclick = () => {
+        if (event.latitude && event.longitude) {
+          fetchWeather(event.latitude, event.longitude);
+        } else {
+          document.getElementById("weatherResult").innerHTML = "<p>Weather data not available for this event.</p>";
+        }
+      };
+      // Setup social share links (example text)
+      const shareText = `Check out the ${event.race} on ${event.date}!`;
+      document.getElementById("shareTwitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+      document.getElementById("shareFacebook").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+      modal.show();
+    }
+
+    // Fetch weather forecast data using OpenWeatherMap API
+    async function fetchWeather(lat, lon) {
+      const weatherDiv = document.getElementById("weatherResult");
+      weatherDiv.innerHTML = "<p>Loading weather data...</p>";
+      try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=YOUR_API_KEY`);
+        const data = await response.json();
+        if (response.ok) {
+          const temp = Math.round(data.main.temp);
+          const conditions = data.weather[0].description;
+          weatherDiv.innerHTML = `
+            <div class="weather-card">
+              <p><strong>Temperature:</strong> ${temp}°C</p>
+              <p><strong>Conditions:</strong> ${conditions}</p>
+              <p><strong>Humidity:</strong> ${data.main.humidity}%</p>
+            </div>
+          `;
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        weatherDiv.innerHTML = "<p class='text-danger'>Unable to fetch weather data.</p>";
+        console.error("Error fetching weather:", error);
+      }
+    }
+
+    // Display the upcoming event (using enhanced data from data.js)
     function displayUpcomingEvent() {
       const allEvents = enhanceEventData();
       allEvents.sort((a, b) => a.start - b.start);
       const now = new Date();
       const nextEvent = allEvents.find(event => event.start >= now);
       
-      // Determine the upcoming weekend (next Saturday and Sunday)
+      // Determine upcoming weekend (next Saturday and Sunday)
       let day = now.getDay();
       let daysUntilSaturday = (6 - day + 7) % 7;
       if (daysUntilSaturday === 0) daysUntilSaturday = 7;
@@ -323,7 +420,7 @@
       });
     }
 
-    // Populate schedule tables using data imported from data.js
+    // Populate schedule tables using data from data.js
     function populateSchedules() {
       populateTable("f1-table-body", scheduleData.f1Events, ["date", "race", "circuit", "time"]);
       populateTable("indy-table-body", scheduleData.indyEvents, ["date", "race", "venue", "network"]);

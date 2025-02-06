@@ -26,7 +26,7 @@ Welcome to the **2025 Racing Schedules** project! This project is a modern, resp
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/2025-racing-schedules.git
+   git clone https://github.com/RaceCentral/RaceCentral.github.io.git
    ```
 
 2. **Navigate to the Project Folder:**

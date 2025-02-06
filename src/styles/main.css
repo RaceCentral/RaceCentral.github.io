@@ -65,7 +65,7 @@ body.dark-mode .nav-tabs .nav-link {
 }
 
 .site-header h1 {
-  font-size: 2.8rem; /* Increased font size from 2.2rem */
+  font-size: 2.8rem; /* Increased font size */
   font-weight: 700;
   color: var(--primary-color);
   margin: 0;
@@ -151,6 +151,32 @@ body.dark-mode .nav-tabs .nav-link {
 
 .dark-mode .table td {
   border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dark Mode Overrides for Schedule Table */
+body.dark-mode .table {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+body.dark-mode .table thead th {
+  background-color: var(--secondary-color);
+  color: var(--text-dark);
+  border-color: var(--accent-color);
+}
+
+body.dark-mode .table tbody td {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .table-striped tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Table Improvements */
@@ -261,17 +287,9 @@ body.dark-mode .nav-tabs .nav-link {
   font-size: 1.2rem;
 }
 
-#themeToggle svg {
-  fill: var(--text-light);
-}
-
 body.dark-mode #themeToggle {
   color: var(--text-dark);
   border-color: var(--accent-color);
-}
-
-body.dark-mode #themeToggle svg {
-  fill: var(--text-dark);
 }
 
 #themeToggle:hover {
@@ -343,7 +361,7 @@ body.dark-mode #themeToggle:hover {
 .bg-secondary { background-color: var(--secondary-color) !important; }
 .bg-accent { background-color: var(--accent-color) !important; }
 
-/* New News Section Styles */
+/* News Section Styles */
 
 /* News Card Styles */
 .news-card {

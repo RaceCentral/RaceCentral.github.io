@@ -24,7 +24,9 @@
     <!-- Header with Theme Toggle -->
     <header class="site-header d-flex justify-content-between align-items-center">
       <h1 class="text-center">2025 Racing Schedules</h1>
-      <button id="themeToggle" class="btn btn-secondary" aria-label="Toggle Dark Mode">🌙</button>
+      <button id="themeToggle" class="btn btn-secondary" aria-label="Toggle Dark Mode">
+        <span id="themeIcon">🌙</span>
+      </button>
     </header>
 
     <!-- Upcoming Event Section -->
@@ -183,7 +185,6 @@
      * Helper Functions
      *******************************/
     
-    // Clear any existing countdown on an element
     function clearCountdown(elementId) {
       const element = document.getElementById(elementId);
       if (element) {
@@ -195,7 +196,6 @@
       }
     }
     
-    // Start a countdown for a given start time (in milliseconds)
     function startCountdown(elementId, startTime) {
       clearCountdown(elementId);
       const countdownElement = document.getElementById(elementId);
@@ -217,7 +217,6 @@
       countdownElement.countdownInterval = setInterval(updateCountdown, 1000);
     }
     
-    // Generic function to populate a table body with event data.
     function populateTable(tableBodyId, events, columns) {
       const tbody = document.getElementById(tableBodyId);
       events.forEach(event => {
@@ -229,13 +228,11 @@
           td.textContent = event[col];
           tr.appendChild(td);
         });
-        // Add click listener to open event detail modal with weather info
         tr.addEventListener("click", () => openEventModal(event));
         tbody.appendChild(tr);
       });
     }
     
-    // Open the event detail modal and populate with event data.
     function openEventModal(event) {
       const modal = new bootstrap.Modal(document.getElementById("eventDetailModal"));
       document.getElementById("modalTitle").textContent = event.race;
@@ -244,10 +241,8 @@
       document.getElementById("modalEventRace").textContent = `Race: ${event.race}`;
       document.getElementById("modalEventLocation").textContent = `Location: ${event.circuit || event.venue || "TBA"}`;
       document.getElementById("modalEventTime").textContent = event.time ? `Time (ET): ${event.time}` : "";
-      // Start countdown in modal
       const eventStart = parseEventDate(event.date).getTime();
       startCountdown("modalCountdown", eventStart);
-      // Setup weather forecast button (if latitude & longitude are available)
       document.getElementById("fetchWeatherBtn").onclick = () => {
         if (event.latitude && event.longitude) {
           fetchWeather(event.latitude, event.longitude);
@@ -255,13 +250,11 @@
           document.getElementById("weatherResult").innerHTML = "<p>Weather data not available for this event.</p>";
         }
       };
-      // Setup social share links (example text)
       const shareText = `Check out the ${event.race} on ${event.date}!`;
       document.getElementById("shareTwitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
       modal.show();
     }
     
-    // Fetch weather forecast data using OpenWeatherMap API
     async function fetchWeather(lat, lon) {
       const weatherDiv = document.getElementById("weatherResult");
       weatherDiv.innerHTML = "<p>Loading weather data...</p>";
@@ -287,14 +280,11 @@
       }
     }
     
-    // Display the upcoming event (using enhanced data from data.js)
     function displayUpcomingEvent() {
       const allEvents = enhanceEventData();
       allEvents.sort((a, b) => a.start - b.start);
       const now = new Date();
       const nextEvent = allEvents.find(event => event.start >= now);
-      
-      // Determine upcoming weekend (next Saturday and Sunday)
       let day = now.getDay();
       let daysUntilSaturday = (6 - day + 7) % 7;
       if (daysUntilSaturday === 0) daysUntilSaturday = 7;
@@ -302,7 +292,6 @@
       saturday.setDate(now.getDate() + daysUntilSaturday);
       const sunday = new Date(saturday);
       sunday.setDate(saturday.getDate() + 1);
-      
       const upcomingDiv = document.getElementById("upcoming-event");
       if (nextEvent) {
         if (nextEvent.start >= saturday && nextEvent.start <= sunday) {
@@ -327,7 +316,6 @@
       }
     }
     
-    // Updated fetchNews() function that creates a grid of news cards
     async function fetchNews() {
       const f1Feed = "https://www.motorsport.com/rss/f1/news/";
       const indyFeed = "https://www.motorsport.com/rss/indycar/news/";
@@ -387,7 +375,6 @@
       }
     }
     
-    // Fetch RSS helper function
     async function fetchRSS(url) {
       try {
         const rss2jsonAPI = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
@@ -410,7 +397,6 @@
       }
     }
     
-    // Global search functionality
     function setupSearch() {
       const searchInput = document.getElementById("searchInput");
       searchInput.addEventListener("input", function(e) {
@@ -422,15 +408,15 @@
       });
     }
     
-    // Theme toggle functionality with icon updates
     function setupThemeToggle() {
       const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
       
       function updateToggleIcon() {
         if (document.body.classList.contains("dark-mode")) {
-          themeToggle.innerHTML = '☀️'; // Sun icon when in dark mode
+          themeIcon.textContent = "☀️"; // Sun icon in dark mode
         } else {
-          themeToggle.innerHTML = '🌙'; // Moon icon when in light mode
+          themeIcon.textContent = "🌙"; // Moon icon in light mode
         }
       }
       
@@ -446,7 +432,6 @@
       });
     }
     
-    // Populate schedule tables using data from data.js
     function populateSchedules() {
       populateTable("f1-table-body", scheduleData.f1Events, ["date", "race", "circuit", "time"]);
       populateTable("indy-table-body", scheduleData.indyEvents, ["date", "race", "venue", "network"]);
@@ -454,7 +439,6 @@
       populateTable("nascar-playoffs-table-body", scheduleData.nascarPlayoffEvents, ["date", "race", "venue", "network"]);
     }
     
-    // On DOM content loaded, initialize the app.
     document.addEventListener("DOMContentLoaded", () => {
       setupThemeToggle();
       setupSearch();

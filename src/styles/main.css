@@ -39,13 +39,14 @@ body.dark-mode .search-input {
 }
 
 body.dark-mode .upcoming-event {
-  background: linear-gradient(135deg, darken(var(--primary-color), 10%), darken(var(--accent-color), 10%)); /* Slightly darker gradient in dark mode */
-  color: var(--text-dark); /* Ensure text is visible */
+  /* Dark mode gradient; note: adjust if your CSS preprocessor supports darken() */
+  background: linear-gradient(135deg, #b50500, #008f8a);
+  color: var(--text-dark);
 }
 
 body.dark-mode .race-card {
   background: var(--secondary-color);
-  color: var(--text-dark); /* Ensure text is visible */
+  color: var(--text-dark);
 }
 
 body.dark-mode .modal-content {
@@ -61,12 +62,12 @@ body.dark-mode .nav-tabs .nav-link {
 .site-header {
   padding: 1.5rem 0;
   border-bottom: 3px solid var(--primary-color);
-  margin-bottom: 1.5rem; /* Slightly reduced margin-bottom */
+  margin-bottom: 1.5rem;
 }
 
-.site-header h1 { /* Target h1 inside site-header for specific styling */
-  font-size: 2.2rem; /* Slightly smaller font size for the main title */
-  font-weight: 700; /* Slightly less bold, adjust as needed */
+.site-header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
   color: var(--primary-color);
   margin: 0;
 }
@@ -79,8 +80,8 @@ body.dark-mode .nav-tabs .nav-link {
 
 .nav-tabs .nav-link {
   border: none;
-  border-radius: var(--border-radius-base) var(--border-radius-base) 0 0; /* Using CSS variable for border-radius */
-  padding: 0.8rem 1.2rem; /* Slightly reduced padding */
+  border-radius: var(--border-radius-base) var(--border-radius-base) 0 0;
+  padding: 0.8rem 1.2rem;
   font-weight: 600;
   color: var(--text-light);
   transition: all var(--transition-speed);
@@ -99,8 +100,8 @@ body.dark-mode .nav-tabs .nav-link {
 /* Card Styles */
 .race-card {
   background: var(--background-light);
-  border-radius: var(--border-radius-base); /* Using CSS variable for border-radius */
-  padding: 1.2rem; /* Slightly reduced padding */
+  border-radius: var(--border-radius-base);
+  padding: 1.2rem;
   margin-bottom: 1rem;
   box-shadow: var(--card-shadow);
   transition: transform var(--transition-speed);
@@ -116,7 +117,7 @@ body.dark-mode .nav-tabs .nav-link {
   border-spacing: 0;
   width: 100%;
   margin-bottom: 1rem;
-  border-radius: var(--border-radius-base); /* Using CSS variable for border-radius */
+  border-radius: var(--border-radius-base);
   overflow: hidden;
 }
 
@@ -136,17 +137,16 @@ body.dark-mode .nav-tabs .nav-link {
     border-bottom-right-radius: var(--border-radius-base);
 }
 
-
 .table th {
   background-color: var(--secondary-color);
   color: var(--text-dark);
   font-weight: 600;
-  padding: 0.9rem; /* Slightly reduced padding */
+  padding: 0.9rem;
   text-align: left;
 }
 
 .table td {
-  padding: 0.9rem; /* Slightly reduced padding */
+  padding: 0.9rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -172,26 +172,25 @@ body.dark-mode .nav-tabs .nav-link {
 .upcoming-event {
   background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
   color: white;
-  padding: 1.8rem; /* Slightly reduced padding */
-  border-radius: var(--border-radius-base); /* Using CSS variable for border-radius */
-  margin-bottom: 1.8rem; /* Slightly reduced margin-bottom */
+  padding: 1.8rem;
+  border-radius: var(--border-radius-base);
+  margin-bottom: 1.8rem;
   box-shadow: var(--card-shadow);
 }
 
-.upcoming-event h4 { /* Style the heading inside upcoming event */
-    font-weight: 700;
-    margin-bottom: 0.8rem;
+.upcoming-event h4 {
+  font-weight: 700;
+  margin-bottom: 0.8rem;
 }
 
-.upcoming-event p { /* Style paragraphs inside upcoming event */
-    margin-bottom: 0.5rem;
+.upcoming-event p {
+  margin-bottom: 0.5rem;
 }
-
 
 .countdown {
-  font-size: 1.1rem; /* Slightly smaller countdown font */
+  font-size: 1.1rem;
   font-weight: 700;
-  margin-top: 0.8rem; /* Slightly reduced margin-top */
+  margin-top: 0.8rem;
 }
 
 /* Series Badge */
@@ -216,14 +215,13 @@ body.dark-mode .nav-tabs .nav-link {
   align-items: center;
   justify-content: center;
   height: 2.5rem;
-  padding: 0.5rem; /* Adjusted padding */
+  padding: 0.5rem;
   border: 2px solid var(--accent-color);
   border-right: none;
   border-radius: 8px 0 0 8px;
-  background-color: var(--background-light); /* Set default background for input-group-text */
-  color: var(--text-light); /* Set default text color for input-group-text */
+  background-color: var(--background-light);
+  color: var(--text-light);
 }
-
 
 .search-input {
   height: 2.5rem;
@@ -242,49 +240,50 @@ body.dark-mode .nav-tabs .nav-link {
 }
 
 .input-group-text svg {
-  width: 1.1rem; /* Slightly smaller icon */
-  height: 1.1rem; /* Slightly smaller icon */
+  width: 1.1rem;
+  height: 1.1rem;
   display: block;
-  fill: var(--accent-color); /* Icon color to accent color */
-}
-.dark-mode .input-group-text svg {
-    fill: var(--accent-color); /* Ensure icon color is set in dark mode too if needed */
+  fill: var(--accent-color);
 }
 
+.dark-mode .input-group-text svg {
+    fill: var(--accent-color);
+}
 
 /* Theme Toggle Button */
 #themeToggle {
-  background: transparent; /* Make background transparent */
-  color: var(--text-light); /* Default text color */
-  border: 1px solid var(--accent-color); /* Add border for visibility */
-  padding: 0.5rem 1rem; /* Adjust padding to fit icon nicely */
+  background: transparent;
+  color: var(--text-light);
+  border: 1px solid var(--accent-color);
+  padding: 0.5rem 1rem;
   border-radius: var(--border-radius-base);
   cursor: pointer;
   transition: all var(--transition-speed);
 }
 
 #themeToggle svg {
-    fill: var(--text-light); /* Icon color in light mode */
-}
-body.dark-mode #themeToggle {
-    color: var(--text-dark); /* Text color in dark mode */
-    border-color: var(--accent-color); /* Keep border consistent */
-}
-body.dark-mode #themeToggle svg {
-    fill: var(--text-dark); /* Icon color in dark mode */
+    fill: var(--text-light);
 }
 
+body.dark-mode #themeToggle {
+    color: var(--text-dark);
+    border-color: var(--accent-color);
+}
+
+body.dark-mode #themeToggle svg {
+    fill: var(--text-dark);
+}
 
 #themeToggle:hover {
-  background-color: rgba(0, 161, 156, 0.2); /* Accent color hover effect */
-  border-color: var(--accent-color); /* Keep border color consistent */
+  background-color: rgba(0, 161, 156, 0.2);
+  border-color: var(--accent-color);
 }
+
 body.dark-mode #themeToggle:hover {
-    background-color: rgba(0, 161, 156, 0.3); /* Slightly different hover in dark mode if needed */
+    background-color: rgba(0, 161, 156, 0.3);
 }
 
-
-/* Modal Styles - No changes needed, looks good */
+/* Modal Styles */
 .modal-content {
   border-radius: 12px;
   border: none;
@@ -299,33 +298,28 @@ body.dark-mode #themeToggle:hover {
   padding: 1.5rem;
 }
 
-/* Responsive Design - No changes needed, already well done */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .site-header h1 { /* Target h1 inside site-header for responsive styling */
-    font-size: 1.8rem; /* Adjust font size for smaller screens */
+  .site-header h1 {
+    font-size: 1.8rem;
   }
-
   .nav-tabs .nav-link {
-    padding: 0.6rem 0.8rem; /* Adjust tab padding for smaller screens */
-    font-size: 0.9rem; /* Slightly reduce font size on tabs */
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
   }
-
   .table {
-    font-size: 0.8rem; /* Reduce table font size on smaller screens */
+    font-size: 0.8rem;
   }
-
   .table th,
   .table td {
-    padding: 0.6rem; /* Adjust table cell padding for smaller screens */
+    padding: 0.6rem;
   }
-
   .upcoming-event {
-    padding: 1.5rem; /* Adjust padding for upcoming event on smaller screens */
+    padding: 1.5rem;
   }
 }
 
-
-/* Animation Classes - Fade In animation is good */
+/* Animation Classes */
 .fade-in {
   animation: fadeIn 0.5s ease-in;
 }
@@ -341,10 +335,62 @@ body.dark-mode #themeToggle:hover {
   }
 }
 
-/* Utility Classes - Good as they are */
+/* Utility Classes */
 .text-primary { color: var(--primary-color) !important; }
 .text-secondary { color: var(--secondary-color) !important; }
 .text-accent { color: var(--accent-color) !important; }
 .bg-primary { background-color: var(--primary-color) !important; }
 .bg-secondary { background-color: var(--secondary-color) !important; }
 .bg-accent { background-color: var(--accent-color) !important; }
+
+/* New News Section Styles */
+
+/* News Card Styles */
+.news-card {
+  border: none;
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition-speed);
+  background-color: var(--background-light);
+  overflow: hidden;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+}
+
+/* News Item Styles */
+.news-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.news-item:last-child {
+  border-bottom: none;
+}
+
+.news-link {
+  font-weight: 600;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.news-link:hover {
+  text-decoration: underline;
+}
+
+.news-date {
+  color: #666;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+/* Dark Mode Overrides for News */
+body.dark-mode .news-card {
+  background-color: var(--background-dark);
+}
+
+body.dark-mode .news-link {
+  color: var(--accent-color);
+}

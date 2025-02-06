@@ -327,32 +327,7 @@
       }
     }
 
-    async function fetchRSS(url) {
-        try {
-            const rss2jsonAPI = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
-            const response = await fetch(rss2jsonAPI);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            if (data.status !== 'ok') {
-                throw new Error('Failed to fetch RSS feed');
-            }
-    
-            return data.items.slice(0, 5).map(item => ({
-                title: item.title || "",
-                link: item.link || "#",
-                pubDate: item.pubDate || ""
-            }));
-        } catch (error) {
-            console.error('Error fetching RSS:', error);
-            return []; // Return empty array on error
-        }
-    }
-
+    // Updated fetchNews() function that creates a grid of news cards
     async function fetchNews() {
       const f1Feed = "https://www.motorsport.com/rss/f1/news/";
       const indyFeed = "https://www.motorsport.com/rss/indycar/news/";
@@ -363,45 +338,75 @@
           fetchRSS(indyFeed),
           fetchRSS(nascarFeed)
         ]);
+
         const newsGrid = document.getElementById("newsGrid");
         newsGrid.innerHTML = `
           <div class="col-md-4">
-            <h5>F1 News</h5>
-            <ul class="list-unstyled">
-              ${f1News.map(item => `
-                <li>
-                  <a href="${item.link}" target="_blank">${item.title}</a>
-                  <br /><small>${item.pubDate}</small>
-                </li>
-              `).join('')}
-            </ul>
+            <div class="card news-card h-100">
+              <div class="card-body">
+                <h5 class="card-title">F1 News</h5>
+                ${f1News.map(item => `
+                  <div class="news-item mb-3">
+                    <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
+                    <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
           </div>
           <div class="col-md-4">
-            <h5>IndyCar News</h5>
-            <ul class="list-unstyled">
-              ${indyNews.map(item => `
-                <li>
-                  <a href="${item.link}" target="_blank">${item.title}</a>
-                  <br /><small>${item.pubDate}</small>
-                </li>
-              `).join('')}
-            </ul>
+            <div class="card news-card h-100">
+              <div class="card-body">
+                <h5 class="card-title">IndyCar News</h5>
+                ${indyNews.map(item => `
+                  <div class="news-item mb-3">
+                    <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
+                    <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
           </div>
           <div class="col-md-4">
-            <h5>NASCAR News</h5>
-            <ul class="list-unstyled">
-              ${nascarNews.map(item => `
-                <li>
-                  <a href="${item.link}" target="_blank">${item.title}</a>
-                  <br /><small>${item.pubDate}</small>
-                </li>
-              `).join('')}
-            </ul>
+            <div class="card news-card h-100">
+              <div class="card-body">
+                <h5 class="card-title">NASCAR News</h5>
+                ${nascarNews.map(item => `
+                  <div class="news-item mb-3">
+                    <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
+                    <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
           </div>
         `;
       } catch (error) {
         document.getElementById("newsGrid").innerHTML = "<p class='text-danger'>Unable to fetch news.</p>";
         console.error("Error fetching news:", error);
+      }
+    }
+
+    // Fetch RSS helper function
+    async function fetchRSS(url) {
+      try {
+        const rss2jsonAPI = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
+        const response = await fetch(rss2jsonAPI);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.status !== 'ok') {
+          throw new Error('Failed to fetch RSS feed');
+        }
+        return data.items.slice(0, 5).map(item => ({
+          title: item.title || "",
+          link: item.link || "#",
+          pubDate: item.pubDate || ""
+        }));
+      } catch (error) {
+        console.error('Error fetching RSS:', error);
+        return []; // Return empty array on error
       }
     }
 

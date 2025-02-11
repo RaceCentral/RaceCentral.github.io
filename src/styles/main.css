@@ -2,13 +2,12 @@
   --primary-color: #e10600;      /* F1 Red */
   --secondary-color: #1e1e1e;    /* Dark Gray */
   --accent-color: #00a19c;       /* Turquoise */
-  --background-light: #ffffff;
+  --background-light: #f7f7f7;   /* A soft off-white for a modern look */
   --background-dark: #121212;
   --text-light: #333333;
   --text-dark: #e0e0e0;
-  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --transition-speed: 0.3s;
-  --border-radius-base: 0.5rem; /* Base border radius for consistency */
+  --border-radius-base: 0.5rem;
 }
 
 /* Base Styles */
@@ -38,13 +37,8 @@ body.dark-mode .search-input {
   border-color: var(--accent-color);
 }
 
-body.dark-mode .upcoming-event {
-  background: linear-gradient(135deg, #b50500, #008f8a);
-  color: var(--text-dark);
-}
-
 body.dark-mode .race-card {
-  background: var(--secondary-color);
+  background-color: var(--background-dark);
   color: var(--text-dark);
 }
 
@@ -59,13 +53,13 @@ body.dark-mode .nav-tabs .nav-link {
 
 /* Header Styles */
 .site-header {
-  padding: 2rem 0; /* Increased vertical padding */
+  padding: 2rem 0;
   border-bottom: 3px solid var(--primary-color);
   margin-bottom: 1.5rem;
 }
 
 .site-header h1 {
-  font-size: 2.8rem; /* Increased font size */
+  font-size: 2.8rem;
   font-weight: 700;
   color: var(--primary-color);
   margin: 0;
@@ -96,18 +90,33 @@ body.dark-mode .nav-tabs .nav-link {
   border-bottom: 3px solid var(--primary-color);
 }
 
-/* Card Styles */
+/* Modern Card Styles (applied via Bootstrap’s .card class) */
+.card {
+  background-color: var(--background-light);
+  border: 1px solid #e0e0e0;
+  border-radius: var(--border-radius-base);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Race Card (if used) */
 .race-card {
-  background: var(--background-light);
+  background-color: var(--background-light);
+  border: 1px solid #e0e0e0;
   border-radius: var(--border-radius-base);
   padding: 1.2rem;
   margin-bottom: 1rem;
-  box-shadow: var(--card-shadow);
-  transition: transform var(--transition-speed);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 .race-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Tables */
@@ -118,6 +127,7 @@ body.dark-mode .nav-tabs .nav-link {
   margin-bottom: 1rem;
   border-radius: var(--border-radius-base);
   overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .table thead tr:first-child th:first-child {
@@ -140,8 +150,10 @@ body.dark-mode .nav-tabs .nav-link {
   background-color: var(--secondary-color);
   color: var(--text-dark);
   font-weight: 600;
-  padding: 0.9rem;
+  padding: 1rem;
   text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .table td {
@@ -157,6 +169,7 @@ body.dark-mode .nav-tabs .nav-link {
 body.dark-mode .table {
   background-color: var(--background-dark);
   color: var(--text-dark);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 body.dark-mode .table thead th {
@@ -195,42 +208,47 @@ body.dark-mode .table-striped tbody tr:hover {
 
 /* Upcoming Event Section */
 .upcoming-event {
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-  color: white;
-  padding: 1.8rem;
-  border-radius: var(--border-radius-base);
-  margin-bottom: 1.8rem;
-  box-shadow: var(--card-shadow);
-}
-
-.upcoming-event h4 {
-  font-weight: 700;
-  margin-bottom: 0.8rem;
-}
-
-.upcoming-event p {
-  margin-bottom: 0.5rem;
-}
-
-.countdown {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-top: 0.8rem;
-}
-
-/* Series Badge */
-.series-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
   background-color: var(--primary-color);
   color: white;
-  border-radius: 1rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin: 0.5rem 0;
+  padding: 2rem;
+  border-radius: var(--border-radius-base);
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Search Input and Icon */
+/* Remove the old gradient overlay */
+.upcoming-event::before {
+  display: none;
+}
+
+/* Upcoming Events List */
+.upcoming-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* (The upcoming event items are now rendered as .card elements via JS) */
+
+/* Countdown Timer */
+.countdown-timer {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-align: center;
+  padding: 0.75rem;
+  background-color: var(--background-dark);
+  border: 1px solid #c9c8c8;
+  border-radius: var(--border-radius-base);
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
+}
+
+body.dark-mode .countdown-timer {
+  background-color: var(--background-dark);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Input Group and Search Input */
 .input-group {
   align-items: stretch;
 }
@@ -305,11 +323,19 @@ body.dark-mode #themeToggle:hover {
 .modal-content {
   border-radius: 12px;
   border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .modal-header {
   border-bottom: 2px solid var(--primary-color);
   padding: 1.5rem;
+  background: linear-gradient(145deg, var(--primary-color), var(--accent-color));
+  color: white;
+}
+
+.modal-title {
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .modal-body {
@@ -362,40 +388,42 @@ body.dark-mode #themeToggle:hover {
 .bg-accent { background-color: var(--accent-color) !important; }
 
 /* News Section Styles */
-
-/* News Card Styles */
 .news-card {
-  border: none;
-  border-radius: var(--border-radius-base);
-  box-shadow: var(--card-shadow);
-  transition: transform var(--transition-speed);
   background-color: var(--background-light);
+  border: 1px solid #e0e0e0;
+  border-radius: var(--border-radius-base);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
   overflow: hidden;
 }
 
 .news-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* News Item Styles */
 .news-item {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.5rem;
+  padding: 1rem;
+  transition: background-color 0.2s ease;
 }
 
 .news-item:last-child {
   border-bottom: none;
 }
 
+.news-item:hover {
+  background-color: rgba(225, 6, 0, 0.02);
+}
+
 .news-link {
   font-weight: 600;
   color: var(--primary-color);
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .news-link:hover {
-  text-decoration: underline;
+  color: var(--accent-color);
 }
 
 .news-date {
@@ -404,11 +432,22 @@ body.dark-mode #themeToggle:hover {
   margin-top: 0.2rem;
 }
 
-/* Dark Mode Overrides for News */
 body.dark-mode .news-card {
   background-color: var(--background-dark);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 body.dark-mode .news-link {
   color: var(--accent-color);
+}
+
+.weather-card {
+  background: linear-gradient(145deg, #f6f6f6, #ffffff);
+  padding: 1.2rem;
+  border-radius: var(--border-radius-base);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .weather-card {
+  background: linear-gradient(145deg, #2a2a2a, #333333);
 }

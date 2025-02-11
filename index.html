@@ -30,8 +30,13 @@
     </header>
 
     <!-- Upcoming Event Section -->
-    <div id="upcoming-event" class="upcoming-event text-center">
-      <!-- Upcoming race info will be injected here -->
+    <div id="upcoming-event" class="upcoming-event">
+      <div class="row">
+        <div class="col-12">
+          <h4 class="mb-3">Upcoming Races</h4>
+          <div id="upcomingEventDetails" class="upcoming-events-list"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Global Search -->
@@ -153,21 +158,37 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p id="modalEventSeries"></p>
-          <p id="modalEventDate"></p>
-          <p id="modalEventRace"></p>
-          <p id="modalEventLocation"></p>
-          <p id="modalEventTime"></p>
-          <div id="modalCountdown" class="mb-3"></div>
-          <!-- Weather Forecast Section -->
-          <div id="weatherSection" class="mb-2">
-            <button id="fetchWeatherBtn" class="btn btn-info">Show Upcoming Weather Forecast</button>
+          <div class="event-details">
+            <div class="series-badge mb-3" id="modalEventSeries"></div>
+            <h5 class="mb-3" id="modalEventRace"></h5>
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Date:</strong> <span id="modalEventDate"></span></p>
+                <p><strong>Location:</strong> <span id="modalEventLocation"></span></p>
+                <p><strong>Time:</strong> <span id="modalEventTime"></span></p>
+              </div>
+              <div class="col-md-6">
+                <div id="modalCountdown" class="countdown-timer mb-3"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Weather Section -->
+          <div id="weatherSection" class="mt-4">
+            <button id="fetchWeatherBtn" class="btn btn-info btn-sm">
+              Show Weather Forecast
+            </button>
             <div id="weatherResult" class="mt-2"></div>
           </div>
-          <!-- Social Sharing Buttons -->
-          <div id="socialShare">
-            <p>Share this event:</p>
-            <a href="#" id="shareTwitter" target="_blank" class="btn btn-outline-primary btn-sm">Share on X</a>
+          
+          <!-- Social Share -->
+          <div id="socialShare" class="mt-4">
+            <h6>Share this event</h6>
+            <div class="d-flex gap-2">
+              <a href="#" id="shareTwitter" class="btn btn-sm btn-outline-primary">
+                Share on X
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -235,23 +256,32 @@
     
     function openEventModal(event) {
       const modal = new bootstrap.Modal(document.getElementById("eventDetailModal"));
-      document.getElementById("modalTitle").textContent = event.race;
-      document.getElementById("modalEventSeries").textContent = `Series: ${event.series}`;
-      document.getElementById("modalEventDate").textContent = `Date: ${event.date}`;
-      document.getElementById("modalEventRace").textContent = `Race: ${event.race}`;
-      document.getElementById("modalEventLocation").textContent = `Location: ${event.circuit || event.venue || "TBA"}`;
-      document.getElementById("modalEventTime").textContent = event.time ? `Time (ET): ${event.time}` : "";
-      const eventStart = parseEventDate(event.date).getTime();
-      startCountdown("modalCountdown", eventStart);
+      
+      // Update modal content
+      document.getElementById("modalEventSeries").textContent = event.series;
+      document.getElementById("modalEventRace").textContent = event.race;
+      document.getElementById("modalEventDate").textContent = event.date;
+      document.getElementById("modalEventLocation").textContent = event.circuit || event.venue || "TBA";
+      document.getElementById("modalEventTime").textContent = event.time || "TBA";
+      
+      // Start countdown
+      startCountdown("modalCountdown", event.start.getTime());
+      
+      // Setup weather button
       document.getElementById("fetchWeatherBtn").onclick = () => {
         if (event.latitude && event.longitude) {
           fetchWeather(event.latitude, event.longitude);
         } else {
-          document.getElementById("weatherResult").innerHTML = "<p>Weather data not available for this event.</p>";
+          document.getElementById("weatherResult").innerHTML = 
+            "<div class='alert alert-warning'>Weather data not available for this location.</div>";
         }
       };
-      const shareText = `Check out the ${event.race} on ${event.date}!`;
-      document.getElementById("shareTwitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+      
+      // Update share link
+      const shareText = `Check out the ${event.race} on ${event.date}! #Motorsports`;
+      document.getElementById("shareTwitter").href = 
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+      
       modal.show();
     }
     
@@ -284,40 +314,69 @@
       const allEvents = enhanceEventData();
       allEvents.sort((a, b) => a.start - b.start);
       const now = new Date();
+
+      // Get this weekend's date range (Friday to Sunday)
+      const friday = new Date(now);
+      friday.setDate(now.getDate() + ((5 - now.getDay() + 7) % 7));
+      friday.setHours(0, 0, 0, 0);
+      
+      const sunday = new Date(friday);
+      sunday.setDate(friday.getDate() + 2);
+      sunday.setHours(23, 59, 59, 999);
+
+      // Find all events this weekend
+      const weekendEvents = allEvents.filter(event => 
+        event.start >= friday && event.start <= sunday
+      );
+
+      // Find next event if no weekend events
       const nextEvent = allEvents.find(event => event.start >= now);
 
-      // Get this weekend's date range
-      const saturday = new Date(now);
-      saturday.setDate(now.getDate() + ((6 - now.getDay() + 7) % 7));
-      saturday.setHours(0, 0, 0, 0);  // Set to start of day
+      const upcomingDiv = document.getElementById("upcomingEventDetails");
       
-      const sunday = new Date(saturday);
-      sunday.setDate(saturday.getDate() + 1);
-      sunday.setHours(23, 59, 59, 999);  // Set to end of day
-
-      const upcomingDiv = document.getElementById("upcoming-event");
-      
-      if (nextEvent) {
-        // Check if the next event is this weekend
-        if (nextEvent.start >= saturday && nextEvent.start <= sunday) {
-          upcomingDiv.innerHTML = `
-            <h4>This Weekend's Race</h4>
-            <p><strong>Series:</strong> ${nextEvent.series}</p>
-            <p><strong>Date:</strong> ${nextEvent.date}</p>
-            <p><strong>Race:</strong> ${nextEvent.race}</p>
-            <p><strong>Location:</strong> ${nextEvent.circuit || nextEvent.venue || ""}</p>
-            ${ nextEvent.time ? `<p><strong>Time (ET):</strong> ${nextEvent.time}</p>` : "" }
-            <div id="eventCountdown" class="mt-2"></div>
+      if (weekendEvents.length > 0) {
+        // Display all weekend events using Bootstrap card markup
+        upcomingDiv.innerHTML = weekendEvents.map(event => {
+          const location = event.circuit || event.venue || "TBA";
+          const timeString = event.time ? `<p class="card-text mb-1"><strong>Time:</strong> ${event.time}</p>` : "";
+          const countdownId = `countdown-${event.series.replace(/\s+/g, '-').toLowerCase()}`;
+          
+          // Start the countdown after insertion
+          setTimeout(() => startCountdown(countdownId, event.start.getTime()), 0);
+          
+          return `
+            <div class="card upcoming-event-item mb-3">
+              <div class="card-body">
+                <div class="series-badge mb-2">${event.series}</div>
+                <h5 class="card-title mb-2">${event.race}</h5>
+                <p class="card-text mb-1"><strong>Date:</strong> ${event.date}</p>
+                <p class="card-text mb-1"><strong>Location:</strong> ${location}</p>
+                ${timeString}
+                <div id="${countdownId}" class="countdown-timer mt-2"></div>
+              </div>
+            </div>
           `;
-          startCountdown("eventCountdown", nextEvent.start.getTime());
-        } else {
-          upcomingDiv.innerHTML = `
-            <h4>Next Race</h4>
-            <p>The next race is the ${nextEvent.race} at ${nextEvent.city} on ${nextEvent.date} (${nextEvent.series}).</p>
-          `;
-        }
+        }).join('');
+      } else if (nextEvent) {
+        const location = nextEvent.circuit || nextEvent.venue || "TBA";
+        const timeString = nextEvent.time ? `<p class="card-text mb-1"><strong>Time:</strong> ${nextEvent.time}</p>` : "";
+        
+        upcomingDiv.innerHTML = `
+          <div class="card upcoming-event-item mb-3">
+            <div class="card-body">
+              <div class="series-badge mb-2">${nextEvent.series}</div>
+              <h5 class="card-title mb-2">${nextEvent.race}</h5>
+              <p class="card-text mb-1"><strong>Date:</strong> ${nextEvent.date}</p>
+              <p class="card-text mb-1"><strong>Location:</strong> ${location}</p>
+              ${timeString}
+              <div id="eventCountdown" class="countdown-timer mt-2"></div>
+            </div>
+          </div>
+        `;
+        
+        startCountdown("eventCountdown", nextEvent.start.getTime());
       } else {
-        upcomingDiv.innerHTML = "<p>No upcoming events.</p>";
+        upcomingDiv.innerHTML = "<p>No upcoming events scheduled.</p>";
       }
     }
     

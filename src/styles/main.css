@@ -207,6 +207,7 @@ body.dark-mode .table-striped tbody tr:hover {
 }
 
 /* Upcoming Event Section */
+/* Upcoming Event Section */
 .upcoming-event {
   background-color: var(--primary-color);
   color: white;
@@ -216,9 +217,10 @@ body.dark-mode .table-striped tbody tr:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Remove the old gradient overlay */
-.upcoming-event::before {
-  display: none;
+/* Dark mode override for upcoming event section */
+body.dark-mode .upcoming-event {
+  background-color: var(--secondary-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Upcoming Events List */
@@ -226,6 +228,22 @@ body.dark-mode .table-striped tbody tr:hover {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+/* Dark mode overrides for cards within upcoming events */
+body.dark-mode .upcoming-events-list .card {
+  background-color: var(--background-dark);
+  border-color: var(--primary-color);
+  color: var(--text-dark);
+}
+
+body.dark-mode .upcoming-events-list .card-body {
+  background-color: var(--primary-color);
+}
+
+body.dark-mode .upcoming-events-list .series-badge {
+  background-color: var(--primary-color);
+  color: var(--text-dark);
 }
 
 /* (The upcoming event items are now rendered as .card elements via JS) */
@@ -388,6 +406,13 @@ body.dark-mode #themeToggle:hover {
 .bg-accent { background-color: var(--accent-color) !important; }
 
 /* News Section Styles */
+.news-title{
+  color: var (--text-light);
+}
+body.dark-mode .news-title {
+  color: var(--text-dark);
+}
+
 .news-card {
   background-color: var(--background-light);
   border: 1px solid #e0e0e0;

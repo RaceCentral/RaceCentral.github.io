@@ -285,18 +285,23 @@
       allEvents.sort((a, b) => a.start - b.start);
       const now = new Date();
       const nextEvent = allEvents.find(event => event.start >= now);
-      let day = now.getDay();
-      let daysUntilSaturday = (6 - day + 7) % 7;
-      if (daysUntilSaturday === 0) daysUntilSaturday = 7;
+
+      // Get this weekend's date range
       const saturday = new Date(now);
-      saturday.setDate(now.getDate() + daysUntilSaturday);
+      saturday.setDate(now.getDate() + ((6 - now.getDay() + 7) % 7));
+      saturday.setHours(0, 0, 0, 0);  // Set to start of day
+      
       const sunday = new Date(saturday);
       sunday.setDate(saturday.getDate() + 1);
+      sunday.setHours(23, 59, 59, 999);  // Set to end of day
+
       const upcomingDiv = document.getElementById("upcoming-event");
+      
       if (nextEvent) {
+        // Check if the next event is this weekend
         if (nextEvent.start >= saturday && nextEvent.start <= sunday) {
           upcomingDiv.innerHTML = `
-            <h4>Upcoming Weekend Race</h4>
+            <h4>This Weekend's Race</h4>
             <p><strong>Series:</strong> ${nextEvent.series}</p>
             <p><strong>Date:</strong> ${nextEvent.date}</p>
             <p><strong>Race:</strong> ${nextEvent.race}</p>
@@ -307,8 +312,8 @@
           startCountdown("eventCountdown", nextEvent.start.getTime());
         } else {
           upcomingDiv.innerHTML = `
-            <h4>No Upcoming Weekend Race</h4>
-            <p>The next race is the ${nextEvent.race} at ${nextEvent.city} on ${nextEvent.date} for (${nextEvent.series}).</p>
+            <h4>Next Race</h4>
+            <p>The next race is the ${nextEvent.race} at ${nextEvent.city} on ${nextEvent.date} (${nextEvent.series}).</p>
           `;
         }
       } else {

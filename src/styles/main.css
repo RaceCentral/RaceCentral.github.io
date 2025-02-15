@@ -166,81 +166,137 @@ body.dark-mode .nav-tabs .nav-link {
 /* Mobile-Friendly Table Styles */
 @media (max-width: 768px) {
   .table {
-    display: block;
+    display: table;
     width: 100%;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
 
   .table td, .table th {
-    padding: 0.75rem 0.5rem;
-    font-size: 0.9rem;
+    padding: 0.5rem 0.35rem;
+    font-size: 0.85rem;
     white-space: normal;
     overflow: visible;
     text-overflow: clip;
+    line-height: 1.2;
   }
 
-  /* Show only essential columns on mobile */
-  .table th:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4)),
-  .table td:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4)) {
+  /* Combined Schedule - hide Venue and Network columns */
+  #all table thead tr th:nth-child(4),
+  #all table tbody tr td:nth-child(4),
+  #all table thead tr th:nth-child(6),
+  #all table tbody tr td:nth-child(6) {
     display: none;
   }
 
-  .series-badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
+  /* F1 Schedule - hide Circuit and Network columns */
+  #f1 table thead tr th:nth-child(3),
+  #f1 table tbody tr td:nth-child(3),
+  #f1 table thead tr th:nth-child(5),
+  #f1 table tbody tr td:nth-child(5) {
+    display: none;
   }
 
-  /* Adjust column widths for mobile */
-  .table th:nth-child(1),
-  .table td:nth-child(1) {
-    width: 20%; /* Date column */
+  /* IndyCar Schedule - hide Venue and Network columns */
+  #indycar table thead tr th:nth-child(3),
+  #indycar table tbody tr td:nth-child(3),
+  #indycar table thead tr th:nth-child(5),
+  #indycar table tbody tr td:nth-child(5) {
+    display: none;
   }
 
-  .table th:nth-child(2),
+  /* NASCAR Schedule - hide Venue and Network columns */
+  #nascar table thead tr th:nth-child(3),
+  #nascar table tbody tr td:nth-child(3),
+  #nascar table thead tr th:nth-child(5),
+  #nascar table tbody tr td:nth-child(5) {
+    display: none;
+  }
+
+  /* Adjust column widths for combined view */
+  #all table thead tr th:nth-child(1),
+  #all table tbody tr td:nth-child(1) {
+    width: 20%;
+  }
+
+  #all table thead tr th:nth-child(2),
+  #all table tbody tr td:nth-child(2) {
+    width: 25%;
+  }
+
+  #all table thead tr th:nth-child(3),
+  #all table tbody tr td:nth-child(3) {
+    width: 40%;
+  }
+
+  #all table thead tr th:nth-child(5),
+  #all table tbody tr td:nth-child(5) {
+    width: 15%;
+    text-align: right;
+  }
+
+  /* Adjust column widths for series-specific views */
+  #f1 table thead tr th:nth-child(1),
+  #f1 table tbody tr td:nth-child(1),
+  #indycar table thead tr th:nth-child(1),
+  #indycar table tbody tr td:nth-child(1),
+  #nascar table thead tr th:nth-child(1),
+  #nascar table tbody tr td:nth-child(1) {
+    width: 25%;
+  }
+
+  #f1 table thead tr th:nth-child(2),
+  #f1 table tbody tr td:nth-child(2),
+  #indycar table thead tr th:nth-child(2),
+  #indycar table tbody tr td:nth-child(2),
+  #nascar table thead tr th:nth-child(2),
+  #nascar table tbody tr td:nth-child(2) {
+    width: 55%;
+  }
+
+  #f1 table thead tr th:nth-child(4),
+  #f1 table tbody tr td:nth-child(4),
+  #indycar table thead tr th:nth-child(4),
+  #indycar table tbody tr td:nth-child(4),
+  #nascar table thead tr th:nth-child(4),
+  #nascar table tbody tr td:nth-child(4) {
+    width: 20%;
+    text-align: right;
+  }
+
+  /* Additional styling for better readability */
   .table td:nth-child(2) {
-    width: 45%; /* Race/Series column */
+    font-weight: 500;
   }
 
-  .table th:nth-child(3),
-  .table td:nth-child(3) {
-    width: 20%; /* Venue column */
-    white-space: normal;
-    word-wrap: break-word;
-    overflow: visible;
+  .series-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.35rem;
+    margin-bottom: 0;
   }
 
-  .table th:nth-child(4),
-  .table td:nth-child(4) {
-    width: 15%; /* Time column */
+  /* Ensure time columns are properly aligned */
+  .table td:last-visible-child {
+    text-align: right;
+    white-space: nowrap;
+    padding-right: 0.5rem;
+  }
+}
+
+/* Additional small screen optimizations */
+@media (max-width: 375px) {
+  .table td, .table th {
+    padding: 0.4rem 0.25rem;
     font-size: 0.8rem;
   }
 
-  /* Stack podium results vertically on mobile */
-  .podium-results {
-    white-space: normal;
-    font-size: 0.85rem;
-    padding: 0.5rem;
+  .table td:last-child {
+    font-size: 0.75rem;
   }
 
-  .podium-position {
-    min-width: 2rem;
-    display: inline-block;
-    margin-right: 0.25rem;
-  }
-
-  .podium-results span {
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-
-  /* Highlight current row more visibly on mobile */
-  .table tr:active {
-    background-color: rgba(225, 6, 0, 0.15);
-  }
-
-  .dark-mode .table tr:active {
-    background-color: rgba(225, 6, 0, 0.25);
+  .series-badge {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.3rem;
   }
 }
 

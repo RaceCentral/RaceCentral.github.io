@@ -107,6 +107,62 @@ body.dark-mode .nav-tabs .nav-link {
   color: black;
 }
 
+/* Container */
+.container {
+  max-width: 1400px !important;
+  padding: 2rem;
+  background: var(--background-light);
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--box-shadow);
+}
+
+.dark-mode .container {
+  background: var(--background-dark);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styles */
+.table td, .table th {
+  background: var(--background-light);
+  color: var(--text-light);
+}
+
+.dark-mode .table td, .dark-mode .table th {
+  background: var(--background-dark);
+  color: var(--text-dark);
+}
+
+/* Search Input */
+.search-input {
+  background: white;
+  color: var(--text-light);
+}
+
+.dark-mode .search-input {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+/* Nav Tabs */
+.nav-tabs .nav-link {
+  color: var(--text-light);
+}
+
+.dark-mode .nav-tabs .nav-link {
+  color: var(--text-dark);
+}
+
+/* Countdown Timer */
+.countdown-timer {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000000 !important;
+}
+
+.dark-mode .countdown-timer {
+  background: var(--background-dark);
+  color: #ffffff !important;
+}
+
 /* Mobile-Friendly Table Styles */
 @media (max-width: 768px) {
   .table {
@@ -124,9 +180,9 @@ body.dark-mode .nav-tabs .nav-link {
     text-overflow: clip;
   }
 
-  /* Hide non-essential columns on mobile */
-  .table th:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)),
-  .table td:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)) {
+  /* Show only essential columns on mobile */
+  .table th:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4)),
+  .table td:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4)) {
     display: none;
   }
 
@@ -135,7 +191,7 @@ body.dark-mode .nav-tabs .nav-link {
     padding: 0.25rem 0.5rem;
   }
 
-  /* Ensure the essential columns have appropriate widths */
+  /* Adjust column widths for mobile */
   .table th:nth-child(1),
   .table td:nth-child(1) {
     width: 20%; /* Date column */
@@ -143,15 +199,21 @@ body.dark-mode .nav-tabs .nav-link {
 
   .table th:nth-child(2),
   .table td:nth-child(2) {
-    width: 25%; /* Series column */
+    width: 45%; /* Race/Series column */
   }
 
   .table th:nth-child(3),
   .table td:nth-child(3) {
-    width: 55%; /* Race column */
+    width: 20%; /* Venue column */
     white-space: normal;
     word-wrap: break-word;
     overflow: visible;
+  }
+
+  .table th:nth-child(4),
+  .table td:nth-child(4) {
+    width: 15%; /* Time column */
+    font-size: 0.8rem;
   }
 
   /* Stack podium results vertically on mobile */

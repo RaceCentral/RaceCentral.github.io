@@ -833,11 +833,28 @@
         }
       }
       
-      if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark-mode");
+      // Check for stored preference first
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme) {
+        document.body.classList.toggle("dark-mode", storedTheme === "dark");
+      } else {
+        // If no stored preference, use system preference
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.body.classList.toggle("dark-mode", prefersDark);
       }
+      
       updateToggleIcon();
       
+      // Listen for system theme changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        // Only apply system preference if user hasn't set their own preference
+        if (!localStorage.getItem("theme")) {
+          document.body.classList.toggle("dark-mode", e.matches);
+          updateToggleIcon();
+        }
+      });
+      
+      // Handle manual toggle
       themeToggle.addEventListener("click", () => {
         document.body.classList.toggle("dark-mode");
         localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");

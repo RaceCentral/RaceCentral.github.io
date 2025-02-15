@@ -16,6 +16,8 @@
 
   <!-- Bootstrap CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <!-- Custom CSS -->
   <link href="src/styles/main.css" rel="stylesheet">
 </head>
@@ -25,7 +27,7 @@
     <header class="site-header d-flex justify-content-between align-items-center">
       <h1 class="text-center">2025 Racing Schedules</h1>
       <button id="themeToggle" class="btn btn-secondary" aria-label="Toggle Dark Mode">
-        <span id="themeIcon">🌙</span>
+        <i class="fas" id="themeIcon"></i>
       </button>
     </header>
 
@@ -33,21 +35,27 @@
     <div id="upcoming-event" class="upcoming-event">
       <div class="row">
         <div class="col-12">
-          <h4 class="mb-3">Upcoming Races</h4>
+          <h4 class="mb-3"><i class="fas fa-flag-checkered me-2"></i>Upcoming Races</h4>
           <div id="upcomingEventDetails" class="upcoming-events-list"></div>
         </div>
       </div>
     </div>
 
     <!-- Global Search -->
-    <div class="mb-3">
-      <input type="text" id="searchInput" class="form-control" placeholder="Search events...">
+    <div class="search-container">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search events...">
+      <i class="fas fa-search search-icon"></i>
     </div>
 
     <!-- Schedule Tabs -->
     <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="f1-tab" data-bs-toggle="tab" data-bs-target="#f1" type="button" role="tab" aria-controls="f1" aria-selected="true">
+        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
+          All Series
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="f1-tab" data-bs-toggle="tab" data-bs-target="#f1" type="button" role="tab" aria-controls="f1" aria-selected="false">
           Formula 1
         </button>
       </li>
@@ -65,8 +73,28 @@
 
     <!-- Tab Content -->
     <div class="tab-content" id="scheduleTabsContent">
+      <!-- All Series Tab -->
+      <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+        <div class="table-responsive">
+          <table class="table table-striped mt-3">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Series</th>
+                <th>Race</th>
+                <th>Venue</th>
+                <th>Time/Network</th>
+              </tr>
+            </thead>
+            <tbody id="all-table-body">
+              <!-- All events will be injected here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- Formula 1 Tab -->
-      <div class="tab-pane fade show active" id="f1" role="tabpanel" aria-labelledby="f1-tab">
+      <div class="tab-pane fade" id="f1" role="tabpanel" aria-labelledby="f1-tab">
         <div class="table-responsive">
           <table class="table table-striped mt-3">
             <thead>
@@ -74,7 +102,7 @@
                 <th>Date</th>
                 <th>Race</th>
                 <th>Circuit</th>
-                <th>Time (PT)</th>
+                <th>Time (Local)</th>
               </tr>
             </thead>
             <tbody id="f1-table-body">
@@ -238,6 +266,48 @@
       countdownElement.countdownInterval = setInterval(updateCountdown, 1000);
     }
     
+    // Function to convert PT time to local timezone
+    function convertToLocalTime(dateStr, timeStr) {
+      if (!timeStr) return "";
+      
+      // Parse the date and time
+      const [month, day] = dateStr.split(" ");
+      const months = {
+        "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
+        "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
+      };
+      
+      // Parse time components
+      const [time, period] = timeStr.split(" ");
+      const [hours, minutes] = time.split(":");
+      let hour = parseInt(hours);
+      
+      // Convert to 24-hour format
+      if (period === "PM" && hour !== 12) hour += 12;
+      if (period === "AM" && hour === 12) hour = 0;
+      
+      // Create date object in PT (2025 for the racing season)
+      const date = new Date(Date.UTC(2025, months[month], parseInt(day)));
+      
+      // Determine if date is in DST for PT (second Sunday in March to first Sunday in November)
+      const year = 2025;
+      const dstStart = new Date(year, 2, 14 - new Date(year, 2, 14).getDay()); // Second Sunday in March
+      const dstEnd = new Date(year, 10, 7 - new Date(year, 10, 1).getDay());   // First Sunday in November
+      const isDST = date >= dstStart && date < dstEnd;
+      
+      // Set the time in PT, accounting for DST
+      const ptOffset = isDST ? 7 : 8; // PT is UTC-7 during DST, UTC-8 during standard time
+      date.setUTCHours(hour + ptOffset);
+      date.setUTCMinutes(parseInt(minutes || 0));
+      
+      // The date object is now in UTC, converting to local automatically
+      return date.toLocaleTimeString([], { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+    }
+    
     function populateTable(tableBodyId, events, columns) {
       const tbody = document.getElementById(tableBodyId);
       const now = new Date();
@@ -289,7 +359,12 @@
           // Create cells with podium information
           columns.forEach((col, index) => {
             const td = document.createElement("td");
-            td.textContent = event[col];
+            if (col === "time" && event.time) {
+              // Convert time to local timezone
+              td.textContent = convertToLocalTime(event.date, event.time);
+            } else {
+              td.textContent = event[col];
+            }
             
             // Add podium information to the race name cell
             if (col === "race" && results.length > 0) {
@@ -534,14 +609,155 @@
       }
     }
     
+    function populateSchedules() {
+      // Populate individual series tabs
+      populateTable("f1-table-body", scheduleData.f1Events, ["date", "race", "circuit", "time"]);
+      populateTable("indy-table-body", scheduleData.indyEvents, ["date", "race", "venue", "network"]);
+      populateTable("nascar-regular-table-body", scheduleData.nascarRegularEvents, ["date", "race", "venue", "network"]);
+      populateTable("nascar-playoffs-table-body", scheduleData.nascarPlayoffEvents, ["date", "race", "venue", "network"]);
+      
+      // Populate All tab with combined and sorted events
+      const allEvents = enhanceEventData();
+      allEvents.sort((a, b) => a.start - b.start);
+      
+      const tbody = document.getElementById("all-table-body");
+      const now = new Date();
+      
+      allEvents.forEach(event => {
+        const tr = document.createElement("tr");
+        const eventStartDate = event.start;
+        tr.setAttribute("data-start", eventStartDate.toISOString());
+        
+        // Check if the race is completed
+        if (eventStartDate < now) {
+          tr.classList.add("completed-race");
+        }
+        
+        // Create series badge
+        const seriesBadge = document.createElement("div");
+        seriesBadge.className = "series-badge";
+        // Set the appropriate series name for NASCAR events
+        let seriesName = event.series;
+        if (event.series.includes("NASCAR")) {
+          seriesName = event.series.includes("Playoffs") ? 
+            "NASCAR Cup (Playoffs)" : "NASCAR Cup (Regular)";
+        }
+        seriesBadge.setAttribute("data-series", seriesName);
+        seriesBadge.textContent = seriesName;
+        
+        // Create table cells
+        const cells = [
+          { content: event.date },
+          { content: seriesBadge, isHTML: true },
+          { content: event.race },
+          { content: event.circuit || event.venue },
+          { content: event.time ? convertToLocalTime(event.date, event.time) : event.network }
+        ];
+        
+        cells.forEach(cell => {
+          const td = document.createElement("td");
+          if (cell.isHTML) {
+            td.appendChild(cell.content);
+          } else {
+            td.textContent = cell.content;
+          }
+          tr.appendChild(td);
+        });
+        
+        // Add podium results if race is completed
+        if (eventStartDate < now) {
+          let results = [];
+          if (event.series === "Formula 1") {
+            const raceName = event.race.replace(" GP", "");
+            const result = resultsData.f1Past.results.find(r => 
+              r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||
+              raceName.toLowerCase().includes(r.grandPrix.toLowerCase())
+            );
+            if (result) results.push(result);
+          } else if (event.series === "IndyCar") {
+            const result = resultsData.indyPast.results.find(r => 
+              r.race.toLowerCase().includes(event.race.toLowerCase()) ||
+              event.race.toLowerCase().includes(r.race.toLowerCase())
+            );
+            if (result) results.push(result);
+          } else if (event.series.includes("NASCAR")) {
+            if (event.race.includes("Duel")) {
+              results = resultsData.nascarPast.results.filter(r => 
+                r.race.toLowerCase().includes("duel")
+              );
+            } else {
+              const eventShortName = event.race.split(" at ")[0].toLowerCase();
+              const result = resultsData.nascarPast.results.find(r => 
+                r.race.toLowerCase().includes(eventShortName) ||
+                eventShortName.includes(r.race.toLowerCase())
+              );
+              if (result) results.push(result);
+            }
+          }
+          
+          if (results.length > 0) {
+            const raceCell = tr.children[2]; // Race name cell
+            const podiumDiv = document.createElement("div");
+            podiumDiv.className = "podium-results";
+            
+            const podiumHTML = results.map(result => {
+              let resultTitle = results.length > 1 ? `<strong>${result.race}:</strong><br>` : "";
+              return `
+                ${resultTitle}
+                <span><span class="podium-position">1st:</span> ${result.winner}</span>
+                <span><span class="podium-position">2nd:</span> ${result.second}</span>
+                <span><span class="podium-position">3rd:</span> ${result.third}</span>
+              `;
+            }).join('<hr class="podium-divider">');
+            
+            podiumDiv.innerHTML = podiumHTML;
+            raceCell.appendChild(podiumDiv);
+          }
+        }
+        
+        tr.addEventListener("click", () => openEventModal(event));
+        tbody.appendChild(tr);
+      });
+    }
+    
+    // Update search functionality to be more modern
     function setupSearch() {
       const searchInput = document.getElementById("searchInput");
+      const searchContainer = searchInput.parentElement;
+      searchContainer.className = "search-container";
+      
+      // Add search icon
+      const searchIcon = document.createElement("i");
+      searchIcon.className = "search-icon fas fa-search";
+      searchContainer.insertBefore(searchIcon, searchInput);
+      
+      // Add debounced search
+      let searchTimeout;
       searchInput.addEventListener("input", function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        document.querySelectorAll("tbody tr").forEach(row => {
-          const text = row.textContent.toLowerCase();
-          row.style.display = text.includes(searchTerm) ? "" : "none";
-        });
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          const searchTerm = e.target.value.toLowerCase();
+          const activeTab = document.querySelector(".tab-pane.active");
+          
+          activeTab.querySelectorAll("tbody tr").forEach(row => {
+            const text = row.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+              row.style.display = "";
+              // Highlight matching text
+              row.querySelectorAll("td").forEach(cell => {
+                const originalText = cell.textContent;
+                if (originalText.toLowerCase().includes(searchTerm)) {
+                  cell.innerHTML = originalText.replace(
+                    new RegExp(searchTerm, "gi"),
+                    match => `<mark>${match}</mark>`
+                  );
+                }
+              });
+            } else {
+              row.style.display = "none";
+            }
+          });
+        }, 200);
       });
     }
     
@@ -567,13 +783,6 @@
         localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
         updateToggleIcon();
       });
-    }
-    
-    function populateSchedules() {
-      populateTable("f1-table-body", scheduleData.f1Events, ["date", "race", "circuit", "time"]);
-      populateTable("indy-table-body", scheduleData.indyEvents, ["date", "race", "venue", "network"]);
-      populateTable("nascar-regular-table-body", scheduleData.nascarRegularEvents, ["date", "race", "venue", "network"]);
-      populateTable("nascar-playoffs-table-body", scheduleData.nascarPlayoffEvents, ["date", "race", "venue", "network"]);
     }
     
     document.addEventListener("DOMContentLoaded", () => {

@@ -8,6 +8,8 @@
   --text-dark: #e0e0e0;
   --transition-speed: 0.3s;
   --border-radius-base: 0.5rem;
+  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --box-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* Base Styles */
@@ -65,16 +67,103 @@ body.dark-mode .nav-tabs .nav-link {
   margin: 0;
 }
 
-/* Navigation/Tabs */
+/* Modern Container */
+.container {
+  max-width: 1400px !important;
+  padding: 2rem;
+  background: var(--background-light);
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--box-shadow);
+}
+
+.dark-mode .container {
+  background: var(--background-dark);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Series Badge Styles */
+.series-badge {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.series-badge[data-series="Formula 1"] {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.series-badge[data-series="IndyCar"] {
+  background-color: #003366;
+  color: white;
+}
+
+.series-badge[data-series="NASCAR Cup (Regular)"] {
+  background-color: #ffd700;
+  color: black;
+}
+
+.series-badge[data-series="NASCAR Cup (Playoffs)"] {
+  background: linear-gradient(135deg, #ffd700, #ff4d00);
+  color: black;
+}
+
+/* Add a small icon next to NASCAR Playoff badge */
+.series-badge[data-series="NASCAR Cup (Playoffs)"]::after {
+  content: "🏆";
+  margin-left: 4px;
+  font-size: 0.9em;
+}
+
+/* Modern Table Styles */
+.table {
+  --bs-table-hover-bg: rgba(0, 161, 156, 0.1);
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+  margin: -0.5rem 0;
+}
+
+.table tr {
+  box-shadow: var(--box-shadow);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.table tr:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.table td, .table th {
+  background: var(--background-light);
+  border: none;
+  padding: 1rem;
+}
+
+.dark-mode .table td, .dark-mode .table th {
+  background: var(--background-dark);
+}
+
+/* Improved Nav Tabs */
 .nav-tabs {
-  border-bottom: 2px solid var(--accent-color);
+  border: none;
   gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius-base);
+}
+
+.dark-mode .nav-tabs {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .nav-tabs .nav-link {
   border: none;
-  border-radius: var(--border-radius-base) var(--border-radius-base) 0 0;
-  padding: 0.8rem 1.2rem;
+  border-radius: var(--border-radius-base);
+  padding: 0.8rem 1.5rem;
   font-weight: 600;
   color: var(--text-light);
   transition: all var(--transition-speed);
@@ -82,12 +171,49 @@ body.dark-mode .nav-tabs .nav-link {
 
 .nav-tabs .nav-link:hover {
   background-color: rgba(225, 6, 0, 0.1);
+  transform: translateY(-1px);
 }
 
 .nav-tabs .nav-link.active {
-  color: var(--primary-color);
-  background-color: transparent;
-  border-bottom: 3px solid var(--primary-color);
+  color: white;
+  background-color: var(--primary-color);
+  box-shadow: var(--box-shadow);
+}
+
+/* Modern Search Input */
+.search-container {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  padding-left: 3rem;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-base);
+  background: white;
+  box-shadow: var(--box-shadow);
+  transition: all var(--transition-speed);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-color);
+}
+
+.dark-mode .search-input {
+  background: var(--background-dark);
+  color: var(--text-dark);
 }
 
 /* Modern Card Styles (applied via Bootstrap's .card class) */
@@ -282,22 +408,6 @@ body.dark-mode .countdown-timer {
   border-radius: 8px 0 0 8px;
   background-color: var(--background-light);
   color: var(--text-light);
-}
-
-.search-input {
-  height: 2.5rem;
-  border: 2px solid var(--accent-color);
-  border-left: none;
-  border-radius: 0 8px 8px 0;
-  padding: 0 1rem;
-  font-size: 1rem;
-  transition: all var(--transition-speed);
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(225, 6, 0, 0.1);
 }
 
 .input-group-text svg {

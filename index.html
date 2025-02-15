@@ -220,20 +220,33 @@
     function startCountdown(elementId, startTime) {
       clearCountdown(elementId);
       const countdownElement = document.getElementById(elementId);
+      
       const updateCountdown = () => {
         const now = new Date().getTime();
         const distance = startTime - now;
+        
         if (distance < 0) {
           clearCountdown(elementId);
           countdownElement.textContent = 'Event Started';
           return;
         }
+        
+        // Calculate time units
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        
+        // Format the display
+        const parts = [];
+        if (days > 0) parts.push(`${days}d`);
+        if (hours > 0 || days > 0) parts.push(`${hours}h`);
+        if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes}m`);
+        parts.push(`${seconds}s`);
+        
+        countdownElement.textContent = parts.join(' ');
       };
+      
       updateCountdown();
       countdownElement.countdownInterval = setInterval(updateCountdown, 1000);
     }
@@ -457,13 +470,13 @@
       const endOfToday = new Date(now);
       endOfToday.setHours(23, 59, 59, 999);
 
-      // Find today's events or next upcoming events
+      // Find today's events
       const todaysEvents = allEvents.filter(event => {
         const eventDate = new Date(event.start);
         return eventDate.toDateString() === now.toDateString();
       });
 
-      // Get this weekend's date range (Friday to Sunday) if no events today
+      // Get this weekend's date range (Friday to Sunday)
       const friday = new Date(now);
       friday.setDate(now.getDate() + ((5 - now.getDay() + 7) % 7));
       friday.setHours(0, 0, 0, 0);
@@ -473,12 +486,16 @@
       sunday.setHours(23, 59, 59, 999);
 
       // Find all events this weekend if no events today
-      const weekendEvents = allEvents.filter(event => 
-        event.start >= friday && event.start <= sunday
-      );
+      const weekendEvents = allEvents.filter(event => {
+        const eventStart = new Date(event.start);
+        return eventStart >= friday && eventStart <= sunday;
+      });
 
       // Find next event if no events today or this weekend
-      const nextEvent = allEvents.find(event => event.start > endOfToday);
+      const nextEvent = allEvents.find(event => {
+        const eventStart = new Date(event.start);
+        return eventStart > now;
+      });
 
       const upcomingDiv = document.getElementById("upcomingEventDetails");
       
@@ -488,6 +505,11 @@
           `<p class="card-text mb-1"><strong>Time:</strong> ${convertUTCtoLocal(event.date, event.time_utc)}</p>` : "";
         const countdownId = `countdown-${event.series.replace(/\s+/g, '-').toLowerCase()}`;
         const weatherId = `weather-${countdownId}`;
+        
+        // Create event start time in UTC
+        const [hours, minutes] = (event.time_utc || "00:00").split(":");
+        const eventDate = new Date(event.start);
+        eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
         
         const cardHTML = `
           <div class="card upcoming-event-item mb-3">
@@ -505,7 +527,7 @@
         
         // Start the countdown after insertion
         setTimeout(() => {
-          startCountdown(countdownId, event.start.getTime());
+          startCountdown(countdownId, eventDate.getTime());
           fetchWeather(event, weatherId);
         }, 0);
         

@@ -376,20 +376,51 @@ body.dark-mode .upcoming-events-list .series-badge {
 
 /* Countdown Timer */
 .countdown-timer {
-  font-size: 1.25rem;
+  font-family: 'Inter', monospace;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--text-dark);
+  padding: 1rem;
   text-align: center;
-  padding: 0.75rem;
-  background-color: var(--background-dark);
-  border: 1px solid #c9c8c8;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--accent-color);
   border-radius: var(--border-radius-base);
-  transition: background-color var(--transition-speed), border-color var(--transition-speed);
+  margin-top: 1rem;
+  color: #000000 !important;
+  box-shadow: var(--box-shadow);
 }
 
-body.dark-mode .countdown-timer {
-  background-color: var(--background-dark);
-  border-color: rgba(255, 255, 255, 0.1);
+.dark-mode .countdown-timer {
+  background: var(--background-dark);
+  color: #ffffff !important;
+  border-color: var(--accent-color);
+}
+
+/* Ensure the timer in the modal has proper contrast */
+.modal .countdown-timer {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000000 !important;
+  border-color: var(--accent-color);
+}
+
+.dark-mode .modal .countdown-timer {
+  background: var(--background-dark);
+  color: #ffffff !important;
+  border-color: var(--accent-color);
+}
+
+/* Ensure the timer in the upcoming event section has proper contrast */
+.upcoming-event .countdown-timer {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000000 !important;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .upcoming-event .countdown-timer {
+  background: var(--background-dark);
+  color: #ffffff !important;
+  border: 2px solid var(--accent-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Input Group and Search Input */
@@ -807,4 +838,120 @@ body.dark-mode .news-link {
   justify-content: center;
   padding: 1rem;
   color: var(--accent-color);
+}
+
+/* Mobile-Friendly Table Styles */
+@media (max-width: 768px) {
+  .table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table td, .table th {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .series-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .podium-results {
+    white-space: normal;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .podium-position {
+    min-width: 2rem;
+    display: inline-block;
+    margin-right: 0.25rem;
+  }
+
+  /* Stack podium results vertically on mobile */
+  .podium-results span {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Highlight current row more visibly on mobile */
+  .table tr:active {
+    background-color: rgba(225, 6, 0, 0.15);
+  }
+
+  .dark-mode .table tr:active {
+    background-color: rgba(225, 6, 0, 0.25);
+  }
+}
+
+/* Upcoming Event Card Improvements */
+.upcoming-event-item {
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.upcoming-event-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.countdown-timer {
+  font-family: 'Inter', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.75rem;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius-base);
+  margin-top: 1rem;
+  color: var(--text-light);
+}
+
+.dark-mode .countdown-timer {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-dark);
+}
+
+/* Ensure the timer in the modal has proper contrast */
+.modal .countdown-timer {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text-light);
+}
+
+.dark-mode .modal .countdown-timer {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-dark);
+}
+
+/* Ensure the timer in the upcoming event section has proper contrast */
+.upcoming-event .countdown-timer {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-dark);
+}
+
+.dark-mode .upcoming-event .countdown-timer {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-dark);
+}
+
+@media (max-width: 768px) {
+  .countdown-timer {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  .upcoming-event-item .card-body {
+    padding: 1rem;
+  }
+
+  .upcoming-event-item h5 {
+    font-size: 1.1rem;
+  }
+
+  .weather-card h3 {
+    font-size: 1.5rem;
+  }
 }

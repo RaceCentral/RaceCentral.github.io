@@ -41,134 +41,106 @@
       </div>
     </div>
 
-    <!-- Global Search -->
-    <div class="search-container">
-      <input type="text" id="searchInput" class="search-input" placeholder="Search events...">
-      <i class="fas fa-search search-icon"></i>
-    </div>
+    <!-- Schedule Section -->
+    <section class="schedule-section">
+      <h2>2025 Race Schedule</h2>
+      
+      <!-- Global Search -->
+      <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search events...">
+        <i class="fas fa-search search-icon"></i>
+      </div>
 
-    <!-- Schedule Tabs -->
-    <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
-          All Series
+      <!-- Past Races Toggle -->
+      <div class="mb-3">
+        <button id="showPastRaces" class="show-past-races">
+          Show Past Races
         </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="f1-tab" data-bs-toggle="tab" data-bs-target="#f1" type="button" role="tab" aria-controls="f1" aria-selected="false">
-          Formula 1
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="indy-tab" data-bs-toggle="tab" data-bs-target="#indy" type="button" role="tab" aria-controls="indy" aria-selected="false">
-          IndyCar
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="nascar-tab" data-bs-toggle="tab" data-bs-target="#nascar" type="button" role="tab" aria-controls="nascar" aria-selected="false">
-          NASCAR Cup
-        </button>
-      </li>
-    </ul>
+      </div>
 
-    <!-- Tab Content -->
-    <div class="tab-content" id="scheduleTabsContent">
-      <!-- All Series Tab -->
-      <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
-        <div class="table-responsive">
-          <table class="table table-striped mt-3">
+      <!-- Schedule Tabs -->
+      <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#all">All Series</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#f1">Formula 1</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#indycar">IndyCar</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nascar">NASCAR</button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="scheduleTabContent">
+        <!-- Combined Schedule -->
+        <div class="tab-pane fade show active" id="all" role="tabpanel">
+          <table class="table table-hover schedule-table">
             <thead>
               <tr>
                 <th>Date</th>
                 <th>Series</th>
                 <th>Race</th>
                 <th>Venue</th>
-                <th>Time/Network</th>
+                <th>Time</th>
+                <th>Network</th>
               </tr>
             </thead>
-            <tbody id="all-table-body">
-              <!-- All events will be injected here -->
-            </tbody>
+            <tbody id="combined-schedule"></tbody>
           </table>
         </div>
-      </div>
 
-      <!-- Formula 1 Tab -->
-      <div class="tab-pane fade" id="f1" role="tabpanel" aria-labelledby="f1-tab">
-        <div class="table-responsive">
-          <table class="table table-striped mt-3">
+        <!-- F1 Schedule -->
+        <div class="tab-pane fade" id="f1" role="tabpanel">
+          <table class="table table-hover schedule-table">
             <thead>
               <tr>
                 <th>Date</th>
                 <th>Race</th>
                 <th>Circuit</th>
-                <th>Time (Local)</th>
+                <th>Time</th>
+                <th>Network</th>
               </tr>
             </thead>
-            <tbody id="f1-table-body">
-              <!-- F1 events will be injected here -->
-            </tbody>
+            <tbody id="f1-schedule"></tbody>
           </table>
         </div>
-      </div>
 
-      <!-- IndyCar Tab -->
-      <div class="tab-pane fade" id="indy" role="tabpanel" aria-labelledby="indy-tab">
-        <div class="table-responsive">
-          <table class="table table-striped mt-3">
+        <!-- IndyCar Schedule -->
+        <div class="tab-pane fade" id="indycar" role="tabpanel">
+          <table class="table table-hover schedule-table">
             <thead>
               <tr>
                 <th>Date</th>
                 <th>Race</th>
                 <th>Venue</th>
+                <th>Time</th>
                 <th>Network</th>
               </tr>
             </thead>
-            <tbody id="indy-table-body">
-              <!-- IndyCar events will be injected here -->
-            </tbody>
+            <tbody id="indy-schedule"></tbody>
           </table>
         </div>
-      </div>
 
-      <!-- NASCAR Cup Tab -->
-      <div class="tab-pane fade" id="nascar" role="tabpanel" aria-labelledby="nascar-tab">
-        <!-- NASCAR Regular Season -->
-        <h3 class="mt-3">Regular Season</h3>
-        <div class="table-responsive">
-          <table class="table table-striped mt-3">
+        <!-- NASCAR Schedule -->
+        <div class="tab-pane fade" id="nascar" role="tabpanel">
+          <table class="table table-hover schedule-table">
             <thead>
               <tr>
                 <th>Date</th>
                 <th>Race</th>
                 <th>Venue</th>
+                <th>Time</th>
                 <th>Network</th>
               </tr>
             </thead>
-            <tbody id="nascar-regular-table-body">
-              <!-- NASCAR Regular events will be injected here -->
-            </tbody>
-          </table>
-        </div>
-        <!-- NASCAR Playoffs -->
-        <h3 class="mt-3">Playoffs</h3>
-        <div class="table-responsive">
-          <table class="table table-striped mt-3">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Race</th>
-                <th>Venue</th>
-                <th>Network</th>
-              </tr>
-            </thead>
-            <tbody id="nascar-playoffs-table-body">
-              <!-- NASCAR Playoff events will be injected here -->
-            </tbody>
+            <tbody id="nascar-schedule"></tbody>
           </table>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- News Section -->
     <section class="mt-5">
@@ -228,7 +200,7 @@
   <!-- Application Script -->
   <script type="module">
     // Import your data from data.js
-    import { scheduleData, resultsData, parseEventDate, enhanceEventData } from './src/js/data.js';
+    import { scheduleData, resultsData, parseEventDate, enhanceEventData, convertUTCtoLocal } from './src/js/data.js';
 
     /*******************************
      * Helper Functions
@@ -266,48 +238,6 @@
       countdownElement.countdownInterval = setInterval(updateCountdown, 1000);
     }
     
-    // Function to convert PT time to local timezone
-    function convertToLocalTime(dateStr, timeStr) {
-      if (!timeStr) return "";
-      
-      // Parse the date and time
-      const [month, day] = dateStr.split(" ");
-      const months = {
-        "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
-        "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
-      };
-      
-      // Parse time components
-      const [time, period] = timeStr.split(" ");
-      const [hours, minutes] = time.split(":");
-      let hour = parseInt(hours);
-      
-      // Convert to 24-hour format
-      if (period === "PM" && hour !== 12) hour += 12;
-      if (period === "AM" && hour === 12) hour = 0;
-      
-      // Create date object in PT (2025 for the racing season)
-      const date = new Date(Date.UTC(2025, months[month], parseInt(day)));
-      
-      // Determine if date is in DST for PT (second Sunday in March to first Sunday in November)
-      const year = 2025;
-      const dstStart = new Date(year, 2, 14 - new Date(year, 2, 14).getDay()); // Second Sunday in March
-      const dstEnd = new Date(year, 10, 7 - new Date(year, 10, 1).getDay());   // First Sunday in November
-      const isDST = date >= dstStart && date < dstEnd;
-      
-      // Set the time in PT, accounting for DST
-      const ptOffset = isDST ? 7 : 8; // PT is UTC-7 during DST, UTC-8 during standard time
-      date.setUTCHours(hour + ptOffset);
-      date.setUTCMinutes(parseInt(minutes || 0));
-      
-      // The date object is now in UTC, converting to local automatically
-      return date.toLocaleTimeString([], { 
-        hour: 'numeric', 
-        minute: '2-digit',
-        timeZoneName: 'short'
-      });
-    }
-    
     function populateTable(tableBodyId, events, columns) {
       const tbody = document.getElementById(tableBodyId);
       const now = new Date();
@@ -321,10 +251,9 @@
         if (eventStartDate < now) {
           tr.classList.add("completed-race");
           
-          // Find race results - handle multiple results for events like Duels
+          // Find race results
           let results = [];
           if (event.series === "Formula 1") {
-            // For F1, remove "GP" and try to match the Grand Prix name
             const raceName = event.race.replace(" GP", "");
             const result = resultsData.f1Past.results.find(r => 
               r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||
@@ -332,21 +261,17 @@
             );
             if (result) results.push(result);
           } else if (event.series === "IndyCar") {
-            // For IndyCar, try to match the full name or partial name
             const result = resultsData.indyPast.results.find(r => 
               r.race.toLowerCase().includes(event.race.toLowerCase()) ||
               event.race.toLowerCase().includes(r.race.toLowerCase())
             );
             if (result) results.push(result);
           } else if (event.series.includes("NASCAR")) {
-            // For NASCAR, handle special cases like Duels
             if (event.race.includes("Duel")) {
-              // Find all Duel results
               results = resultsData.nascarPast.results.filter(r => 
                 r.race.toLowerCase().includes("duel")
               );
             } else {
-              // For other NASCAR races, try to match by the main race name
               const eventShortName = event.race.split(" at ")[0].toLowerCase();
               const result = resultsData.nascarPast.results.find(r => 
                 r.race.toLowerCase().includes(eventShortName) ||
@@ -357,11 +282,14 @@
           }
           
           // Create cells with podium information
-          columns.forEach((col, index) => {
+          columns.forEach(col => {
             const td = document.createElement("td");
-            if (col === "time" && event.time) {
-              // Convert time to local timezone
-              td.textContent = convertToLocalTime(event.date, event.time);
+            if (col === "time") {
+              td.textContent = event.time_utc ? convertUTCtoLocal(event.date, event.time_utc) : "";
+            } else if (col === "network") {
+              td.textContent = event.network || "";
+            } else if (col === "venue") {
+              td.textContent = event.circuit || event.venue;
             } else {
               td.textContent = event[col];
             }
@@ -371,7 +299,6 @@
               const podiumDiv = document.createElement("div");
               podiumDiv.className = "podium-results";
               
-              // Create HTML for each result
               const podiumHTML = results.map(result => {
                 let resultTitle = results.length > 1 ? `<strong>${result.race}:</strong><br>` : "";
                 return `
@@ -392,7 +319,15 @@
           // Regular event without results
           columns.forEach(col => {
             const td = document.createElement("td");
-            td.textContent = event[col];
+            if (col === "time") {
+              td.textContent = event.time_utc ? convertUTCtoLocal(event.date, event.time_utc) : "";
+            } else if (col === "network") {
+              td.textContent = event.network || "";
+            } else if (col === "venue") {
+              td.textContent = event.circuit || event.venue;
+            } else {
+              td.textContent = event[col];
+            }
             tr.appendChild(td);
           });
         }
@@ -410,7 +345,8 @@
       document.getElementById("modalEventRace").textContent = event.race;
       document.getElementById("modalEventDate").textContent = event.date;
       document.getElementById("modalEventLocation").textContent = event.circuit || event.venue || "TBA";
-      document.getElementById("modalEventTime").textContent = event.time || "TBA";
+      document.getElementById("modalEventTime").textContent = event.time_utc ? 
+        convertUTCtoLocal(event.date, event.time_utc) : "TBA";
       
       // Start countdown
       startCountdown("modalCountdown", event.start.getTime());
@@ -462,8 +398,18 @@
       const allEvents = enhanceEventData();
       allEvents.sort((a, b) => a.start - b.start);
       const now = new Date();
+      
+      // Set time to end of current day for comparison
+      const endOfToday = new Date(now);
+      endOfToday.setHours(23, 59, 59, 999);
 
-      // Get this weekend's date range (Friday to Sunday)
+      // Find today's events or next upcoming events
+      const todaysEvents = allEvents.filter(event => {
+        const eventDate = new Date(event.start);
+        return eventDate.toDateString() === now.toDateString();
+      });
+
+      // Get this weekend's date range (Friday to Sunday) if no events today
       const friday = new Date(now);
       friday.setDate(now.getDate() + ((5 - now.getDay() + 7) % 7));
       friday.setHours(0, 0, 0, 0);
@@ -472,21 +418,22 @@
       sunday.setDate(friday.getDate() + 2);
       sunday.setHours(23, 59, 59, 999);
 
-      // Find all events this weekend
+      // Find all events this weekend if no events today
       const weekendEvents = allEvents.filter(event => 
         event.start >= friday && event.start <= sunday
       );
 
-      // Find next event if no weekend events
-      const nextEvent = allEvents.find(event => event.start >= now);
+      // Find next event if no events today or this weekend
+      const nextEvent = allEvents.find(event => event.start > endOfToday);
 
       const upcomingDiv = document.getElementById("upcomingEventDetails");
       
-      if (weekendEvents.length > 0) {
-        // Display all weekend events using Bootstrap card markup
-        upcomingDiv.innerHTML = weekendEvents.map(event => {
+      if (todaysEvents.length > 0) {
+        // Display today's events
+        upcomingDiv.innerHTML = todaysEvents.map(event => {
           const location = event.circuit || event.venue || "TBA";
-          const timeString = event.time ? `<p class="card-text mb-1"><strong>Time:</strong> ${event.time}</p>` : "";
+          const timeString = event.time_utc ? 
+            `<p class="card-text mb-1"><strong>Time:</strong> ${convertUTCtoLocal(event.date, event.time_utc)}</p>` : "";
           const countdownId = `countdown-${event.series.replace(/\s+/g, '-').toLowerCase()}`;
           
           // Start the countdown after insertion
@@ -505,9 +452,34 @@
             </div>
           `;
         }).join('');
+      } else if (weekendEvents.length > 0) {
+        // Display weekend events if no events today
+        upcomingDiv.innerHTML = weekendEvents.map(event => {
+          const location = event.circuit || event.venue || "TBA";
+          const timeString = event.time_utc ? 
+            `<p class="card-text mb-1"><strong>Time:</strong> ${convertUTCtoLocal(event.date, event.time_utc)}</p>` : "";
+          const countdownId = `countdown-${event.series.replace(/\s+/g, '-').toLowerCase()}`;
+          
+          setTimeout(() => startCountdown(countdownId, event.start.getTime()), 0);
+          
+          return `
+            <div class="card upcoming-event-item mb-3">
+              <div class="card-body">
+                <div class="series-badge mb-2">${event.series}</div>
+                <h5 class="card-title mb-2">${event.race}</h5>
+                <p class="card-text mb-1"><strong>Date:</strong> ${event.date}</p>
+                <p class="card-text mb-1"><strong>Location:</strong> ${location}</p>
+                ${timeString}
+                <div id="${countdownId}" class="countdown-timer mt-2"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
       } else if (nextEvent) {
+        // Display next event if no events today or this weekend
         const location = nextEvent.circuit || nextEvent.venue || "TBA";
-        const timeString = nextEvent.time ? `<p class="card-text mb-1"><strong>Time:</strong> ${nextEvent.time}</p>` : "";
+        const timeString = nextEvent.time_utc ? 
+          `<p class="card-text mb-1"><strong>Time:</strong> ${convertUTCtoLocal(nextEvent.date, nextEvent.time_utc)}</p>` : "";
         
         upcomingDiv.innerHTML = `
           <div class="card upcoming-event-item mb-3">
@@ -609,98 +581,83 @@
       }
     }
     
-    function populateSchedules() {
-      // Populate individual series tabs
-      populateTable("f1-table-body", scheduleData.f1Events, ["date", "race", "circuit", "time"]);
-      populateTable("indy-table-body", scheduleData.indyEvents, ["date", "race", "venue", "network"]);
-      populateTable("nascar-regular-table-body", scheduleData.nascarRegularEvents, ["date", "race", "venue", "network"]);
-      populateTable("nascar-playoffs-table-body", scheduleData.nascarPlayoffEvents, ["date", "race", "venue", "network"]);
+    // Initialize show past races button
+    const showPastRacesBtn = document.getElementById('showPastRaces');
+    let pastRacesVisible = true;
+    showPastRacesBtn.addEventListener('click', function() {
+      pastRacesVisible = !pastRacesVisible;
+      this.textContent = pastRacesVisible ? 'Hide Past Races' : 'Show Past Races';
       
-      // Populate All tab with combined and sorted events
-      const allEvents = enhanceEventData();
-      allEvents.sort((a, b) => a.start - b.start);
-      
-      const tbody = document.getElementById("all-table-body");
+      const tables = document.querySelectorAll('.schedule-table');
+      tables.forEach(table => {
+        const rows = table.querySelectorAll('tr[data-date]');
+        rows.forEach(row => {
+          const eventDate = new Date(row.getAttribute('data-date'));
+          const today = new Date();
+          if (eventDate < today) {
+            row.style.display = pastRacesVisible ? 'table-row' : 'none';
+          }
+        });
+      });
+    });
+
+    // Function to create a table row for an event
+    function createTableRow(event, includeSeriesBadge = false) {
+      const row = document.createElement('tr');
+      row.setAttribute('data-date', event.start.toISOString());
+      const localTime = convertUTCtoLocal(event.date, event.time_utc);
       const now = new Date();
       
-      allEvents.forEach(event => {
-        const tr = document.createElement("tr");
-        const eventStartDate = event.start;
-        tr.setAttribute("data-start", eventStartDate.toISOString());
-        
-        // Check if the race is completed
-        if (eventStartDate < now) {
-          tr.classList.add("completed-race");
-        }
-        
-        // Create series badge
-        const seriesBadge = document.createElement("div");
-        seriesBadge.className = "series-badge";
-        // Set the appropriate series name for NASCAR events
+      if (event.start < now) {
+        row.classList.add('completed-race');
+      }
+
+      // Create series badge if needed
+      let seriesBadgeHTML = '';
+      if (includeSeriesBadge) {
         let seriesName = event.series;
-        if (event.series.includes("NASCAR")) {
-          seriesName = event.series.includes("Playoffs") ? 
-            "NASCAR Cup (Playoffs)" : "NASCAR Cup (Regular)";
+        if (event.series.includes('NASCAR')) {
+          seriesName = event.series.includes('Playoffs') ? 
+            'NASCAR Cup (Playoffs)' : 'NASCAR Cup (Regular)';
         }
-        seriesBadge.setAttribute("data-series", seriesName);
-        seriesBadge.textContent = seriesName;
-        
-        // Create table cells
-        const cells = [
-          { content: event.date },
-          { content: seriesBadge, isHTML: true },
-          { content: event.race },
-          { content: event.circuit || event.venue },
-          { content: event.time ? convertToLocalTime(event.date, event.time) : event.network }
-        ];
-        
-        cells.forEach(cell => {
-          const td = document.createElement("td");
-          if (cell.isHTML) {
-            td.appendChild(cell.content);
+        seriesBadgeHTML = `<div class="series-badge" data-series="${seriesName}">${seriesName}</div>`;
+      }
+
+      // Find race results for completed races
+      let podiumHTML = '';
+      if (event.start < now) {
+        let results = [];
+        if (event.series === "Formula 1") {
+          const raceName = event.race.replace(" GP", "");
+          const result = resultsData.f1Past.results.find(r => 
+            r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||
+            raceName.toLowerCase().includes(r.grandPrix.toLowerCase())
+          );
+          if (result) results.push(result);
+        } else if (event.series === "IndyCar") {
+          const result = resultsData.indyPast.results.find(r => 
+            r.race.toLowerCase().includes(event.race.toLowerCase()) ||
+            event.race.toLowerCase().includes(r.race.toLowerCase())
+          );
+          if (result) results.push(result);
+        } else if (event.series.includes("NASCAR")) {
+          if (event.race.includes("Duel")) {
+            results = resultsData.nascarPast.results.filter(r => 
+              r.race.toLowerCase().includes("duel")
+            );
           } else {
-            td.textContent = cell.content;
-          }
-          tr.appendChild(td);
-        });
-        
-        // Add podium results if race is completed
-        if (eventStartDate < now) {
-          let results = [];
-          if (event.series === "Formula 1") {
-            const raceName = event.race.replace(" GP", "");
-            const result = resultsData.f1Past.results.find(r => 
-              r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||
-              raceName.toLowerCase().includes(r.grandPrix.toLowerCase())
+            const eventShortName = event.race.split(" at ")[0].toLowerCase();
+            const result = resultsData.nascarPast.results.find(r => 
+              r.race.toLowerCase().includes(eventShortName) ||
+              eventShortName.includes(r.race.toLowerCase())
             );
             if (result) results.push(result);
-          } else if (event.series === "IndyCar") {
-            const result = resultsData.indyPast.results.find(r => 
-              r.race.toLowerCase().includes(event.race.toLowerCase()) ||
-              event.race.toLowerCase().includes(r.race.toLowerCase())
-            );
-            if (result) results.push(result);
-          } else if (event.series.includes("NASCAR")) {
-            if (event.race.includes("Duel")) {
-              results = resultsData.nascarPast.results.filter(r => 
-                r.race.toLowerCase().includes("duel")
-              );
-            } else {
-              const eventShortName = event.race.split(" at ")[0].toLowerCase();
-              const result = resultsData.nascarPast.results.find(r => 
-                r.race.toLowerCase().includes(eventShortName) ||
-                eventShortName.includes(r.race.toLowerCase())
-              );
-              if (result) results.push(result);
-            }
           }
-          
-          if (results.length > 0) {
-            const raceCell = tr.children[2]; // Race name cell
-            const podiumDiv = document.createElement("div");
-            podiumDiv.className = "podium-results";
-            
-            const podiumHTML = results.map(result => {
+        }
+
+        if (results.length > 0) {
+          podiumHTML = '<div class="podium-results">' +
+            results.map(result => {
               let resultTitle = results.length > 1 ? `<strong>${result.race}:</strong><br>` : "";
               return `
                 ${resultTitle}
@@ -708,16 +665,70 @@
                 <span><span class="podium-position">2nd:</span> ${result.second}</span>
                 <span><span class="podium-position">3rd:</span> ${result.third}</span>
               `;
-            }).join('<hr class="podium-divider">');
-            
-            podiumDiv.innerHTML = podiumHTML;
-            raceCell.appendChild(podiumDiv);
-          }
+            }).join('<hr class="podium-divider">') +
+            '</div>';
         }
-        
-        tr.addEventListener("click", () => openEventModal(event));
-        tbody.appendChild(tr);
+      }
+
+      // Create row content
+      const cells = includeSeriesBadge ? [
+        event.date,
+        seriesBadgeHTML,
+        `${event.race}${podiumHTML}`,
+        event.circuit || event.venue,
+        localTime || event.time,
+        event.network || ''
+      ] : [
+        event.date,
+        `${event.race}${podiumHTML}`,
+        event.circuit || event.venue,
+        localTime || event.time,
+        event.network || ''
+      ];
+
+      row.innerHTML = cells.map(cell => `<td>${cell}</td>`).join('');
+      row.addEventListener('click', () => openEventModal(event));
+      
+      return row;
+    }
+
+    // Function to populate schedule tables
+    function populateSchedules() {
+      const f1Table = document.getElementById('f1-schedule');
+      const indyTable = document.getElementById('indy-schedule');
+      const nascarTable = document.getElementById('nascar-schedule');
+      const combinedTable = document.getElementById('combined-schedule');
+
+      // Clear existing content
+      [f1Table, indyTable, nascarTable, combinedTable].forEach(table => {
+        if (table) table.innerHTML = '';
       });
+
+      // Populate F1 schedule
+      scheduleData.f1Events.forEach(event => {
+        if (f1Table) f1Table.appendChild(createTableRow(event));
+      });
+
+      // Populate IndyCar schedule
+      scheduleData.indyEvents.forEach(event => {
+        if (indyTable) indyTable.appendChild(createTableRow(event));
+      });
+
+      // Populate NASCAR schedule (both regular and playoff events)
+      const allNascarEvents = [...scheduleData.nascarRegularEvents, ...scheduleData.nascarPlayoffEvents];
+      allNascarEvents.forEach(event => {
+        if (nascarTable) nascarTable.appendChild(createTableRow(event));
+      });
+
+      // Populate combined schedule with series badges
+      const allEvents = enhanceEventData();
+      allEvents.sort((a, b) => a.start - b.start);
+      allEvents.forEach(event => {
+        if (combinedTable) combinedTable.appendChild(createTableRow(event, true));
+      });
+
+      // Set initial state of past races visibility
+      showPastRacesBtn.click(); // This will hide past races initially
     }
     
     // Update search functionality to be more modern

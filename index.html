@@ -64,7 +64,7 @@
           <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#all">All Series</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#f1">Formula 1</button>
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#f1">F1</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" data-bs-toggle="tab" data-bs-target="#indycar">IndyCar</button>
@@ -266,7 +266,7 @@
           
           // Find race results
           let results = [];
-          if (event.series === "Formula 1") {
+          if (event.series === "F1") {
             const raceName = event.race.replace(" GP", "");
             const result = resultsData.f1Past.results.find(r => 
               r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||
@@ -669,19 +669,14 @@
       // Create series badge if needed
       let seriesBadgeHTML = '';
       if (includeSeriesBadge) {
-        let seriesName = event.series;
-        if (event.series.includes('NASCAR')) {
-          seriesName = event.series.includes('Playoffs') ? 
-            'NASCAR Cup (Playoffs)' : 'NASCAR Cup (Regular)';
-        }
-        seriesBadgeHTML = `<div class="series-badge" data-series="${seriesName}">${seriesName}</div>`;
+        seriesBadgeHTML = `<div class="series-badge" data-series="${event.displaySeries}">${event.displaySeries}</div>`;
       }
 
       // Find race results for completed races
       let podiumHTML = '';
       if (event.start < now) {
         let results = [];
-        if (event.series === "Formula 1") {
+        if (event.series === "F1") {
           const raceName = event.race.replace(" GP", "");
           const result = resultsData.f1Past.results.find(r => 
             r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||

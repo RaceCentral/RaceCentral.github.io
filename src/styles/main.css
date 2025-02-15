@@ -92,7 +92,7 @@ body.dark-mode .nav-tabs .nav-link {
   letter-spacing: 0.5px;
 }
 
-.series-badge[data-series="Formula 1"] {
+.series-badge[data-series="F1"] {
   background-color: var(--primary-color);
   color: white;
 }
@@ -102,21 +102,84 @@ body.dark-mode .nav-tabs .nav-link {
   color: white;
 }
 
-.series-badge[data-series="NASCAR Cup (Regular)"] {
-  background-color: #ffd700;
-  color: black;
-}
-
-.series-badge[data-series="NASCAR Cup (Playoffs)"] {
+.series-badge[data-series="NASCAR"] {
   background: linear-gradient(135deg, #ffd700, #ff4d00);
   color: black;
 }
 
-/* Add a small icon next to NASCAR Playoff badge */
-.series-badge[data-series="NASCAR Cup (Playoffs)"]::after {
-  content: "🏆";
-  margin-left: 4px;
-  font-size: 0.9em;
+/* Mobile-Friendly Table Styles */
+@media (max-width: 768px) {
+  .table {
+    display: block;
+    width: 100%;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table td, .table th {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  /* Hide non-essential columns on mobile */
+  .table th:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)),
+  .table td:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)) {
+    display: none;
+  }
+
+  .series-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* Ensure the essential columns have appropriate widths */
+  .table th:nth-child(1),
+  .table td:nth-child(1) {
+    width: 20%; /* Date column */
+  }
+
+  .table th:nth-child(2),
+  .table td:nth-child(2) {
+    width: 25%; /* Series column */
+  }
+
+  .table th:nth-child(3),
+  .table td:nth-child(3) {
+    width: 55%; /* Race column */
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: visible;
+  }
+
+  /* Stack podium results vertically on mobile */
+  .podium-results {
+    white-space: normal;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .podium-position {
+    min-width: 2rem;
+    display: inline-block;
+    margin-right: 0.25rem;
+  }
+
+  .podium-results span {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Highlight current row more visibly on mobile */
+  .table tr:active {
+    background-color: rgba(225, 6, 0, 0.15);
+  }
+
+  .dark-mode .table tr:active {
+    background-color: rgba(225, 6, 0, 0.25);
+  }
 }
 
 /* Modern Table Styles */
@@ -838,54 +901,6 @@ body.dark-mode .news-link {
   justify-content: center;
   padding: 1rem;
   color: var(--accent-color);
-}
-
-/* Mobile-Friendly Table Styles */
-@media (max-width: 768px) {
-  .table {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .table td, .table th {
-    padding: 0.75rem 0.5rem;
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
-
-  .series-badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-  }
-
-  .podium-results {
-    white-space: normal;
-    font-size: 0.85rem;
-    padding: 0.5rem;
-  }
-
-  .podium-position {
-    min-width: 2rem;
-    display: inline-block;
-    margin-right: 0.25rem;
-  }
-
-  /* Stack podium results vertically on mobile */
-  .podium-results span {
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-
-  /* Highlight current row more visibly on mobile */
-  .table tr:active {
-    background-color: rgba(225, 6, 0, 0.15);
-  }
-
-  .dark-mode .table tr:active {
-    background-color: rgba(225, 6, 0, 0.25);
-  }
 }
 
 /* Upcoming Event Card Improvements */

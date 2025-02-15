@@ -90,7 +90,7 @@ body.dark-mode .nav-tabs .nav-link {
   border-bottom: 3px solid var(--primary-color);
 }
 
-/* Modern Card Styles (applied via Bootstrap’s .card class) */
+/* Modern Card Styles (applied via Bootstrap's .card class) */
 .card {
   background-color: var(--background-light);
   border: 1px solid #e0e0e0;
@@ -475,4 +475,77 @@ body.dark-mode .news-link {
 
 .dark-mode .weather-card {
   background: linear-gradient(145deg, #2a2a2a, #333333);
+}
+
+/* Completed Race Styles */
+.completed-race {
+  background-color: rgba(0, 161, 156, 0.15) !important; /* Using accent color with transparency */
+  position: relative;
+}
+
+.completed-race td {
+  color: var(--text-light);
+}
+
+.completed-race td:last-child {
+  position: relative;
+  padding-right: 40px;
+}
+
+.dark-mode .completed-race {
+  background-color: rgba(0, 161, 156, 0.25) !important;
+}
+
+.dark-mode .completed-race td {
+  color: var(--text-dark);
+}
+
+.completed-race td:last-child::after {
+  content: "✓";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* Podium Results */
+.podium-results {
+  font-size: 0.9em;
+  color: var(--text-light);
+  margin-top: 8px;
+  display: block;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 6px 10px;
+  border-radius: 4px;
+  border-left: 3px solid var(--accent-color);
+}
+
+.dark-mode .podium-results {
+  color: var(--text-dark);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.podium-results span {
+  margin-right: 12px;
+  display: inline-block;
+}
+
+.podium-position {
+  font-weight: bold;
+  color: var(--accent-color);
+  margin-right: 4px;
+}
+
+/* Add styles for multiple results divider */
+.podium-divider {
+  margin: 8px 0;
+  border: 0;
+  border-top: 1px solid rgba(0, 161, 156, 0.2);
+}
+
+.dark-mode .podium-divider {
+  border-top-color: rgba(0, 161, 156, 0.3);
 }

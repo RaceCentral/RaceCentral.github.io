@@ -186,43 +186,10 @@ const f1Events = [
   ];
   
   const nascarPastResults = [
-    { race: "Daytona 500", date: "Feb 18, 2024", winner: "William Byron", second: "Joey Logano", third: "Kyle Larson" },
-    { race: "Ambetter Health 400", date: "Feb 25, 2024", winner: "Daniel Suárez", second: "Ross Chastain", third: "Denny Hamlin" },
-    { race: "Pennzoil 400", date: "Mar 3, 2024", winner: "Kyle Larson", second: "Martin Truex Jr.", third: "Christopher Bell" },
-    { race: "Shriners Children's 500", date: "Mar 10, 2024", winner: "Christopher Bell", second: "Kevin Harvick", third: "Chase Elliott" },
-    { race: "Food City 500", date: "Mar 17, 2024", winner: "Denny Hamlin", second: "Kyle Busch", third: "Tyler Reddick" },
-    { race: "EchoPark Automotive Grand Prix", date: "Mar 24, 2024", winner: "William Byron", second: "A.J. Allmendinger", third: "Alex Bowman" },
-    { race: "Toyota Owners 400", date: "Mar 31, 2024", winner: "Denny Hamlin", second: "William Byron", third: "Martin Truex Jr." },
-    { race: "Cook Out 400", date: "Apr 7, 2024", winner: "William Byron", second: "Kyle Larson", third: "Christopher Bell" },
-    { race: "Autotrader EchoPark Automotive 400", date: "Apr 14, 2024", winner: "Chase Elliott", second: "Ryan Blaney", third: "Joey Logano" },
-    { race: "GEICO 500", date: "Apr 21, 2024", winner: "Tyler Reddick", second: "Bubba Wallace", third: "Brad Keselowski" },
-    { race: "Würth 400", date: "Apr 28, 2024", winner: "Denny Hamlin", second: "Martin Truex Jr.", third: "Ross Chastain" },
-    { race: "AdventHealth 400", date: "May 5, 2024", winner: "Kyle Larson", second: "Chase Elliott", third: "William Byron" },
-    { race: "Goodyear 400", date: "May 12, 2024", winner: "Brad Keselowski", second: "Joey Logano", third: "Kevin Harvick" },
-    { race: "NASCAR All-Star Race", date: "May 19, 2024", winner: "Joey Logano", second: "Ryan Blaney", third: "Kyle Busch" },
-    { race: "Coca-Cola 600", date: "May 26, 2024", winner: "Christopher Bell", second: "Martin Truex Jr.", third: "Denny Hamlin" },
-    { race: "Enjoy Illinois 300", date: "Jun 2, 2024", winner: "Austin Cindric", second: "Chase Briscoe", third: "Aric Almirola" },
-    { race: "Toyota/Save Mart 350", date: "Jun 9, 2024", winner: "Kyle Larson", second: "Chase Elliott", third: "Tyler Reddick" },
-    { race: "Iowa Corn 350", date: "Jun 16, 2024", winner: "Ryan Blaney", second: "Joey Logano", third: "William Byron" },
-    { race: "USA Today 301", date: "Jun 23, 2024", winner: "Christopher Bell", second: "Denny Hamlin", third: "Martin Truex Jr." },
-    { race: "Ally 400", date: "Jun 30, 2024", winner: "Joey Logano", second: "Kyle Larson", third: "Ross Chastain" },
-    { race: "Grant Park 165", date: "Jul 7, 2024", winner: "Alex Bowman", second: "Chase Elliott", third: "Tyler Reddick" },
-    { race: "The Great American Getaway 400", date: "Jul 14, 2024", winner: "Ryan Blaney", second: "William Byron", third: "Kyle Busch" },
-    { race: "Brickyard 400", date: "Jul 21, 2024", winner: "Kyle Larson", second: "Denny Hamlin", third: "Christopher Bell" },
-    { race: "Cook Out 400", date: "Aug 11, 2024", winner: "Austin Dillon", second: "Kevin Harvick", third: "Joey Logano" },
-    { race: "FireKeepers Casino 400", date: "Aug 18, 2024", winner: "Tyler Reddick", second: "Martin Truex Jr.", third: "Kyle Larson" },
-    { race: "Coke Zero Sugar 400", date: "Aug 24, 2024", winner: "Harrison Burton", second: "Kyle Busch", third: "Christopher Bell" },
-    { race: "Southern 500", date: "Sep 1, 2024", winner: "Chase Briscoe", second: "Denny Hamlin", third: "Joey Logano" },
-    { race: "Quaker State 400", date: "Sep 8, 2024", winner: "Joey Logano", second: "Ryan Blaney", third: "William Byron" },
-    { race: "Go Bowling at The Glen", date: "Sep 15, 2024", winner: "Chris Buescher", second: "Chase Elliott", third: "Kyle Larson" },
-    { race: "Bass Pro Shops Night Race", date: "Sep 21, 2024", winner: "Kyle Larson", second: "Denny Hamlin", third: "Martin Truex Jr." },
-    { race: "Hollywood Casino 400", date: "Sep 29, 2024", winner: "Ross Chastain", second: "Kyle Busch", third: "Tyler Reddick" },
-    { race: "YellaWood 500", date: "Oct 6, 2024", winner: "Ricky Stenhouse Jr.", second: "Bubba Wallace", third: "Joey Logano" },
-    { race: "Bank of America Roval 400", date: "Oct 13, 2024", winner: "Kyle Larson", second: "A.J. Allmendinger", third: "Chase Elliott" },
-    { race: "South Point 400", date: "Oct 20, 2024", winner: "Joey Logano", second: "Ryan Blaney", third: "Denny Hamlin" },
-    { race: "Straight Talk Wireless 400", date: "Oct 27, 2024", winner: "Tyler Reddick", second: "William Byron", third: "Kyle Larson" },
-    { race: "Xfinity 500", date: "Nov 3, 2024", winner: "Ryan Blaney", second: "Joey Logano", third: "Martin Truex Jr." },
-    { race: "NASCAR Cup Series Championship", date: "Nov 10, 2024", winner: "Joey Logano", second: "Ryan Blaney", third: "William Byron" }
+    { race: "Clash at Bowman Gray", date: "Feb 2, 2024", winner: "Chase Elliott", second: "Ryan Blaney", third: "Denny Hamlin" },
+    { race: "Duel #1", date: "Feb 13, 2024", winner: "Bubba Wallace", second: "William Byron", third: "Ty Dillon" },
+    { race: "Duel #2", date: "Feb 13, 2024", winner: "Austin Cindric", second: "Erik Jones", third: "Chris Buescher" },
+    // Add more NASCAR results as they happen
   ];
   
   // Add a "start" property to each schedule event using parseEventDate.

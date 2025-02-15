@@ -240,15 +240,88 @@
     
     function populateTable(tableBodyId, events, columns) {
       const tbody = document.getElementById(tableBodyId);
+      const now = new Date();
+      
       events.forEach(event => {
         const tr = document.createElement("tr");
         const eventStartDate = parseEventDate(event.date);
         tr.setAttribute("data-start", eventStartDate.toISOString());
-        columns.forEach(col => {
-          const td = document.createElement("td");
-          td.textContent = event[col];
-          tr.appendChild(td);
-        });
+        
+        // Check if the race is completed
+        if (eventStartDate < now) {
+          tr.classList.add("completed-race");
+          
+          // Find race results - handle multiple results for events like Duels
+          let results = [];
+          if (event.series === "Formula 1") {
+            // For F1, remove "GP" and try to match the Grand Prix name
+            const raceName = event.race.replace(" GP", "");
+            const result = resultsData.f1Past.results.find(r => 
+              r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||
+              raceName.toLowerCase().includes(r.grandPrix.toLowerCase())
+            );
+            if (result) results.push(result);
+          } else if (event.series === "IndyCar") {
+            // For IndyCar, try to match the full name or partial name
+            const result = resultsData.indyPast.results.find(r => 
+              r.race.toLowerCase().includes(event.race.toLowerCase()) ||
+              event.race.toLowerCase().includes(r.race.toLowerCase())
+            );
+            if (result) results.push(result);
+          } else if (event.series.includes("NASCAR")) {
+            // For NASCAR, handle special cases like Duels
+            if (event.race.includes("Duel")) {
+              // Find all Duel results
+              results = resultsData.nascarPast.results.filter(r => 
+                r.race.toLowerCase().includes("duel")
+              );
+            } else {
+              // For other NASCAR races, try to match by the main race name
+              const eventShortName = event.race.split(" at ")[0].toLowerCase();
+              const result = resultsData.nascarPast.results.find(r => 
+                r.race.toLowerCase().includes(eventShortName) ||
+                eventShortName.includes(r.race.toLowerCase())
+              );
+              if (result) results.push(result);
+            }
+          }
+          
+          // Create cells with podium information
+          columns.forEach((col, index) => {
+            const td = document.createElement("td");
+            td.textContent = event[col];
+            
+            // Add podium information to the race name cell
+            if (col === "race" && results.length > 0) {
+              const podiumDiv = document.createElement("div");
+              podiumDiv.className = "podium-results";
+              
+              // Create HTML for each result
+              const podiumHTML = results.map(result => {
+                let resultTitle = results.length > 1 ? `<strong>${result.race}:</strong><br>` : "";
+                return `
+                  ${resultTitle}
+                  <span><span class="podium-position">1st:</span> ${result.winner}</span>
+                  <span><span class="podium-position">2nd:</span> ${result.second}</span>
+                  <span><span class="podium-position">3rd:</span> ${result.third}</span>
+                `;
+              }).join('<hr class="podium-divider">');
+              
+              podiumDiv.innerHTML = podiumHTML;
+              td.appendChild(podiumDiv);
+            }
+            
+            tr.appendChild(td);
+          });
+        } else {
+          // Regular event without results
+          columns.forEach(col => {
+            const td = document.createElement("td");
+            td.textContent = event[col];
+            tr.appendChild(td);
+          });
+        }
+        
         tr.addEventListener("click", () => openEventModal(event));
         tbody.appendChild(tr);
       });

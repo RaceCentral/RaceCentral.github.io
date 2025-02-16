@@ -374,61 +374,68 @@
           </div>
         `;
 
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${event.latitude}&lon=${event.longitude}&units=metric&appid=76e88dcc2deedd45254cb828a080cb54`);
-        const data = await response.json();
-        
-        if (!response.ok) throw new Error(data.message);
+        // Required headers for the NWS API.
+        const headers = {
+          "User-Agent": "(RacingCentral, info@racecentral.info)",
+          "Accept": "application/geo+json"
+        };
 
-        const eventDate = new Date(event.start);
-        const forecast = data.list.find(item => {
-          const forecastDate = new Date(item.dt * 1000);
-          return forecastDate.toDateString() === eventDate.toDateString() &&
-                 Math.abs(forecastDate.getHours() - eventDate.getHours()) <= 3;
+        // Retrieve metadata from the NWS API
+        const pointResponse = await fetch(`https://api.weather.gov/points/${event.latitude},${event.longitude}`, { headers });
+        if (!pointResponse.ok) {
+          throw new Error(`Error fetching location metadata: ${pointResponse.status}`);
+        }
+        const pointData = await pointResponse.json();
+        const forecastURL = pointData.properties && pointData.properties.forecast;
+        if (!forecastURL) {
+          throw new Error("Forecast URL not available.");
+        }
+
+        // Fetch forecast data
+        const forecastResponse = await fetch(forecastURL, { headers });
+        if (!forecastResponse.ok) {
+          throw new Error(`Error fetching forecast: ${forecastResponse.status}`);
+        }
+        const forecastData = await forecastResponse.json();
+        const periods = forecastData.properties && forecastData.properties.periods;
+        if (!periods || periods.length === 0) {
+          weatherContainer.innerHTML = "<p class='text-muted'>Forecast not available.</p>";
+          return;
+        }
+
+        // Adjust eventDate using event.time_utc if available
+        let eventDate = new Date(event.start);
+        if (event.time_utc) {
+          const [hours, minutes] = event.time_utc.split(":");
+          eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
+        }
+
+        // Find a forecast period that matches the event's start time
+        const forecastPeriod = periods.find(period => {
+          const periodStart = new Date(period.startTime);
+          const periodEnd = new Date(period.endTime);
+          return eventDate >= periodStart && eventDate < periodEnd;
         });
 
-        if (forecast) {
-          const tempC = Math.round(forecast.main.temp);
-          const tempF = celsiusToFahrenheit(tempC);
-          const conditions = forecast.weather[0].description;
-          const windSpeed = Math.round(forecast.wind.speed * 3.6); // Convert m/s to km/h
-          const icon = forecast.weather[0].icon;
+        if (forecastPeriod) {
+          const temp = forecastPeriod.temperature;
+          const tempUnit = forecastPeriod.temperatureUnit; // Typically "F"
+          const wind = forecastPeriod.windSpeed;
+          const windDir = forecastPeriod.windDirection;
+          const shortForecast = forecastPeriod.shortForecast;
           
           weatherContainer.innerHTML = `
             <div class="weather-card">
               <h6 class="mb-2">Race Day Forecast</h6>
-              <div class="d-flex align-items-center mb-2">
-                <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${conditions}" style="width: 50px; height: 50px;">
-                <div class="ms-2">
-                  <div class="temperature-display">
-                    <h3 class="mb-0">
-                      <span class="temp-c">${tempC}°C</span>
-                      <span class="temp-f" style="display: none;">${tempF}°F</span>
-                    </h3>
-                    <button class="btn btn-sm btn-outline-secondary ms-2 temp-toggle">
-                      Switch to °F
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <p class="mb-1"><strong>Conditions:</strong> ${conditions}</p>
-              <p class="mb-1"><strong>Humidity:</strong> ${forecast.main.humidity}%</p>
-              <p class="mb-0"><strong>Wind:</strong> ${windSpeed} km/h</p>
+              <p class="mb-1"><strong>Temperature:</strong> ${temp}°${tempUnit}</p>
+              <p class="mb-1"><strong>Conditions:</strong> ${shortForecast}</p>
+              <p class="mb-1"><strong>Wind:</strong> ${wind} ${windDir}</p>
             </div>
           `;
-
-          // Add event listener for temperature toggle
-          const weatherCard = weatherContainer.querySelector('.weather-card');
-          const toggleBtn = weatherContainer.querySelector('.temp-toggle');
-          
-          toggleBtn.addEventListener('click', function() {
-            const showingF = weatherCard.classList.toggle('show-fahrenheit');
-            weatherCard.querySelector('.temp-c').style.display = showingF ? 'none' : 'inline';
-            weatherCard.querySelector('.temp-f').style.display = showingF ? 'inline' : 'none';
-            this.textContent = showingF ? 'Switch to °C' : 'Switch to °F';
-          });
         } else {
           weatherContainer.innerHTML = "<p class='text-muted'>Forecast not yet available for race day.</p>";
         }
+
       } catch (error) {
         weatherContainer.innerHTML = "<p class='text-danger'>Weather forecast not available.</p>";
         console.error("Error fetching weather:", error);

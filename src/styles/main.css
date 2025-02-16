@@ -687,3 +687,26 @@
     line-height: 1.5;
     border-radius: 0.25rem;
   }
+
+  /* Quick Navigation Button Overrides */
+  .quick-nav-btn {
+    background-color: var(--background-card-light);
+    color: var(--text-light-mode);
+    border: 1px solid var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-base);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all var(--transition-speed);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--box-shadow);
+    text-decoration: none;
+  }
+
+  .quick-nav-btn:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+  }

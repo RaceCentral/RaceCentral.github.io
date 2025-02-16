@@ -254,6 +254,7 @@
     function populateTable(tableBodyId, events, columns) {
       const tbody = document.getElementById(tableBodyId);
       const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       
       events.forEach(event => {
         const tr = document.createElement("tr");
@@ -261,7 +262,7 @@
         tr.setAttribute("data-start", eventStartDate.toISOString());
         
         // Check if the race is completed
-        if (eventStartDate < now) {
+        if (Date.now() >= eventStartDate.getTime() + 24 * 60 * 60 * 1000) {
           tr.classList.add("completed-race");
           
           // Find race results
@@ -465,36 +466,25 @@
       const allEvents = enhanceEventData();
       allEvents.sort((a, b) => a.start - b.start);
       const now = new Date();
-      
-      // Set time to end of current day for comparison
-      const endOfToday = new Date(now);
-      endOfToday.setHours(23, 59, 59, 999);
+      const nowUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 
-      // Find today's events
+      // Find today's events using UTC comparison
       const todaysEvents = allEvents.filter(event => {
-        const eventDate = new Date(event.start);
-        return eventDate.toDateString() === now.toDateString();
+        return event.start.getTime() === nowUTC.getTime();
       });
 
-      // Get this weekend's date range (Friday to Sunday)
-      const friday = new Date(now);
-      friday.setDate(now.getDate() + ((5 - now.getDay() + 7) % 7));
-      friday.setHours(0, 0, 0, 0);
-      
-      const sunday = new Date(friday);
-      sunday.setDate(friday.getDate() + 2);
-      sunday.setHours(23, 59, 59, 999);
+      // Get weekend range in UTC (Friday 00:00 UTC to Sunday 23:59:59 UTC)
+      const dayOfWeekUTC = now.getUTCDay();
+      const daysUntilFriday = (5 - dayOfWeekUTC + 7) % 7;
+      const fridayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilFriday));
+      const sundayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilFriday + 2, 23, 59, 59, 999));
 
-      // Find all events this weekend if no events today
       const weekendEvents = allEvents.filter(event => {
-        const eventStart = new Date(event.start);
-        return eventStart >= friday && eventStart <= sunday;
+        return event.start >= fridayUTC && event.start <= sundayUTC;
       });
 
-      // Find next event if no events today or this weekend
       const nextEvent = allEvents.find(event => {
-        const eventStart = new Date(event.start);
-        return eventStart > now;
+        return event.start > now;
       });
 
       const upcomingDiv = document.getElementById("upcomingEventDetails");
@@ -635,7 +625,7 @@
       }
     }
     
-    // Initialize show past races button
+    // Updated showPastRacesBtn event listener block
     const showPastRacesBtn = document.getElementById('showPastRaces');
     let pastRacesVisible = true;
     showPastRacesBtn.addEventListener('click', function() {
@@ -647,9 +637,10 @@
         const rows = table.querySelectorAll('tr[data-date]');
         rows.forEach(row => {
           const eventDate = new Date(row.getAttribute('data-date'));
-          const today = new Date();
-          if (eventDate < today) {
+          if (Date.now() >= eventDate.getTime() + 24 * 60 * 60 * 1000) {
             row.style.display = pastRacesVisible ? 'table-row' : 'none';
+          } else {
+            row.style.display = '';
           }
         });
       });
@@ -660,9 +651,9 @@
       const row = document.createElement('tr');
       row.setAttribute('data-date', event.start.toISOString());
       const localTime = convertUTCtoLocal(event.date, event.time_utc);
-      const now = new Date();
-      
-      if (event.start < now) {
+      const nowRow = new Date();
+      const todayUTC = new Date(Date.UTC(nowRow.getUTCFullYear(), nowRow.getUTCMonth(), nowRow.getUTCDate()));
+      if (event.start < todayUTC) {
         row.classList.add('completed-race');
       }
 
@@ -674,7 +665,7 @@
 
       // Find race results for completed races
       let podiumHTML = '';
-      if (event.start < now) {
+      if (event.start < nowRow) {
         let results = [];
         if (event.series === "F1") {
           const raceName = event.race.replace(" GP", "");
@@ -800,21 +791,38 @@
           const activeTab = document.querySelector(".tab-pane.active");
           
           activeTab.querySelectorAll("tbody tr").forEach(row => {
-            const text = row.textContent.toLowerCase();
-            if (text.includes(searchTerm)) {
-              row.style.display = "";
-              // Highlight matching text
+            // Store original cell HTML if not already stored
+            row.querySelectorAll("td").forEach(cell => {
+              if (!cell.dataset.original) {
+                cell.dataset.original = cell.innerHTML;
+              }
+            });
+
+            if (searchTerm === "") {
+              // Restore original content
               row.querySelectorAll("td").forEach(cell => {
-                const originalText = cell.textContent;
-                if (originalText.toLowerCase().includes(searchTerm)) {
-                  cell.innerHTML = originalText.replace(
+                cell.innerHTML = cell.dataset.original;
+              });
+              // Re-apply past races filter if needed
+              if (row.classList.contains("completed-race") && !pastRacesVisible) {
+                row.style.display = "none";
+              } else {
+                row.style.display = "";
+              }
+            } else {
+              const text = row.textContent.toLowerCase();
+              if (text.includes(searchTerm)) {
+                row.style.display = "";
+                row.querySelectorAll("td").forEach(cell => {
+                  const originalHTML = cell.dataset.original;
+                  cell.innerHTML = originalHTML.replace(
                     new RegExp(searchTerm, "gi"),
                     match => `<mark>${match}</mark>`
                   );
-                }
-              });
-            } else {
-              row.style.display = "none";
+                });
+              } else {
+                row.style.display = "none";
+              }
             }
           });
         }, 200);

@@ -374,26 +374,27 @@
   
   .weather-card {
     background: var(--background-card-light);
-    padding: 1rem;
     border-radius: var(--border-radius-base);
-    box-shadow: var(--box-shadow);
-    margin-top: 1rem;
-    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+    padding: 1.25rem;
   }
   
   body.dark-mode .weather-card {
     background: var(--background-card-dark);
   }
   
-  .temp-toggle {
-    font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
-    margin-left: 0.5rem;
-    background-color: var(--accent-color);
-    color: #fff;
-    border: none;
-    border-radius: var(--border-radius-base);
-    cursor: pointer;
+  .weather-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .temperature-display {
+    font-weight: 600;
+  }
+  
+  .conditions-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
   }
   
   /* -------------------------------------------------------
@@ -610,4 +611,50 @@
     #nascar table tbody tr td:nth-child(5) {
       display: none;
     }
+  }
+  
+  /* Hourly Forecast Styles */
+  .hourly-forecast {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+  }
+  
+  .hourly-breakdown {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+  
+  .hourly-breakdown::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .hourly-breakdown::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+  
+  .hourly-breakdown::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+  
+  .hour-item {
+    min-width: 80px;
+    padding: 0.5rem;
+    border-radius: var(--border-radius-base);
+  }
+  
+  .hour-item .time {
+    font-weight: 500;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  
+  .hour-item .temp {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .hour-item .temp-c {
+    color: var(--text-muted);
+    font-size: 0.8rem;
   }

@@ -355,6 +355,11 @@
       return Math.round((celsius * 9/5) + 32);
     }
 
+    // Add temperature conversion helper function
+    function fahrenheitToCelsius(fahrenheit) {
+      return Math.round((fahrenheit - 32) * 5 / 9);
+    }
+
     async function fetchWeather(event, containerId) {
       const weatherContainer = document.getElementById(containerId);
       if (!weatherContainer) return;
@@ -374,7 +379,7 @@
           </div>
         `;
 
-        // Required headers for the NWS API.
+        // Required headers for the NWS API
         const headers = {
           "User-Agent": "(RacingCentral, info@racecentral.info)",
           "Accept": "application/geo+json"
@@ -387,18 +392,31 @@
         }
         const pointData = await pointResponse.json();
         const forecastURL = pointData.properties && pointData.properties.forecast;
-        if (!forecastURL) {
+        const hourlyForecastURL = pointData.properties && pointData.properties.forecastHourly;
+        
+        if (!forecastURL || !hourlyForecastURL) {
           throw new Error("Forecast URL not available.");
         }
 
-        // Fetch forecast data
-        const forecastResponse = await fetch(forecastURL, { headers });
-        if (!forecastResponse.ok) {
-          throw new Error(`Error fetching forecast: ${forecastResponse.status}`);
+        // Fetch both regular and hourly forecast data
+        const [forecastResponse, hourlyResponse] = await Promise.all([
+          fetch(forecastURL, { headers }),
+          fetch(hourlyForecastURL, { headers })
+        ]);
+
+        if (!forecastResponse.ok || !hourlyResponse.ok) {
+          throw new Error(`Error fetching forecast data`);
         }
-        const forecastData = await forecastResponse.json();
+
+        const [forecastData, hourlyData] = await Promise.all([
+          forecastResponse.json(),
+          hourlyResponse.json()
+        ]);
+
         const periods = forecastData.properties && forecastData.properties.periods;
-        if (!periods || periods.length === 0) {
+        const hourlyPeriods = hourlyData.properties && hourlyData.properties.periods;
+
+        if (!periods || periods.length === 0 || !hourlyPeriods || hourlyPeriods.length === 0) {
           weatherContainer.innerHTML = "<p class='text-muted'>Forecast not available.</p>";
           return;
         }
@@ -410,28 +428,106 @@
           eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
         }
 
-        // Find a forecast period that matches the event's start time
-        const forecastPeriod = periods.find(period => {
+        // Find matching forecast period
+        let forecastPeriod = periods.find(period => {
           const periodStart = new Date(period.startTime);
           const periodEnd = new Date(period.endTime);
           return eventDate >= periodStart && eventDate < periodEnd;
         });
 
+        // Fallback: If no exact period is found, choose the closest period
+        if (!forecastPeriod) {
+          forecastPeriod = periods.reduce((prev, cur) => {
+            return Math.abs(new Date(cur.startTime) - eventDate) < Math.abs(new Date(prev.startTime) - eventDate) ? cur : prev;
+          });
+        }
+
         if (forecastPeriod) {
-          const temp = forecastPeriod.temperature;
-          const tempUnit = forecastPeriod.temperatureUnit; // Typically "F"
+          const tempF = forecastPeriod.temperature;
+          const tempC = fahrenheitToCelsius(tempF);
           const wind = forecastPeriod.windSpeed;
           const windDir = forecastPeriod.windDirection;
           const shortForecast = forecastPeriod.shortForecast;
           
-          weatherContainer.innerHTML = `
+          // Get hourly forecasts around event time (3 hours before and after)
+          const eventTime = eventDate.getTime();
+          const relevantHourlyForecasts = hourlyPeriods.filter(period => {
+            const periodTime = new Date(period.startTime).getTime();
+            return Math.abs(periodTime - eventTime) <= 3 * 60 * 60 * 1000; // 3 hours before/after
+          });
+
+          // Weather icons mapping based on forecast text
+          const weatherIcons = {
+            'sunny': '☀️',
+            'clear': '☀️',
+            'mostly clear': '🌤️',
+            'partly cloudy': '⛅',
+            'mostly cloudy': '🌥️',
+            'cloudy': '☁️',
+            'rain': '🌧️',
+            'showers': '🌧️',
+            'thunderstorm': '⛈️',
+            'snow': '🌨️',
+            'fog': '🌫️'
+          };
+
+          // Find appropriate weather icon
+          let weatherIcon = '☀️'; // default
+          const forecast = shortForecast.toLowerCase();
+          for (const [condition, icon] of Object.entries(weatherIcons)) {
+            if (forecast.includes(condition)) {
+              weatherIcon = icon;
+              break;
+            }
+          }
+
+          // Create the main weather card
+          const mainWeatherCard = `
             <div class="weather-card">
-              <h6 class="mb-2">Race Day Forecast</h6>
-              <p class="mb-1"><strong>Temperature:</strong> ${temp}°${tempUnit}</p>
-              <p class="mb-1"><strong>Conditions:</strong> ${shortForecast}</p>
-              <p class="mb-1"><strong>Wind:</strong> ${wind} ${windDir}</p>
+              <h6 class="mb-3">Race Day Forecast</h6>
+              <div class="d-flex align-items-center mb-3">
+                <div class="weather-icon me-3">
+                  <span style="font-size: 2.5rem;">${weatherIcon}</span>
+                </div>
+                <div>
+                  <div class="temperature-display">
+                    <span class="temp-main" style="font-size: 1.5rem;">${tempF}°F / ${tempC}°C</span>
+                  </div>
+                  <div class="conditions-text">${shortForecast}</div>
+                </div>
+              </div>
+              <p class="mb-2"><strong>Wind:</strong> ${wind} ${windDir}</p>
+              
+              <div class="hourly-forecast mt-4">
+                <h6 class="mb-3">Hourly Forecast</h6>
+                <div class="hourly-breakdown d-flex overflow-auto">
+                  ${relevantHourlyForecasts.map(hour => {
+                    const hourTemp = hour.temperature;
+                    const hourTempC = fahrenheitToCelsius(hourTemp);
+                    const time = new Date(hour.startTime).toLocaleTimeString([], {hour: 'numeric'});
+                    let hourIcon = '☀️';
+                    const hourForecast = hour.shortForecast.toLowerCase();
+                    for (const [condition, icon] of Object.entries(weatherIcons)) {
+                      if (hourForecast.includes(condition)) {
+                        hourIcon = icon;
+                        break;
+                      }
+                    }
+                    return `
+                      <div class="hour-item text-center me-4">
+                        <div class="time mb-1">${time}</div>
+                        <div class="icon mb-1" style="font-size: 1.5rem;">${hourIcon}</div>
+                        <div class="temp">${hourTemp}°F</div>
+                        <div class="temp-c">${hourTempC}°C</div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
             </div>
           `;
+
+          weatherContainer.innerHTML = mainWeatherCard;
         } else {
           weatherContainer.innerHTML = "<p class='text-muted'>Forecast not yet available for race day.</p>";
         }

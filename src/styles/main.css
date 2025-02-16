@@ -710,3 +710,14 @@
     background-color: var(--accent-color);
     color: #fff;
   }
+
+  body.dark-mode .quick-nav-btn {
+    background-color: var(--background-card-dark);
+    color: var(--text-dark-mode);
+    border: 1px solid var(--accent-color);
+  }
+
+  body.dark-mode .quick-nav-btn:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+  }

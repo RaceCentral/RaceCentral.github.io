@@ -566,7 +566,11 @@
       document.getElementById("modalEventCity").textContent = event.city || "TBA";
       
       // Start countdown
-      startCountdown("modalCountdown", event.start.getTime());
+      // Create event start time in UTC
+      const [hours, minutes] = (event.time_utc || "00:00").split(":");
+      const eventDate = new Date(event.start);
+      eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
+      startCountdown("modalCountdown", eventDate.getTime());
       
       // Setup weather button
       document.getElementById("fetchWeatherBtn").onclick = () => {

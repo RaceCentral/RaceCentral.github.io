@@ -721,3 +721,31 @@
     background-color: var(--accent-color);
     color: #fff;
   }
+
+  .event-info-group {
+    background: var(--background-card-light);
+    padding: 1rem;
+    border-radius: var(--border-radius-base);
+    margin-bottom: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .event-info-group p {
+    margin-bottom: 0.5rem;
+  }
+
+  .event-info-group p:first-child {
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .dark-mode .event-info-group {
+    background: var(--background-card-dark);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .dark-mode .event-info-group p:first-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }

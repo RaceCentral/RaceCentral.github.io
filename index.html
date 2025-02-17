@@ -166,13 +166,22 @@
           <div class="event-details">
             <div class="series-badge mb-3" id="modalEventSeries"></div>
             <h5 class="mb-3" id="modalEventRace"></h5>
-            <div class="row">
+            <div class="row g-3">
               <div class="col-md-6">
-                <p><strong>Date:</strong> <span id="modalEventDate"></span></p>
-                <p><strong>Location:</strong> <span id="modalEventLocation"></span></p>
-                <p><strong>Time:</strong> <span id="modalEventTime"></span></p>
+                <div class="event-info-group">
+                  <p><strong>Date & Time</strong></p>
+                  <p class="mb-1"><i class="fas fa-calendar me-2"></i><span id="modalEventDate"></span></p>
+                  <p class="mb-1"><i class="fas fa-clock me-2"></i><span id="modalEventTime"></span></p>
+                  <p class="mb-3"><i class="fas fa-tv me-2"></i><span id="modalEventNetwork"></span></p>
+                </div>
+                <div class="event-info-group">
+                  <p><strong>Track Information</strong></p>
+                  <p class="mb-1"><i class="fas fa-map-marker-alt me-2"></i><span id="modalEventLocation"></span></p>
+                  <p class="mb-1"><i class="fas fa-city me-2"></i><span id="modalEventCity"></span></p>
+                </div>
               </div>
               <div class="col-md-6">
+                <p><strong>Time Until Race</strong></p>
                 <div id="modalCountdown" class="countdown-timer mb-3"></div>
               </div>
             </div>
@@ -553,6 +562,8 @@
       document.getElementById("modalEventLocation").textContent = event.circuit || event.venue || "TBA";
       document.getElementById("modalEventTime").textContent = event.time_utc ? 
         convertUTCtoLocal(event.date, event.time_utc) : "TBA";
+      document.getElementById("modalEventNetwork").textContent = event.network || "";
+      document.getElementById("modalEventCity").textContent = event.city || "TBA";
       
       // Start countdown
       startCountdown("modalCountdown", event.start.getTime());

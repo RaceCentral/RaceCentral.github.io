@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>2025 Racing Results</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Clarity Analytics -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "q5g6pdi6gf");
+  </script>
+
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="src/styles/main.css" rel="stylesheet">
+  <!-- ICS.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/ics-js@0.10.2/dist/ics.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container my-4">
+    <!-- Header with Theme Toggle -->
+    <header class="site-header d-flex justify-content-between align-items-center">
+      <h1 class="text-center">2025 Racing Results</h1>
+      <button id="themeToggle" class="btn btn-secondary" aria-label="Toggle Dark Mode">
+        <i class="fas" id="themeIcon"></i>
+      </button>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="my-3">
+      <div class="btn-group me-2">
+        <a href="index.html" class="btn btn-outline-primary">
+          <i class="fas fa-home me-1"></i> Home
+        </a>
+        <a href="results.html" class="btn btn-primary">
+          <i class="fas fa-trophy me-1"></i> Results
+        </a>
+      </div>
+      <div class="btn-group">
+        <a href="index.html#schedule" class="btn btn-outline-primary">
+          <i class="fas fa-list me-1"></i> Full Schedule
+        </a>
+        <a href="index.html#news" class="btn btn-outline-primary">
+          <i class="fas fa-newspaper me-1"></i> News
+        </a>
+      </div>
+    </nav>
+
+    <!-- Results Section -->
+    <section id="results" class="results-section">
+      <!-- Series Tabs -->
+      <ul class="nav nav-tabs" id="seriesTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#f1">F1</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#indycar">IndyCar</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nascar">NASCAR</button>
+        </li>
+      </ul>
+
+      <div class="tab-content mt-4" id="seriesTabContent">
+        <!-- F1 Content -->
+        <div class="tab-pane fade show active" id="f1" role="tabpanel">
+          <div class="row">
+            <!-- Visualizations Row -->
+            <div class="col-12 mb-4">
+              <div class="row">
+                <!-- Driver Points Chart -->
+                <div class="col-md-6 mb-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="mb-0">Driver Points Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="driverPointsChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <!-- Constructor Points Chart -->
+                <div class="col-md-6 mb-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="mb-0">Constructor Points Share</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="constructorPointsChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Existing Tables Row -->
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="mb-0">Driver Standings</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="f1DriverStandings">
+                      <thead>
+                        <tr>
+                          <th>Pos</th>
+                          <th>Driver</th>
+                          <th>Points</th>
+                          <th>Wins</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Constructor Standings -->
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="mb-0">Constructor Standings</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="f1ConstructorStandings">
+                      <thead>
+                        <tr>
+                          <th>Pos</th>
+                          <th>Constructor</th>
+                          <th>Points</th>
+                          <th>Wins</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Race Results -->
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="mb-0">Race Results</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="f1Results">
+                      <thead>
+                        <tr>
+                          <th>Round</th>
+                          <th>Race</th>
+                          <th>Winner</th>
+                          <th>Second</th>
+                          <th>Third</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- IndyCar Content -->
+        <div class="tab-pane fade" id="indycar" role="tabpanel">
+          <div class="row">
+            <!-- Visualizations Row -->
+            <div class="col-12 mb-4">
+              <div class="row">
+                <!-- Driver Points Chart -->
+                <div class="col-md-6 mb-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="mb-0">Driver Points Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="indyDriverPointsChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <!-- Team Points Chart -->
+                <div class="col-md-6 mb-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="mb-0">Team Points Share</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="indyTeamPointsChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- IndyCar Driver Standings Table -->
+            <div class="col-md-12 mb-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="mb-0">Driver Standings</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="indyDriverStandings">
+                      <thead>
+                        <tr>
+                          <th>Pos</th>
+                          <th>Driver</th>
+                          <th>Points</th>
+                          <th>Wins</th>
+                          <th>Poles</th>
+                          <th>Top 5</th>
+                          <th>Top 10</th>
+                          <th>Laps Led</th>
+                          <th>Engine</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Race Results -->
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="mb-0">Race Results</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="indyResults">
+                      <thead>
+                        <tr>
+                          <th>Round</th>
+                          <th>Race</th>
+                          <th>Winner</th>
+                          <th>Second</th>
+                          <th>Third</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NASCAR Content -->
+        <div class="tab-pane fade" id="nascar" role="tabpanel">
+          <div class="row">
+            <!-- Visualizations Row -->
+            <div class="col-12 mb-4">
+              <div class="row">
+                <!-- Driver Points Chart -->
+                <div class="col-md-6 mb-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="mb-0">Driver Points Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="nascarDriverPointsChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <!-- Team Points Chart -->
+                <div class="col-md-6 mb-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="mb-0">Team Points Share</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="nascarTeamPointsChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Driver Standings -->
+            <div class="col-md-12 mb-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="mb-0">Driver Standings</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="nascarDriverStandings">
+                      <thead>
+                        <tr>
+                          <th>Pos</th>
+                          <th>Driver</th>
+                          <th>Points</th>
+                          <th>Wins</th>
+                          <th>Stage Wins</th>
+                          <th>Playoff Points</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Race Results -->
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="mb-0">Race Results</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="nascarResults">
+                      <thead>
+                        <tr>
+                          <th>Round</th>
+                          <th>Race</th>
+                          <th>Winner</th>
+                          <th>Second</th>
+                          <th>Third</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Application Script -->
+  <script type="module">
+    import { 
+      getF1DriverStandings, 
+      getF1ConstructorStandings,
+      getF1RaceResults,
+      getIndyCarDriverStandings
+    } from './src/js/api.js';
+
+    // Theme toggle functionality
+    function setupThemeToggle() {
+      const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
+      
+      function updateToggleIcon() {
+        if (document.body.classList.contains("dark-mode")) {
+          themeIcon.textContent = "☀️";
+        } else {
+          themeIcon.textContent = "🌙";
+        }
+      }
+      
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme) {
+        document.body.classList.toggle("dark-mode", storedTheme === "dark");
+      } else {
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.body.classList.toggle("dark-mode", prefersDark);
+      }
+      
+      updateToggleIcon();
+      
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        if (!localStorage.getItem("theme")) {
+          document.body.classList.toggle("dark-mode", e.matches);
+          updateToggleIcon();
+        }
+      });
+      
+      themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        updateToggleIcon();
+      });
+    }
+
+    // Loading state handler
+    function setLoadingState(tableId, isLoading) {
+      const table = document.getElementById(tableId);
+      const tbody = table.getElementsByTagName('tbody')[0];
+      
+      if (isLoading) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="${table.getElementsByTagName('th').length}" class="text-center">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <span class="ms-2">Loading data...</span>
+            </td>
+          </tr>
+        `;
+      } else {
+        tbody.innerHTML = '';
+      }
+    }
+
+    // Error state handler
+    function setErrorState(tableId, message) {
+      const table = document.getElementById(tableId);
+      const tbody = table.getElementsByTagName('tbody')[0];
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="${table.getElementsByTagName('th').length}" class="text-center text-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>${message}
+          </td>
+        </tr>
+      `;
+    }
+
+    // Chart instances
+    let driverPointsChart = null;
+    let constructorPointsChart = null;
+    let indyDriverPointsChart = null;
+    let indyTeamPointsChart = null;
+    let nascarDriverPointsChart = null;
+    let nascarTeamPointsChart = null;
+
+    // Chart color palettes
+    const chartColors = {
+      // F1 team colors (existing)
+      f1Teams: {
+        'Red Bull': '#0600EF',
+        'Ferrari': '#DC0000',
+        'Mercedes': '#00A19C',
+        'McLaren': '#FF8700',
+        'Aston Martin': '#006F62',
+        'Alpine': '#0090FF',
+        'Williams': '#005AFF',
+        'Sauber': '#52E252',
+        'Racing Bulls': '#1E3C99',
+        'Haas': '#FFFFFF'
+      },
+      // IndyCar team colors
+      indyTeams: {
+        'Chip Ganassi Racing': '#01579B',
+        'Team Penske': '#C41E3A',
+        'Arrow McLaren': '#FF8700',
+        'Andretti Global': '#E10600',
+        'Meyer Shank Racing': '#FF1CA2',
+        'Ed Carpenter Racing': '#004225',
+        'Dale Coyne Racing': '#00A0DC',
+        'Rahal Letterman Lanigan': '#0066CC',
+        'A.J. Foyt Enterprises': '#BC9B6A',
+        'Juncos Hollinger Racing': '#84BD00'
+      },
+      // NASCAR team colors
+      nascarTeams: {
+        'Hendrick Motorsports': '#0081CA',
+        'Joe Gibbs Racing': '#FDB913',
+        'Team Penske': '#C41E3A',
+        'Stewart-Haas Racing': '#4C4C4C',
+        'Richard Childress Racing': '#B5121B',
+        '23XI Racing': '#FF1CA2',
+        'Trackhouse Racing': '#1DA1F2',
+        'RFK Racing': '#EE3E34',
+        'Legacy Motor Club': '#00A0DC',
+        'Front Row Motorsports': '#34B233'
+      },
+      // Get color for specific constructor/team
+      getConstructorColor(constructorName) {
+        return this.f1Teams[constructorName] || '#999999';
+      },
+      getIndyTeamColor(teamName) {
+        return this.indyTeams[teamName] || '#999999';
+      },
+      getNascarTeamColor(teamName) {
+        return this.nascarTeams[teamName] || '#999999';
+      }
+    };
+
+    // Create driver points chart
+    function createDriverPointsChart(driverStandings) {
+      const ctx = document.getElementById('driverPointsChart').getContext('2d');
+      
+      // Destroy existing chart if it exists
+      if (driverPointsChart) {
+        driverPointsChart.destroy();
+      }
+
+      const top10Drivers = driverStandings.slice(0, 10);
+      
+      // Map drivers to their constructor colors
+      const driverColors = top10Drivers.map(d => chartColors.getConstructorColor(d.Constructors[0].name));
+      
+      driverPointsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: top10Drivers.map(d => d.Driver.familyName),
+          datasets: [{
+            label: 'Points',
+            data: top10Drivers.map(d => d.points),
+            backgroundColor: driverColors,
+            borderColor: driverColors,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                title: (items) => {
+                  const index = items[0].dataIndex;
+                  const driver = top10Drivers[index];
+                  return `${driver.Driver.givenName} ${driver.Driver.familyName}`;
+                },
+                label: (item) => {
+                  const driver = top10Drivers[item.dataIndex];
+                  return [
+                    `Points: ${driver.points}`,
+                    `Team: ${driver.Constructors[0].name}`
+                  ];
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Points'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Create constructor points chart
+    function createConstructorPointsChart(constructorStandings) {
+      const ctx = document.getElementById('constructorPointsChart').getContext('2d');
+      
+      // Destroy existing chart if it exists
+      if (constructorPointsChart) {
+        constructorPointsChart.destroy();
+      }
+
+      // Map constructors to their team colors
+      const constructorColors = constructorStandings.map(c => 
+        chartColors.getConstructorColor(c.Constructor.name)
+      );
+
+      constructorPointsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: constructorStandings.map(c => c.Constructor.name),
+          datasets: [{
+            data: constructorStandings.map(c => c.points),
+            backgroundColor: constructorColors,
+            borderColor: '#ffffff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                padding: 20,
+                font: {
+                  size: 12
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (item) => {
+                  const constructor = constructorStandings[item.dataIndex];
+                  const percentage = (constructor.points / constructorStandings.reduce((sum, c) => sum + parseInt(c.points), 0) * 100).toFixed(1);
+                  return `${constructor.Constructor.name}: ${constructor.points} points (${percentage}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Create IndyCar driver points chart
+    function createIndyDriverPointsChart(driverStandings) {
+      const ctx = document.getElementById('indyDriverPointsChart').getContext('2d');
+      
+      if (indyDriverPointsChart) {
+        indyDriverPointsChart.destroy();
+      }
+
+      const top10Drivers = driverStandings.slice(0, 10);
+      const driverColors = top10Drivers.map(d => chartColors.getIndyTeamColor(d.team));
+      
+      indyDriverPointsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: top10Drivers.map(d => d.driverName),
+          datasets: [{
+            label: 'Points',
+            data: top10Drivers.map(d => d.points),
+            backgroundColor: driverColors,
+            borderColor: driverColors,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                title: (items) => {
+                  const index = items[0].dataIndex;
+                  return top10Drivers[index].driverName;
+                },
+                label: (item) => {
+                  const driver = top10Drivers[item.dataIndex];
+                  return [
+                    `Points: ${driver.points}`,
+                    `Team: ${driver.team}`
+                  ];
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Points'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Create NASCAR driver points chart
+    function createNascarDriverPointsChart(driverStandings) {
+      const ctx = document.getElementById('nascarDriverPointsChart').getContext('2d');
+      
+      if (nascarDriverPointsChart) {
+        nascarDriverPointsChart.destroy();
+      }
+
+      const top10Drivers = driverStandings.slice(0, 10);
+      const driverColors = top10Drivers.map(d => chartColors.getNascarTeamColor(d.team));
+      
+      nascarDriverPointsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: top10Drivers.map(d => d.driverName),
+          datasets: [{
+            label: 'Points',
+            data: top10Drivers.map(d => d.points),
+            backgroundColor: driverColors,
+            borderColor: driverColors,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                title: (items) => {
+                  const index = items[0].dataIndex;
+                  return top10Drivers[index].driverName;
+                },
+                label: (item) => {
+                  const driver = top10Drivers[item.dataIndex];
+                  return [
+                    `Points: ${driver.points}`,
+                    `Team: ${driver.team}`,
+                    `Playoff Points: ${driver.playoffPoints || 0}`
+                  ];
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Points'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Create team points charts for IndyCar and NASCAR
+    function createIndyTeamPointsChart(teamStandings) {
+      const ctx = document.getElementById('indyTeamPointsChart').getContext('2d');
+      
+      if (indyTeamPointsChart) {
+        indyTeamPointsChart.destroy();
+      }
+
+      const teamColors = teamStandings.map(t => chartColors.getIndyTeamColor(t.team));
+
+      indyTeamPointsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: teamStandings.map(t => t.team),
+          datasets: [{
+            data: teamStandings.map(t => t.points),
+            backgroundColor: teamColors,
+            borderColor: '#ffffff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                padding: 20,
+                font: { size: 12 }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (item) => {
+                  const team = teamStandings[item.dataIndex];
+                  const percentage = (team.points / teamStandings.reduce((sum, t) => sum + parseInt(t.points), 0) * 100).toFixed(1);
+                  return `${team.team}: ${team.points} points (${percentage}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function createNascarTeamPointsChart(teamStandings) {
+      const ctx = document.getElementById('nascarTeamPointsChart').getContext('2d');
+      
+      if (nascarTeamPointsChart) {
+        nascarTeamPointsChart.destroy();
+      }
+
+      const teamColors = teamStandings.map(t => chartColors.getNascarTeamColor(t.team));
+
+      nascarTeamPointsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: teamStandings.map(t => t.team),
+          datasets: [{
+            data: teamStandings.map(t => t.points),
+            backgroundColor: teamColors,
+            borderColor: '#ffffff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                padding: 20,
+                font: { size: 12 }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (item) => {
+                  const team = teamStandings[item.dataIndex];
+                  const percentage = (team.points / teamStandings.reduce((sum, t) => sum + parseInt(t.points), 0) * 100).toFixed(1);
+                  return `${team.team}: ${team.points} points (${percentage}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Update populateF1Data function to include visualization
+    async function populateF1Data() {
+      setLoadingState('f1DriverStandings', true);
+      setLoadingState('f1ConstructorStandings', true);
+      setLoadingState('f1Results', true);
+
+      try {
+        const [driverStandings, constructorStandings] = await Promise.all([
+          getF1DriverStandings(),
+          getF1ConstructorStandings()
+        ]);
+
+        if (driverStandings && driverStandings.length > 0) {
+          // Populate driver standings table
+          const driverTable = document.getElementById('f1DriverStandings').getElementsByTagName('tbody')[0];
+          driverTable.innerHTML = '';
+          driverStandings.forEach(driver => {
+            const row = driverTable.insertRow();
+            row.innerHTML = `
+              <td>${driver.position}</td>
+              <td>${driver.Driver.givenName} ${driver.Driver.familyName}</td>
+              <td>${driver.points}</td>
+              <td>${driver.wins}</td>
+            `;
+          });
+
+          // Create driver points visualization
+          createDriverPointsChart(driverStandings);
+        }
+
+        if (constructorStandings && constructorStandings.length > 0) {
+          // Populate constructor standings table
+          const constructorTable = document.getElementById('f1ConstructorStandings').getElementsByTagName('tbody')[0];
+          constructorTable.innerHTML = '';
+          constructorStandings.forEach(constructor => {
+            const row = constructorTable.insertRow();
+            row.innerHTML = `
+              <td>${constructor.position}</td>
+              <td>${constructor.Constructor.name}</td>
+              <td>${constructor.points}</td>
+              <td>${constructor.wins}</td>
+            `;
+          });
+
+          // Create constructor points visualization
+          createConstructorPointsChart(constructorStandings);
+        }
+
+        // Fetch and populate race results for the current season
+        const resultsTable = document.getElementById('f1Results').getElementsByTagName('tbody')[0];
+        resultsTable.innerHTML = '';
+        
+        // Get all race results for the current season
+        const currentYear = new Date().getFullYear();
+        const rounds = Array.from({ length: 24 }, (_, i) => i + 1); // F1 has max 24 races
+        
+        for (const round of rounds) {
+          try {
+            const raceResult = await getF1RaceResults(round);
+            if (raceResult) {
+              const row = resultsTable.insertRow();
+              const podium = raceResult.Results.slice(0, 3);
+              row.innerHTML = `
+                <td>${round}</td>
+                <td>${raceResult.raceName}</td>
+                <td>${podium[0]?.Driver.familyName || '-'}</td>
+                <td>${podium[1]?.Driver.familyName || '-'}</td>
+                <td>${podium[2]?.Driver.familyName || '-'}</td>
+              `;
+            }
+          } catch (error) {
+            // Skip races that haven't happened yet
+            continue;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching F1 data:', error);
+        setErrorState('f1DriverStandings', 'Unable to load driver standings');
+        setErrorState('f1ConstructorStandings', 'Unable to load constructor standings');
+        setErrorState('f1Results', 'Unable to load race results');
+      }
+    }
+
+    // Function to populate IndyCar data
+    async function populateIndyCarData() {
+      setLoadingState('indyDriverStandings', true);
+
+      try {
+        const standings = await getIndyCarDriverStandings();
+        
+        if (standings && standings.length > 0) {
+          // Populate driver standings table
+          const driverTable = document.getElementById('indyDriverStandings').getElementsByTagName('tbody')[0];
+          driverTable.innerHTML = '';
+          
+          standings.forEach(driver => {
+            const row = driverTable.insertRow();
+            row.innerHTML = `
+              <td>${driver.rank}</td>
+              <td>${driver.driver}</td>
+              <td>${driver.points}</td>
+              <td>${driver.wins}</td>
+              <td>${driver.poles}</td>
+              <td>${driver.top5}</td>
+              <td>${driver.top10}</td>
+              <td>${driver.lapsLed}</td>
+              <td>${driver.engine}</td>
+            `;
+          });
+
+          // Create driver points visualization
+          createIndyDriverPointsChart(standings.slice(0, 10)); // Top 10 drivers
+        } else {
+          setErrorState('indyDriverStandings', 'No standings data available');
+        }
+      } catch (error) {
+        console.error('Error loading IndyCar data:', error);
+        setErrorState('indyDriverStandings', 'Unable to load standings');
+      } finally {
+        setLoadingState('indyDriverStandings', false);
+      }
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', () => {
+      setupThemeToggle();
+      populateF1Data();
+      populateIndyCarData();
+    });
+  </script>
+</body>
+</html> 

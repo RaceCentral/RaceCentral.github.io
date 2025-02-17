@@ -20,6 +20,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <!-- Custom CSS -->
   <link href="src/styles/main.css" rel="stylesheet">
+  <!-- ICS.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/ics-js@0.10.2/dist/ics.min.js"></script>
 </head>
 <body>
   <div class="container my-4">
@@ -78,6 +80,13 @@
           <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nascar">NASCAR</button>
         </li>
       </ul>
+
+      <!-- Add Calendar Button -->
+      <div class="calendar-buttons mt-3 mb-3">
+        <button class="btn btn-primary" type="button" id="downloadICSBtn">
+          <i class="fas fa-calendar-plus me-1"></i> Download Calendar
+        </button>
+      </div>
 
       <div class="tab-content" id="scheduleTabContent">
         <!-- Combined Schedule -->
@@ -204,6 +213,16 @@
               </a>
             </div>
           </div>
+
+          <!-- Calendar Integration -->
+          <div id="calendarIntegration" class="mt-4">
+            <h6>Add to Calendar</h6>
+            <div class="d-flex gap-2">
+              <button class="btn btn-primary" type="button" id="modalDownloadICS">
+                <i class="fas fa-calendar-plus me-1"></i> Download Calendar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -215,6 +234,7 @@
   <script type="module">
     // Import your data from data.js
     import { scheduleData, resultsData, parseEventDate, enhanceEventData, convertUTCtoLocal } from './src/js/data.js';
+    import { downloadICS, downloadSeriesICS } from './src/js/calendar.js';
 
     /*******************************
      * Helper Functions
@@ -999,6 +1019,78 @@
       populateSchedules();
       displayUpcomingEvent();
       fetchNews();
+    });
+
+    // Function to get current active tab events
+    function getCurrentTabEvents() {
+      const activeTabId = document.querySelector('.tab-pane.active').id;
+      switch (activeTabId) {
+        case 'f1':
+          return scheduleData.f1Events;
+        case 'indycar':
+          return scheduleData.indyEvents;
+        case 'nascar':
+          return [...scheduleData.nascarRegularEvents, ...scheduleData.nascarPlayoffEvents];
+        case 'all':
+          return enhanceEventData();
+        default:
+          return [];
+      }
+    }
+
+    // Function to get series name from active tab
+    function getActiveSeriesName() {
+      const activeTabId = document.querySelector('.tab-pane.active').id;
+      switch (activeTabId) {
+        case 'f1':
+          return 'F1';
+        case 'indycar':
+          return 'IndyCar';
+        case 'nascar':
+          return 'NASCAR';
+        case 'all':
+          return 'All-Series';
+        default:
+          return '';
+      }
+    }
+
+    // Add event listener for calendar button
+    document.getElementById('downloadICSBtn').addEventListener('click', () => {
+      const events = getCurrentTabEvents();
+      const seriesName = getActiveSeriesName();
+      if (events && events.length > 0) {
+        const totalEvents = events.length;
+        const message = `Downloading ${totalEvents} ${seriesName} events as an ICS file.\n\n` +
+                       `You can import this file into any calendar application.`;
+        alert(message);
+        downloadSeriesICS(events, seriesName);
+      }
+    });
+
+    // Update calendar button text based on active tab
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+      tab.addEventListener('shown.bs.tab', () => {
+        const seriesName = getActiveSeriesName();
+        const buttonText = seriesName === 'All-Series' ? 'Download Calendar' : `Download ${seriesName} Calendar`;
+        document.getElementById('downloadICSBtn').innerHTML = `<i class="fas fa-calendar-plus me-1"></i> ${buttonText}`;
+      });
+    });
+
+    // Store the current event when opening the modal
+    const eventDetailModal = document.getElementById('eventDetailModal');
+    eventDetailModal.addEventListener('show.bs.modal', (event) => {
+      const button = event.relatedTarget;
+      const eventData = JSON.parse(button.getAttribute('data-event'));
+      eventDetailModal.currentEvent = eventData;
+    });
+
+    // Add event listener for modal download button
+    document.getElementById('modalDownloadICS').addEventListener('click', () => {
+      const event = eventDetailModal.currentEvent;
+      if (event) {
+        downloadICS(event);
+      }
     });
   </script>
 </body>

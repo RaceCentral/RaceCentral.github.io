@@ -205,7 +205,7 @@ const f1Events = [
     { race: "Clash at Bowman Gray", date: "Feb 2, 2024", winner: "Chase Elliott", second: "Ryan Blaney", third: "Denny Hamlin" },
     { race: "Duels at Daytona #1", date: "Feb 13, 2024", winner: "Bubba Wallace", second: "William Byron", third: "Ty Dillon" },
     { race: "Duels at Daytona #2", date: "Feb 13, 2024", winner: "Austin Cindric", second: "Erik Jones", third: "Chris Buescher" },
-    // Add more NASCAR results as they happen
+    { race: "Daytona 500", date: "Feb 16, 2024", winner: "William Byron", second: "Tyler Reddick", third: "Jimmie Johnson"}
   ];
   
   // Add a "start" property to each schedule event using parseEventDate.

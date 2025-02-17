@@ -54,7 +54,7 @@ const f1Events = [
     // Regular Season
     { date: "Feb 2", race: "Clash at Bowman Gray", venue: "Bowman Gray Stadium", time: "8:00 PM", time_utc: "01:00", series: "NASCAR Cup", network: "FOX", city: "Winston-Salem", latitude: 36.0999, longitude: -80.2242 },
     { date: "Feb 13", race: "Duels at Daytona", venue: "Daytona International Speedway", time: "7:00 PM", time_utc: "00:00", series: "NASCAR Cup", network: "FS1", city: "Daytona Beach", latitude: 29.1857, longitude: -81.0694 },
-    { date: "Feb 17", race: "Daytona 500", venue: "Daytona International Speedway", time: "1:30 PM", time_utc: "18:30", series: "NASCAR Cup", network: "FOX", city: "Daytona Beach", latitude: 29.1857, longitude: -81.0694 },
+    { date: "Feb 16", race: "Daytona 500", venue: "Daytona International Speedway", time: "1:30 PM", time_utc: "18:30", series: "NASCAR Cup", network: "FOX", city: "Daytona Beach", latitude: 29.1857, longitude: -81.0694 },
     { date: "Feb 23", race: "Ambetter Health 400", venue: "Atlanta Motor Speedway", time: "3:00 PM", time_utc: "20:00", series: "NASCAR Cup", network: "FOX", city: "Hampton", latitude: 33.3863, longitude: -84.3150 },
     { date: "Mar 2", race: "EchoPark Automotive Grand Prix", venue: "Circuit of the Americas", time: "3:30 PM", time_utc: "20:30", series: "NASCAR Cup", network: "FOX", city: "Austin", latitude: 30.1328, longitude: -97.6411 },
     { date: "Mar 9", race: "Shriners Children's 500", venue: "Phoenix Raceway", time: "3:30 PM", time_utc: "20:30", series: "NASCAR Cup", network: "FS1", city: "Avondale", latitude: 33.3748, longitude: -112.3110 },

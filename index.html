@@ -22,6 +22,7 @@
   <link href="src/styles/main.css" rel="stylesheet">
   <!-- ICS.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/ics-js@0.10.2/dist/ics.min.js"></script>
+  
 </head>
 <body>
   <div class="container my-4">
@@ -63,6 +64,13 @@
         <button id="showPastRaces" class="show-past-races">
           Show Past Races
         </button>
+      <!--</div>-->
+
+      <!-- Add Calendar Button -->
+      <!--<div class="calendar-buttons mt-3 mb-3">-->
+        <button class="btn btn-primary" type="button" id="downloadICSBtn">
+          <i class="fas fa-calendar-plus me-1"></i> Download Calendar
+        </button>
       </div>
 
       <!-- Schedule Tabs -->
@@ -81,12 +89,7 @@
         </li>
       </ul>
 
-      <!-- Add Calendar Button -->
-      <div class="calendar-buttons mt-3 mb-3">
-        <button class="btn btn-primary" type="button" id="downloadICSBtn">
-          <i class="fas fa-calendar-plus me-1"></i> Download Calendar
-        </button>
-      </div>
+
 
       <div class="tab-content" id="scheduleTabContent">
         <!-- Combined Schedule -->

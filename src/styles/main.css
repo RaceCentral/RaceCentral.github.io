@@ -773,3 +773,10 @@
   .dark-mode .event-info-group p:first-child {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
+
+  /*
+  #downloadICSBtn {
+    font-size: 0.75rem; 
+    padding: 0.25rem 0.5rem; 
+  }
+  */

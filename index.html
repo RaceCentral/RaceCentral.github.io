@@ -575,8 +575,11 @@
     function openEventModal(event) {
       const modal = new bootstrap.Modal(document.getElementById("eventDetailModal"));
       
-      // Update modal content
-      document.getElementById("modalEventSeries").textContent = event.series;
+      // Update modal content with proper series badge
+      const seriesBadgeElement = document.getElementById("modalEventSeries");
+      const displaySeries = event.series === "NASCAR Cup" ? "NASCAR" : event.series;
+      seriesBadgeElement.setAttribute('data-series', event.series);
+      seriesBadgeElement.textContent = displaySeries;
       document.getElementById("modalEventRace").textContent = event.race;
       document.getElementById("modalEventDate").textContent = event.date;
       document.getElementById("modalEventLocation").textContent = event.circuit || event.venue || "TBA";
@@ -644,10 +647,13 @@
         const eventDate = new Date(event.start);
         eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
         
+        // Format series display name
+        const displaySeries = event.series === "NASCAR Cup" ? "NASCAR" : event.series;
+        
         const cardHTML = `
           <div class="card upcoming-event-item mb-3">
             <div class="card-body">
-              <div class="series-badge mb-2">${event.series}</div>
+              <div class="series-badge" data-series="${event.series}">${displaySeries}</div>
               <h5 class="card-title mb-2">${event.race}</h5>
               <p class="card-text mb-1"><strong>Date:</strong> ${event.date}</p>
               <p class="card-text mb-1"><strong>Location:</strong> ${location}</p>
@@ -934,34 +940,66 @@
           const activeTab = document.querySelector(".tab-pane.active");
           
           activeTab.querySelectorAll("tbody tr").forEach(row => {
-            // Store original cell HTML if not already stored
-            row.querySelectorAll("td").forEach(cell => {
-              if (!cell.dataset.original) {
-                cell.dataset.original = cell.innerHTML;
+            // Get text content only from cells
+            const rowText = Array.from(row.querySelectorAll("td")).map(cell => {
+              // Create a temporary div to strip HTML
+              const div = document.createElement('div');
+              div.innerHTML = cell.innerHTML;
+              // Get text content and handle series badges specially
+              const badge = div.querySelector('.series-badge');
+              if (badge) {
+                return badge.textContent;
               }
-            });
+              return div.textContent;
+            }).join(' ').toLowerCase();
 
             if (searchTerm === "") {
-              // Restore original content
-              row.querySelectorAll("td").forEach(cell => {
-                cell.innerHTML = cell.dataset.original;
-              });
-              // Re-apply past races filter if needed
+              // Show row and restore original content
+              row.style.display = "";
               if (row.classList.contains("completed-race") && !pastRacesVisible) {
                 row.style.display = "none";
-              } else {
-                row.style.display = "";
               }
+              row.querySelectorAll("td").forEach(cell => {
+                if (cell.dataset.original) {
+                  cell.innerHTML = cell.dataset.original;
+                }
+              });
             } else {
-              const text = row.textContent.toLowerCase();
-              if (text.includes(searchTerm)) {
+              if (rowText.includes(searchTerm)) {
                 row.style.display = "";
+                // Highlight matches in text nodes only
                 row.querySelectorAll("td").forEach(cell => {
-                  const originalHTML = cell.dataset.original;
-                  cell.innerHTML = originalHTML.replace(
-                    new RegExp(searchTerm, "gi"),
-                    match => `<mark>${match}</mark>`
-                  );
+                  const originalHTML = cell.innerHTML;
+                  // Store original HTML if not already stored
+                  if (!cell.dataset.original) {
+                    cell.dataset.original = originalHTML;
+                  }
+                  
+                  // Create temporary element to manipulate HTML
+                  const temp = document.createElement('div');
+                  temp.innerHTML = originalHTML;
+                  
+                  // Function to highlight text in a node
+                  function highlightText(node) {
+                    if (node.nodeType === 3) { // Text node
+                      const text = node.textContent;
+                      const regex = new RegExp(searchTerm, 'gi');
+                      if (regex.test(text)) {
+                        const span = document.createElement('span');
+                        span.innerHTML = text.replace(regex, match => `<mark>${match}</mark>`);
+                        node.parentNode.replaceChild(span, node);
+                      }
+                    } else if (node.nodeType === 1) { // Element node
+                      // Don't highlight inside series badges
+                      if (!node.classList || !node.classList.contains('series-badge')) {
+                        Array.from(node.childNodes).forEach(highlightText);
+                      }
+                    }
+                  }
+                  
+                  // Apply highlighting
+                  Array.from(temp.childNodes).forEach(highlightText);
+                  cell.innerHTML = temp.innerHTML;
                 });
               } else {
                 row.style.display = "none";

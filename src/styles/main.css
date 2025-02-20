@@ -229,17 +229,36 @@
     font-weight: 600;
     font-size: 0.75rem;
     text-transform: uppercase;
-    color: #fff;
+    color: #ffffff;
+    transition: background-color var(--transition-speed), opacity var(--transition-speed);
   }
   
+  /* F1 Series */
   .series-badge[data-series="F1"] {
     background-color: #e72424;
   }
+  
+  /* IndyCar Series */
   .series-badge[data-series="IndyCar"] {
     background-color: #ea580c;
   }
-  .series-badge[data-series="NASCAR"] {
+  
+  /* NASCAR Series - handle both NASCAR and NASCAR Cup */
+  .series-badge[data-series="NASCAR"],
+  .series-badge[data-series="NASCAR Cup"] {
     background-color: #16a34a;
+  }
+  
+  /* Dark mode overrides for series badges */
+  body.dark-mode .series-badge {
+    opacity: 0.95;
+  }
+  
+  /* Hero card series badge specific styling */
+  .upcoming-event-item .series-badge {
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
   }
   
   /* -------------------------------------------------------

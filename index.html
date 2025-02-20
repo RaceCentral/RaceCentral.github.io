@@ -198,9 +198,7 @@
           
           <!-- Weather Section -->
           <div id="weatherSection" class="mt-4">
-            <button id="fetchWeatherBtn" class="btn btn-info btn-sm">
-              Show Weather Forecast
-            </button>
+            <h6>Weather Forecast</h6>
             <div id="weatherResult" class="mt-2"></div>
           </div>
           
@@ -584,11 +582,19 @@
     function openEventModal(event) {
       const modal = new bootstrap.Modal(document.getElementById("eventDetailModal"));
       
+      // Clear any existing weather data
+      document.getElementById("weatherResult").innerHTML = '';
+      
       // Update modal content with proper series badge
       const seriesBadgeElement = document.getElementById("modalEventSeries");
       const displaySeries = event.series === "NASCAR Cup" ? "NASCAR" : event.series;
       seriesBadgeElement.setAttribute('data-series', event.series);
       seriesBadgeElement.textContent = displaySeries;
+      
+      // Store the current event data
+      eventDetailModal.currentEvent = event;
+      
+      // Update other modal content
       document.getElementById("modalEventRace").textContent = event.race;
       document.getElementById("modalEventDate").textContent = event.date;
       document.getElementById("modalEventLocation").textContent = event.circuit || event.venue || "TBA";
@@ -598,16 +604,13 @@
       document.getElementById("modalEventCity").textContent = event.city || "TBA";
       
       // Start countdown
-      // Create event start time in UTC
       const [hours, minutes] = (event.time_utc || "00:00").split(":");
       const eventDate = new Date(event.start);
       eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
       startCountdown("modalCountdown", eventDate.getTime());
       
-      // Setup weather button
-      document.getElementById("fetchWeatherBtn").onclick = () => {
-        fetchWeather(event, "weatherResult");
-      };
+      // Automatically fetch weather
+      fetchWeather(event, "weatherResult");
       
       // Update share link
       const shareText = `Check out the ${event.race} on ${event.date}! #Motorsports`;
@@ -1127,9 +1130,10 @@
     // Store the current event when opening the modal
     const eventDetailModal = document.getElementById('eventDetailModal');
     eventDetailModal.addEventListener('show.bs.modal', (event) => {
-      const button = event.relatedTarget;
-      const eventData = JSON.parse(button.getAttribute('data-event'));
-      eventDetailModal.currentEvent = eventData;
+      // Remove this section as we're not using a button with data-event attribute
+      // const button = event.relatedTarget;
+      // const eventData = JSON.parse(button.getAttribute('data-event'));
+      // eventDetailModal.currentEvent = eventData;
     });
 
     // Add event listener for modal download button

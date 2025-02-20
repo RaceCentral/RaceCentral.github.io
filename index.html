@@ -33,10 +33,24 @@
       </button>
     </header>
     <!-- Quick Navigation Buttons -->
-    <div class="quick-nav text-center my-3">
-      <a href="#schedule" class="quick-nav-btn mx-2">Full Schedule</a>
-      <a href="#news" class="quick-nav-btn mx-2">News</a>
-    </div>
+    <nav class="my-3">
+      <div class="btn-group me-2">
+        <a href="index.html" class="btn btn-primary">
+          <i class="fas fa-home me-1"></i> Home
+        </a>
+        <a href="results.html" class="btn btn-outline-primary">
+          <i class="fas fa-trophy me-1"></i> Results
+        </a>
+      </div>
+      <div class="btn-group">
+        <a href="#schedule" class="btn btn-outline-primary">
+          <i class="fas fa-list me-1"></i> Full Schedule
+        </a>
+        <a href="#news" class="btn btn-outline-primary">
+          <i class="fas fa-newspaper me-1"></i> News
+        </a>
+      </div>
+    </nav>
 
     <!-- Upcoming Event Section -->
     <div id="upcoming-event" class="upcoming-event">
@@ -663,7 +677,7 @@
         const cardHTML = `
           <div class="card upcoming-event-item mb-3">
             <div class="card-body">
-              <div class="series-badge" data-series="${event.series}">${displaySeries}</div>
+              <div class="series-badge mb-2">${event.series}</div>
               <h5 class="card-title mb-2">${event.race}</h5>
               <p class="card-text mb-1"><strong>Date:</strong> ${event.date}</p>
               <p class="card-text mb-1"><strong>Location:</strong> ${location}</p>

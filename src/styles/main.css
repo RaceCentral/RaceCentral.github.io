@@ -714,36 +714,38 @@
 
   /* Quick Navigation Button Overrides */
   .quick-nav-btn {
-    background-color: var(--background-card-light);
-    color: var(--text-light-mode);
-    border: 1px solid var(--accent-color);
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius-base);
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: all var(--transition-speed);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    box-shadow: var(--box-shadow);
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
     text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    transition: all 0.15s ease-in-out;
+    color: var(--primary-color);
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
   }
 
   .quick-nav-btn:hover {
-    background-color: var(--accent-color);
     color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    text-decoration: none;
   }
 
   body.dark-mode .quick-nav-btn {
-    background-color: var(--background-card-dark);
     color: var(--text-dark-mode);
-    border: 1px solid var(--accent-color);
+    border-color: var(--text-dark-mode);
   }
 
   body.dark-mode .quick-nav-btn:hover {
-    background-color: var(--accent-color);
-    color: #fff;
+    color: var(--text-light-mode);
+    background-color: var(--text-dark-mode);
+    border-color: var(--text-dark-mode);
   }
 
   .event-info-group {

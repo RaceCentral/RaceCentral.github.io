@@ -164,7 +164,7 @@
   </div>
 
   <!-- Event Detail Modal (includes weather forecast functionality) -->
-  <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-labelledby="modalTitle" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -1129,11 +1129,26 @@
 
     // Store the current event when opening the modal
     const eventDetailModal = document.getElementById('eventDetailModal');
+    let previousActiveElement = null;
+
     eventDetailModal.addEventListener('show.bs.modal', (event) => {
-      // Remove this section as we're not using a button with data-event attribute
-      // const button = event.relatedTarget;
-      // const eventData = JSON.parse(button.getAttribute('data-event'));
-      // eventDetailModal.currentEvent = eventData;
+      // Store the element that had focus before opening the modal
+      previousActiveElement = document.activeElement;
+    });
+
+    eventDetailModal.addEventListener('shown.bs.modal', () => {
+      // Focus the first focusable element in the modal
+      const firstFocusableElement = eventDetailModal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (firstFocusableElement) {
+        firstFocusableElement.focus();
+      }
+    });
+
+    eventDetailModal.addEventListener('hidden.bs.modal', () => {
+      // Restore focus to the previously focused element
+      if (previousActiveElement) {
+        previousActiveElement.focus();
+      }
     });
 
     // Add event listener for modal download button

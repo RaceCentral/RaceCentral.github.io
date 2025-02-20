@@ -111,6 +111,100 @@
     box-shadow: var(--box-shadow-hover);
   }
   
+  .upcoming-event-item .card-body {
+    padding: 1rem;
+  }
+  
+  .upcoming-event-item .event-summary {
+    position: relative;
+  }
+  
+  .upcoming-event-item .card-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .upcoming-event-item .card-text {
+    font-size: 0.9rem;
+    color: var(--text-light-mode);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .upcoming-event-item .card-text span {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  
+  .upcoming-event-item .card-text .temp-summary {
+    font-size: 0.85rem;
+    margin-left: 0.25rem;
+    opacity: 0.9;
+  }
+  
+  .upcoming-event-item .weather-details {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: var(--border-radius-base);
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .upcoming-event-item .current-conditions {
+    margin-bottom: 1.5rem;
+  }
+  
+  .upcoming-event-item .temperature-display {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  
+  .upcoming-event-item .conditions-text {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .upcoming-event-item .wind-info {
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+  
+  .upcoming-event-item .hourly-breakdown {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    gap: 1.5rem;
+  }
+  
+  .upcoming-event-item .btn-expand {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    color: var(--text-light-mode);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .upcoming-event-item .btn-expand:hover {
+    color: var(--primary-color);
+  }
+  
+  .upcoming-event-item .btn-expand.collapsed i {
+    transform: rotate(0deg);
+  }
+  
+  .upcoming-event-item .btn-expand i {
+    transform: rotate(180deg);
+    transition: transform 0.2s ease;
+  }
+  
+  .upcoming-event-item .event-details {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+  
   /* Dark mode overrides for hero section & items */
   body.dark-mode .upcoming-event {
     background: var(--background-card-dark);
@@ -125,6 +219,34 @@
   body.dark-mode .upcoming-event-item {
     background: var(--background-card-dark);
     color: var(--text-dark-mode);
+  }
+  
+  body.dark-mode .upcoming-event-item .card-text {
+    color: var(--text-dark-mode);
+  }
+  
+  body.dark-mode .upcoming-event-item .weather-details {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  body.dark-mode .upcoming-event-item .hourly-breakdown {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  body.dark-mode .upcoming-event-item .btn-expand {
+    color: var(--text-dark-mode);
+  }
+  
+  body.dark-mode .upcoming-event-item .btn-expand:hover {
+    color: var(--accent-color);
+  }
+  
+  body.dark-mode .upcoming-event-item .event-details {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  body.dark-mode .upcoming-event-item .card-text .temp-summary {
+    opacity: 0.8;
   }
   
   /* -------------------------------------------------------
@@ -680,6 +802,16 @@
     #nascar table thead tr th:nth-child(5),
     #nascar table tbody tr td:nth-child(5) {
       display: none;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .upcoming-event-item .card-text {
+      font-size: 0.8rem;
+    }
+    
+    .upcoming-event-item .card-text .temp-summary {
+      font-size: 0.75rem;
     }
   }
   

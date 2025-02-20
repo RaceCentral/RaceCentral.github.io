@@ -84,8 +84,6 @@
         </li>
       </ul>
 
-
-
       <div class="tab-content" id="scheduleTabContent">
         <!-- Combined Schedule -->
         <div class="tab-pane fade show active" id="all" role="tabpanel">
@@ -647,15 +645,11 @@
       
       async function createEventCard(event) {
         const location = event.circuit || event.venue || "TBA";
-        const timeString = event.time_utc ? 
-          `<p class="card-text mb-1"><strong>Time:</strong> ${convertUTCtoLocal(event.date, event.time_utc)}</p>` : "";
+        const timeString = event.time_utc ? convertUTCtoLocal(event.date, event.time_utc) : "TBA";
         const countdownId = `countdown-${event.series.replace(/\s+/g, '-').toLowerCase()}`;
         const weatherId = `weather-${countdownId}`;
-        
-        // Create event start time in UTC
-        const [hours, minutes] = (event.time_utc || "00:00").split(":");
-        const eventDate = new Date(event.start);
-        eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
+        const collapseId = `collapse-${countdownId}`;
+        const weatherIconId = `weather-icon-${countdownId}`;
         
         // Format series display name
         const displaySeries = event.series === "NASCAR Cup" ? "NASCAR" : event.series;
@@ -663,21 +657,196 @@
         const cardHTML = `
           <div class="card upcoming-event-item mb-3">
             <div class="card-body">
-              <div class="series-badge" data-series="${event.series}">${displaySeries}</div>
-              <h5 class="card-title mb-2">${event.race}</h5>
-              <p class="card-text mb-1"><strong>Date:</strong> ${event.date}</p>
-              <p class="card-text mb-1"><strong>Location:</strong> ${location}</p>
-              ${timeString}
-              <div id="${weatherId}" class="weather-section mt-3 mb-3"></div>
-              <div id="${countdownId}" class="countdown-timer"></div>
+              <div class="event-summary d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="series-badge mb-2" data-series="${event.series}">${displaySeries}</div>
+                  <h5 class="card-title mb-1">${event.race}</h5>
+                  <div class="card-text mb-0 d-flex align-items-center flex-nowrap">
+                    <span><i class="fas fa-calendar me-2"></i>${event.date}</span>
+                    <span class="ms-2"><i class="fas fa-clock me-1"></i>${timeString}</span>
+                    <span class="ms-2" id="${weatherIconId}"></span>
+                  </div>
+                </div>
+                <button class="btn-expand collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false">
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+              </div>
+              
+              <div class="collapse" id="${collapseId}">
+                <div class="event-details mt-3">
+                  <p class="card-text mb-2"><i class="fas fa-map-marker-alt me-2"></i>${location}</p>
+                  <div class="weather-details mb-3">
+                    <div class="current-conditions mb-2"></div>
+                    <div class="hourly-forecast">
+                      <div class="hourly-breakdown d-flex overflow-auto"></div>
+                    </div>
+                  </div>
+                  <div id="${countdownId}" class="countdown-timer"></div>
+                </div>
+              </div>
             </div>
           </div>
         `;
         
-        // Start the countdown after insertion
-        setTimeout(() => {
+        // Start the countdown and fetch weather after insertion
+        setTimeout(async () => {
+          const [hours, minutes] = (event.time_utc || "00:00").split(":");
+          const eventDate = new Date(event.start);
+          eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
           startCountdown(countdownId, eventDate.getTime());
-          fetchWeather(event, weatherId);
+          
+          // Fetch weather and update both summary icon and expanded details
+          try {
+            if (!event.latitude || !event.longitude) {
+              return;
+            }
+
+            const headers = {
+              "User-Agent": "(RacingCentral, info@racecentral.info)",
+              "Accept": "application/geo+json"
+            };
+
+            const pointResponse = await fetch(`https://api.weather.gov/points/${event.latitude},${event.longitude}`, { headers });
+            if (!pointResponse.ok) {
+              throw new Error(`Error fetching location metadata: ${pointResponse.status}`);
+            }
+            const pointData = await pointResponse.json();
+            
+            const forecastURL = pointData.properties?.forecast;
+            const hourlyForecastURL = pointData.properties?.forecastHourly;
+            
+            if (!forecastURL || !hourlyForecastURL) {
+              throw new Error("Forecast URL not available for this location.");
+            }
+
+            const [forecastResponse, hourlyResponse] = await Promise.all([
+              fetch(forecastURL, { headers }),
+              fetch(hourlyForecastURL, { headers })
+            ]);
+
+            if (!forecastResponse.ok || !hourlyResponse.ok) {
+              throw new Error(`Error fetching forecast data`);
+            }
+
+            const [forecastData, hourlyData] = await Promise.all([
+              forecastResponse.json(),
+              hourlyResponse.json()
+            ]);
+
+            const periods = forecastData.properties?.periods;
+            const hourlyPeriods = hourlyData.properties?.periods;
+
+            if (!periods?.length || !hourlyPeriods?.length) {
+              throw new Error("No forecast periods available");
+            }
+
+            // Find matching forecast period
+            let forecastPeriod = periods.find(period => {
+              const periodStart = new Date(period.startTime);
+              const periodEnd = new Date(period.endTime);
+              return eventDate >= periodStart && eventDate < periodEnd;
+            });
+
+            if (!forecastPeriod && periods.length > 0) {
+              forecastPeriod = periods.reduce((prev, cur) => {
+                const prevDiff = Math.abs(new Date(prev.startTime) - eventDate);
+                const curDiff = Math.abs(new Date(cur.startTime) - eventDate);
+                return curDiff < prevDiff ? cur : prev;
+              });
+            }
+
+            // Weather icons mapping
+            const weatherIcons = {
+              'sunny': '☀️',
+              'clear': '☀️',
+              'mostly clear': '��️',
+              'partly cloudy': '⛅',
+              'mostly cloudy': '🌥️',
+              'cloudy': '☁️',
+              'rain': '🌧️',
+              'showers': '🌧️',
+              'thunderstorm': '⛈️',
+              'snow': '🌨️',
+              'fog': '🌫️'
+            };
+
+            // Find appropriate weather icon
+            let weatherIcon = '☀️'; // default
+            const forecast = forecastPeriod.shortForecast.toLowerCase();
+            for (const [condition, icon] of Object.entries(weatherIcons)) {
+              if (forecast.includes(condition)) {
+                weatherIcon = icon;
+                break;
+              }
+            }
+
+            // Update the summary weather icon
+            const weatherIconElement = document.getElementById(weatherIconId);
+            if (weatherIconElement) {
+              const tempF = forecastPeriod.temperature;
+              const tempC = fahrenheitToCelsius(tempF);
+              weatherIconElement.innerHTML = `${weatherIcon} <span class="temp-summary">${tempF}°F / ${tempC}°C</span>`;
+              weatherIconElement.title = forecastPeriod.shortForecast;
+            }
+
+            // Get relevant hourly forecasts
+            const relevantHourlyForecasts = hourlyPeriods.filter(period => {
+              const periodTime = new Date(period.startTime).getTime();
+              return Math.abs(periodTime - eventDate.getTime()) <= 3 * 60 * 60 * 1000;
+            });
+
+            // Update expanded weather details
+            const expandedSection = document.querySelector(`#${collapseId} .weather-details`);
+            if (expandedSection) {
+              const tempF = forecastPeriod.temperature;
+              const tempC = fahrenheitToCelsius(tempF);
+              
+              expandedSection.querySelector('.current-conditions').innerHTML = `
+                <div class="d-flex align-items-center gap-3">
+                  <span style="font-size: 2rem;">${weatherIcon}</span>
+                  <div>
+                    <div class="temperature-display">
+                      <span class="temp-main">${tempF}°F / ${tempC}°C</span>
+                    </div>
+                    <div class="conditions-text">${forecastPeriod.shortForecast}</div>
+                    <div class="wind-info"><small>${forecastPeriod.windSpeed} ${forecastPeriod.windDirection}</small></div>
+                  </div>
+                </div>
+              `;
+
+              expandedSection.querySelector('.hourly-breakdown').innerHTML = relevantHourlyForecasts.map(hour => {
+                const hourTemp = hour.temperature;
+                const hourTempC = fahrenheitToCelsius(hourTemp);
+                const time = new Date(hour.startTime).toLocaleTimeString([], {hour: 'numeric'});
+                let hourIcon = '☀️';
+                const hourForecast = hour.shortForecast.toLowerCase();
+                for (const [condition, icon] of Object.entries(weatherIcons)) {
+                  if (hourForecast.includes(condition)) {
+                    hourIcon = icon;
+                    break;
+                  }
+                }
+                return `
+                  <div class="hour-item text-center me-4">
+                    <div class="time mb-1">${time}</div>
+                    <div class="icon mb-1" style="font-size: 1.5rem;">${hourIcon}</div>
+                    <div class="temp">${hourTemp}°F</div>
+                    <div class="temp-c">${hourTempC}°C</div>
+                  </div>
+                `;
+              }).join('');
+            }
+          } catch (error) {
+            console.error("Error fetching weather:", error);
+            const weatherIconElement = document.getElementById(weatherIconId);
+            if (weatherIconElement) {
+              weatherIconElement.remove();
+            }
+            const expandedSection = document.querySelector(`#${collapseId} .weather-details`);
+            if (expandedSection) {
+              expandedSection.innerHTML = `<p class='text-danger'>Weather forecast not available</p>`;
+            }
+          }
         }, 0);
         
         return cardHTML;

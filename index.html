@@ -425,11 +425,12 @@
           throw new Error(`Error fetching location metadata: ${pointResponse.status}`);
         }
         const pointData = await pointResponse.json();
-        const forecastURL = pointData.properties && pointData.properties.forecast;
-        const hourlyForecastURL = pointData.properties && pointData.properties.forecastHourly;
+        
+        const forecastURL = pointData.properties?.forecast;
+        const hourlyForecastURL = pointData.properties?.forecastHourly;
         
         if (!forecastURL || !hourlyForecastURL) {
-          throw new Error("Forecast URL not available.");
+          throw new Error("Forecast URL not available for this location.");
         }
 
         // Fetch both regular and hourly forecast data
@@ -439,7 +440,7 @@
         ]);
 
         if (!forecastResponse.ok || !hourlyResponse.ok) {
-          throw new Error(`Error fetching forecast data`);
+          throw new Error(`Error fetching forecast data: ${forecastResponse.status}, ${hourlyResponse.status}`);
         }
 
         const [forecastData, hourlyData] = await Promise.all([
@@ -447,12 +448,11 @@
           hourlyResponse.json()
         ]);
 
-        const periods = forecastData.properties && forecastData.properties.periods;
-        const hourlyPeriods = hourlyData.properties && hourlyData.properties.periods;
+        const periods = forecastData.properties?.periods;
+        const hourlyPeriods = hourlyData.properties?.periods;
 
-        if (!periods || periods.length === 0 || !hourlyPeriods || hourlyPeriods.length === 0) {
-          weatherContainer.innerHTML = "<p class='text-muted'>Forecast not available.</p>";
-          return;
+        if (!periods?.length || !hourlyPeriods?.length) {
+          throw new Error("No forecast periods available for this location.");
         }
 
         // Adjust eventDate using event.time_utc if available
@@ -470,70 +470,82 @@
         });
 
         // Fallback: If no exact period is found, choose the closest period
-        if (!forecastPeriod) {
+        if (!forecastPeriod && periods.length > 0) {
           forecastPeriod = periods.reduce((prev, cur) => {
-            return Math.abs(new Date(cur.startTime) - eventDate) < Math.abs(new Date(prev.startTime) - eventDate) ? cur : prev;
+            const prevDiff = Math.abs(new Date(prev.startTime) - eventDate);
+            const curDiff = Math.abs(new Date(cur.startTime) - eventDate);
+            return curDiff < prevDiff ? cur : prev;
           });
         }
 
-        if (forecastPeriod) {
-          const tempF = forecastPeriod.temperature;
-          const tempC = fahrenheitToCelsius(tempF);
-          const wind = forecastPeriod.windSpeed;
-          const windDir = forecastPeriod.windDirection;
-          const shortForecast = forecastPeriod.shortForecast;
-          
-          // Get hourly forecasts around event time (3 hours before and after)
-          const eventTime = eventDate.getTime();
-          const relevantHourlyForecasts = hourlyPeriods.filter(period => {
-            const periodTime = new Date(period.startTime).getTime();
-            return Math.abs(periodTime - eventTime) <= 3 * 60 * 60 * 1000; // 3 hours before/after
-          });
+        if (!forecastPeriod) {
+          throw new Error("No matching forecast period found for the event time.");
+        }
 
-          // Weather icons mapping based on forecast text
-          const weatherIcons = {
-            'sunny': '☀️',
-            'clear': '☀️',
-            'mostly clear': '🌤️',
-            'partly cloudy': '⛅',
-            'mostly cloudy': '🌥️',
-            'cloudy': '☁️',
-            'rain': '🌧️',
-            'showers': '🌧️',
-            'thunderstorm': '⛈️',
-            'snow': '🌨️',
-            'fog': '🌫️'
-          };
+        const tempF = forecastPeriod.temperature;
+        const tempC = fahrenheitToCelsius(tempF);
+        const wind = forecastPeriod.windSpeed;
+        const windDir = forecastPeriod.windDirection;
+        const shortForecast = forecastPeriod.shortForecast;
+        
+        // Get hourly forecasts around event time (3 hours before and after)
+        const eventTime = eventDate.getTime();
+        const relevantHourlyForecasts = hourlyPeriods.filter(period => {
+          const periodTime = new Date(period.startTime).getTime();
+          return Math.abs(periodTime - eventTime) <= 3 * 60 * 60 * 1000; // 3 hours before/after
+        });
 
-          // Find appropriate weather icon
-          let weatherIcon = '☀️'; // default
-          const forecast = shortForecast.toLowerCase();
-          for (const [condition, icon] of Object.entries(weatherIcons)) {
-            if (forecast.includes(condition)) {
-              weatherIcon = icon;
-              break;
-            }
+        // Weather icons mapping based on forecast text
+        const weatherIcons = {
+          'sunny': '☀️',
+          'clear': '☀️',
+          'mostly clear': '🌤️',
+          'partly cloudy': '⛅',
+          'mostly cloudy': '🌥️',
+          'cloudy': '☁️',
+          'rain': '🌧️',
+          'showers': '🌧️',
+          'thunderstorm': '⛈️',
+          'snow': '🌨️',
+          'fog': '🌫️'
+        };
+
+        // Find appropriate weather icon
+        let weatherIcon = '☀️'; // default
+        const forecast = shortForecast.toLowerCase();
+        for (const [condition, icon] of Object.entries(weatherIcons)) {
+          if (forecast.includes(condition)) {
+            weatherIcon = icon;
+            break;
           }
+        }
 
-          // Create the main weather card
-          const mainWeatherCard = `
-            <div class="weather-card">
-              <h6 class="mb-3">Race Day Forecast</h6>
-              <div class="d-flex align-items-center mb-3">
+        // Create unique ID for the collapse section
+        const collapseId = `hourlyForecast-${Date.now()}`;
+
+        // Create the main weather card with the new compact design
+        const mainWeatherCard = `
+          <div class="weather-card">
+            <div class="weather-summary d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
                 <div class="weather-icon me-3">
-                  <span style="font-size: 2.5rem;">${weatherIcon}</span>
+                  <span style="font-size: 2rem;">${weatherIcon}</span>
                 </div>
                 <div>
                   <div class="temperature-display">
-                    <span class="temp-main" style="font-size: 1.5rem;">${tempF}°F / ${tempC}°C</span>
+                    <span class="temp-main">${tempF}°F / ${tempC}°C</span>
                   </div>
                   <div class="conditions-text">${shortForecast}</div>
+                  <div class="wind-info"><small>${wind} ${windDir}</small></div>
                 </div>
               </div>
-              <p class="mb-2"><strong>Wind:</strong> ${wind} ${windDir}</p>
-              
-              <div class="hourly-forecast mt-4">
-                <h6 class="mb-3">Hourly Forecast</h6>
+              <button class="btn-expand collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false">
+                <i class="fas fa-chevron-down"></i>
+              </button>
+            </div>
+            
+            <div class="collapse" id="${collapseId}">
+              <div class="hourly-forecast mt-3">
                 <div class="hourly-breakdown d-flex overflow-auto">
                   ${relevantHourlyForecasts.map(hour => {
                     const hourTemp = hour.temperature;
@@ -559,16 +571,13 @@
                 </div>
               </div>
             </div>
-          `;
+          </div>
+        `;
 
-          weatherContainer.innerHTML = mainWeatherCard;
-        } else {
-          weatherContainer.innerHTML = "<p class='text-muted'>Forecast not yet available for race day.</p>";
-        }
-
+        weatherContainer.innerHTML = mainWeatherCard;
       } catch (error) {
-        weatherContainer.innerHTML = "<p class='text-danger'>Weather forecast not available.</p>";
         console.error("Error fetching weather:", error);
+        weatherContainer.innerHTML = `<p class='text-danger'>Weather forecast not available: ${error.message}</p>`;
       }
     }
     

@@ -392,28 +392,79 @@
   }
   
   .weather-card {
-    background: var(--background-card-light);
-    border-radius: var(--border-radius-base);
-    padding: 1.25rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   body.dark-mode .weather-card {
     background: var(--background-card-dark);
   }
   
-  .weather-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .weather-summary {
+    position: relative;
   }
   
-  .temperature-display {
-    font-weight: 600;
+  .temperature-display .temp-main {
+    font-size: 1.2rem;
+    font-weight: 500;
   }
   
   .conditions-text {
-    color: var(--text-muted);
     font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  
+  .wind-info {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .btn-expand {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    color: var(--text-color);
+    transition: transform 0.2s ease;
+  }
+  
+  .btn-expand:hover {
+    color: var(--primary);
+  }
+  
+  .btn-expand.collapsed i {
+    transform: rotate(0deg);
+  }
+  
+  .btn-expand i {
+    transform: rotate(180deg);
+    transition: transform 0.2s ease;
+  }
+  
+  .hourly-forecast {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .hour-item {
+    min-width: 80px;
+  }
+  
+  .hour-item .time {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .hour-item .temp {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .hour-item .temp-c {
+    font-size: 0.8rem;
+    color: var(--text-muted);
   }
   
   /* -------------------------------------------------------
@@ -632,52 +683,6 @@
     }
   }
   
-  /* Hourly Forecast Styles */
-  .hourly-forecast {
-    border-top: 1px solid var(--border-color);
-    padding-top: 1rem;
-  }
-  
-  .hourly-breakdown {
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-  }
-  
-  .hourly-breakdown::-webkit-scrollbar {
-    height: 6px;
-  }
-  
-  .hourly-breakdown::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
-  }
-  
-  .hourly-breakdown::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar-thumb);
-    border-radius: 3px;
-  }
-  
-  .hour-item {
-    min-width: 80px;
-    padding: 0.5rem;
-    border-radius: var(--border-radius-base);
-  }
-  
-  .hour-item .time {
-    font-weight: 500;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-  }
-  
-  .hour-item .temp {
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-  
-  .hour-item .temp-c {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-  }
-
   /* Custom Button Overrides */
   .btn {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

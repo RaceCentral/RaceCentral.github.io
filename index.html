@@ -620,26 +620,34 @@
       const allEvents = enhanceEventData();
       allEvents.sort((a, b) => a.start - b.start);
       const now = new Date();
-      const nowUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 
-      // Find today's events using UTC comparison
+      // Get current week's Friday-Sunday range
+      const currentDay = now.getDay(); // 0 = Sunday, 6 = Saturday
+      const daysUntilFriday = currentDay <= 5 ? 5 - currentDay : (5 + 7 - currentDay);
+      const daysUntilSunday = currentDay <= 0 ? 0 : (7 - currentDay);
+      
+      const fridayDate = new Date(now);
+      fridayDate.setDate(now.getDate() - daysUntilFriday);
+      fridayDate.setHours(0, 0, 0, 0);
+      
+      const sundayDate = new Date(now);
+      sundayDate.setDate(now.getDate() + daysUntilSunday);
+      sundayDate.setHours(23, 59, 59, 999);
+
+      // Find today's events
       const todaysEvents = allEvents.filter(event => {
-        return event.start.getTime() === nowUTC.getTime();
+        const eventDate = new Date(event.start);
+        return eventDate.toDateString() === now.toDateString();
       });
 
-      // Get weekend range in UTC (Friday 00:00 UTC to Sunday 23:59:59 UTC)
-      const dayOfWeekUTC = now.getUTCDay();
-      const daysUntilFriday = (5 - dayOfWeekUTC + 7) % 7;
-      const fridayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilFriday));
-      const sundayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilFriday + 2, 23, 59, 59, 999));
-
+      // Find this weekend's events
       const weekendEvents = allEvents.filter(event => {
-        return event.start >= fridayUTC && event.start <= sundayUTC;
+        const eventDate = new Date(event.start);
+        return eventDate >= fridayDate && eventDate <= sundayDate;
       });
 
-      const nextEvent = allEvents.find(event => {
-        return event.start > now;
-      });
+      // Find next event if no events today or this weekend
+      const nextEvent = allEvents.find(event => event.start > now);
 
       const upcomingDiv = document.getElementById("upcomingEventDetails");
       
@@ -759,7 +767,7 @@
             const weatherIcons = {
               'sunny': '☀️',
               'clear': '☀️',
-              'mostly clear': '��️',
+              'mostly clear': '🌤️',
               'partly cloudy': '⛅',
               'mostly cloudy': '🌥️',
               'cloudy': '☁️',

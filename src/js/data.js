@@ -205,7 +205,8 @@ const f1Events = [
     { race: "Clash at Bowman Gray", date: "Feb 2, 2024", winner: "Chase Elliott", second: "Ryan Blaney", third: "Denny Hamlin" },
     { race: "Duels at Daytona #1", date: "Feb 13, 2024", winner: "Bubba Wallace", second: "William Byron", third: "Ty Dillon" },
     { race: "Duels at Daytona #2", date: "Feb 13, 2024", winner: "Austin Cindric", second: "Erik Jones", third: "Chris Buescher" },
-    { race: "Daytona 500", date: "Feb 16, 2024", winner: "William Byron", second: "Tyler Reddick", third: "Jimmie Johnson"}
+    { race: "Daytona 500", date: "Feb 16, 2024", winner: "William Byron", second: "Tyler Reddick", third: "Jimmie Johnson"},
+    { race: "Ambetter Health 400", date: "Feb 23, 2024", winner: "Christopher Bell", second: "Carson Hocevar", third: "Kyle Larson" }
   ];
   
   // Add a "start" property to each schedule event using parseEventDate.

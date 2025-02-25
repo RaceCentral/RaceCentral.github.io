@@ -634,20 +634,62 @@
       sundayDate.setDate(now.getDate() + daysUntilSunday);
       sundayDate.setHours(23, 59, 59, 999);
 
-      // Find today's events
+      // Find today's events that haven't finished yet
       const todaysEvents = allEvents.filter(event => {
         const eventDate = new Date(event.start);
-        return eventDate.toDateString() === now.toDateString();
+        // Check if the event is today
+        if (eventDate.toDateString() === now.toDateString()) {
+          // If the event has a specific time, check if it's still upcoming or currently happening
+          if (event.time_utc) {
+            const [hours, minutes] = event.time_utc.split(':').map(Number);
+            const eventDateTime = new Date(eventDate);
+            eventDateTime.setUTCHours(hours, minutes, 0, 0);
+            
+            // Consider an event as "happening" for 4 hours after start time
+            const eventEndTime = new Date(eventDateTime);
+            eventEndTime.setHours(eventEndTime.getHours() + 4);
+            
+            return eventEndTime > now;
+          }
+          return true; // If no specific time, show it
+        }
+        return false;
       });
 
-      // Find this weekend's events
+      // Find upcoming weekend events (only those that haven't happened yet)
       const weekendEvents = allEvents.filter(event => {
         const eventDate = new Date(event.start);
-        return eventDate >= fridayDate && eventDate <= sundayDate;
+        // Check if the event is within the weekend date range
+        if (eventDate >= fridayDate && eventDate <= sundayDate) {
+          // If the event has a specific time, check if it's still upcoming or currently happening
+          if (event.time_utc) {
+            const [hours, minutes] = event.time_utc.split(':').map(Number);
+            const eventDateTime = new Date(eventDate);
+            eventDateTime.setUTCHours(hours, minutes, 0, 0);
+            
+            // Consider an event as "happening" for 4 hours after start time
+            const eventEndTime = new Date(eventDateTime);
+            eventEndTime.setHours(eventEndTime.getHours() + 4);
+            
+            return eventEndTime > now;
+          }
+          return true; // If no specific time, show it
+        }
+        return false;
       });
 
-      // Find next event if no events today or this weekend
-      const nextEvent = allEvents.find(event => event.start > now);
+      // Find next event (first future event)
+      const nextEvent = allEvents.find(event => {
+        // If event has a specific time, use it for comparison
+        if (event.time_utc) {
+          const [hours, minutes] = event.time_utc.split(':').map(Number);
+          const eventDateTime = new Date(event.start);
+          eventDateTime.setUTCHours(hours, minutes, 0, 0);
+          return eventDateTime > now;
+        }
+        // Otherwise just compare dates
+        return event.start > now;
+      });
 
       const upcomingDiv = document.getElementById("upcomingEventDetails");
       

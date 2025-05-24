@@ -42,8 +42,39 @@
     <div id="upcoming-event" class="upcoming-event">
       <div class="row">
         <div class="col-12">
-          <h4 class="mb-3"><i class="fas fa-flag-checkered me-2"></i>This Weekend's Races</h4>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0"><i class="fas fa-flag-checkered me-2"></i>Upcoming Races</h4>
+            <button id="generateAIPredictions" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-robot me-1"></i>AI Race Insights
+            </button>
+          </div>
           <div id="upcomingEventDetails" class="upcoming-events-list"></div>
+          
+          <!-- AI Predictions Section -->
+          <div id="aiPredictionsSection" class="ai-predictions-section" style="display: none;">
+            <div class="card border-primary mt-3">
+              <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="fas fa-robot me-2"></i>AI Race Analysis</h6>
+                <button class="btn btn-sm btn-outline-light" id="closeAIPredictions">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div class="card-body">
+                <div id="aiPredictionsContent">
+                  <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Generating predictions...</span>
+                    </div>
+                    <p class="mt-2">Generating race analysis...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="view-calendar-link">
+            <a href="#schedule">View Full Calendar →</a>
+          </div>
         </div>
       </div>
     </div>
@@ -198,6 +229,17 @@
             <div id="weatherResult" class="mt-2"></div>
           </div>
           
+          <!-- AI Prediction Section -->
+          <div id="aiPredictionSection" class="mt-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6>AI Race Analysis</h6>
+              <button id="generateModalAIPrediction" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-robot me-1"></i>Get Race Insights
+              </button>
+            </div>
+            <div id="aiPredictionResult" class="mt-2"></div>
+          </div>
+          
           <!-- Social Share -->
           <div id="socialShare" class="mt-4">
             <h6>Share this event</h6>
@@ -229,6 +271,7 @@
     // Import your data from data.js
     import { scheduleData, resultsData, parseEventDate, enhanceEventData, convertUTCtoLocal } from './src/js/data.js';
     import { downloadICS, downloadSeriesICS } from './src/js/calendar.js';
+    import { aiPredictions } from './src/js/ai-predictions.js';
 
     /*******************************
      * Helper Functions
@@ -255,7 +298,7 @@
         
         if (distance < 0) {
           clearCountdown(elementId);
-          countdownElement.textContent = 'Event Started';
+          countdownElement.innerHTML = '<div class="countdown-badge">LIVE</div>';
           return;
         }
         
@@ -263,16 +306,25 @@
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
         
-        // Format the display
-        const parts = [];
-        if (days > 0) parts.push(`${days}d`);
-        if (hours > 0 || days > 0) parts.push(`${hours}h`);
-        if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes}m`);
-        parts.push(`${seconds}s`);
+        // Format the display based on time remaining
+        let displayText = '';
+        let labelText = '';
         
-        countdownElement.textContent = parts.join(' ');
+        if (days > 0) {
+          displayText = `${days} DAY${days > 1 ? 'S' : ''}`;
+          labelText = 'DAYS';
+        } else if (hours > 0) {
+          displayText = `${hours}:${minutes.toString().padStart(2, '0')}`;
+          labelText = 'HOURS';
+        } else {
+          displayText = `${minutes}:${Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0')}`;
+          labelText = 'MINUTES';
+        }
+        
+        countdownElement.innerHTML = `
+          <div class="countdown-badge">${displayText}</div>
+        `;
       };
       
       updateCountdown();
@@ -386,6 +438,96 @@
     // Add temperature conversion helper function
     function fahrenheitToCelsius(fahrenheit) {
       return Math.round((fahrenheit - 32) * 5 / 9);
+    }
+
+    async function fetchWeatherPreview(event, weatherId) {
+      const weatherElement = document.getElementById(weatherId);
+      if (!weatherElement || !event.latitude || !event.longitude) return;
+
+      try {
+        // Required headers for the NWS API
+        const headers = {
+          "User-Agent": "(RacingCentral, info@racecentral.info)",
+          "Accept": "application/geo+json"
+        };
+
+        // Retrieve metadata from the NWS API
+        const pointResponse = await fetch(`https://api.weather.gov/points/${event.latitude},${event.longitude}`, { headers });
+        if (!pointResponse.ok) throw new Error(`Error fetching location metadata: ${pointResponse.status}`);
+        
+        const pointData = await pointResponse.json();
+        const forecastURL = pointData.properties?.forecast;
+        if (!forecastURL) throw new Error("Forecast URL not available for this location.");
+
+        // Fetch forecast data
+        const forecastResponse = await fetch(forecastURL, { headers });
+        if (!forecastResponse.ok) throw new Error(`Error fetching forecast data: ${forecastResponse.status}`);
+        
+        const forecastData = await forecastResponse.json();
+        const periods = forecastData.properties?.periods;
+        if (!periods?.length) throw new Error("No forecast periods available");
+
+        // Adjust eventDate using event.time_utc if available
+        let eventDate = new Date(event.start);
+        if (event.time_utc) {
+          const [hours, minutes] = event.time_utc.split(":");
+          eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
+        }
+
+        // Find matching forecast period
+        let forecastPeriod = periods.find(period => {
+          const periodStart = new Date(period.startTime);
+          const periodEnd = new Date(period.endTime);
+          return eventDate >= periodStart && eventDate < periodEnd;
+        });
+
+        // Fallback: If no exact period is found, choose the closest period
+        if (!forecastPeriod && periods.length > 0) {
+          forecastPeriod = periods.reduce((prev, cur) => {
+            const prevDiff = Math.abs(new Date(prev.startTime) - eventDate);
+            const curDiff = Math.abs(new Date(cur.startTime) - eventDate);
+            return curDiff < prevDiff ? cur : prev;
+          });
+        }
+
+        if (!forecastPeriod) throw new Error("No matching forecast period found");
+
+        // Weather icons mapping
+        const weatherIcons = {
+          'sunny': '☀️',
+          'clear': '☀️',
+          'mostly clear': '🌤️',
+          'partly cloudy': '⛅',
+          'mostly cloudy': '🌥️',
+          'cloudy': '☁️',
+          'rain': '🌧️',
+          'showers': '🌧️',
+          'thunderstorm': '⛈️',
+          'snow': '🌨️',
+          'fog': '🌫️'
+        };
+
+        // Find appropriate weather icon
+        let weatherIcon = '☀️'; // default
+        const forecast = forecastPeriod.shortForecast.toLowerCase();
+        for (const [condition, icon] of Object.entries(weatherIcons)) {
+          if (forecast.includes(condition)) {
+            weatherIcon = icon;
+            break;
+          }
+        }
+
+        const tempF = forecastPeriod.temperature;
+        const tempC = fahrenheitToCelsius(tempF);
+        
+        // Display compact weather preview
+        weatherElement.innerHTML = `${weatherIcon} ${tempF}°F`;
+        weatherElement.title = `${forecastPeriod.shortForecast} - ${tempF}°F / ${tempC}°C`;
+        
+      } catch (error) {
+        console.error("Error fetching weather preview:", error);
+        // Silently fail for weather preview
+      }
     }
 
     async function fetchWeather(event, containerId) {
@@ -698,204 +840,45 @@
         const timeString = event.time_utc ? convertUTCtoLocal(event.date, event.time_utc) : "TBA";
         const countdownId = `countdown-${event.series.replace(/\s+/g, '-').toLowerCase()}`;
         const weatherId = `weather-${countdownId}`;
-        const collapseId = `collapse-${countdownId}`;
-        const weatherIconId = `weather-icon-${countdownId}`;
         
         // Format series display name
         const displaySeries = event.series === "NASCAR Cup" ? "NASCAR" : event.series;
         
         const cardHTML = `
-          <div class="card upcoming-event-item mb-3">
+          <div class="card upcoming-event-item" data-series="${event.series}">
             <div class="card-body">
-              <div class="event-summary d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="series-badge mb-2" data-series="${event.series}">${displaySeries}</div>
-                  <h5 class="card-title mb-1">${event.race}</h5>
-                  <div class="card-text mb-0 d-flex align-items-center flex-nowrap">
-                    <span><i class="fas fa-calendar me-2"></i>${event.date}</span>
-                    <span class="ms-2"><i class="fas fa-clock me-1"></i>${timeString}</span>
-                    <span class="ms-2" id="${weatherIconId}"></span>
-                  </div>
-                </div>
-                <button class="btn-expand collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false">
-                  <i class="fas fa-chevron-down"></i>
-                </button>
-              </div>
-              
-              <div class="collapse" id="${collapseId}">
-                <div class="event-details mt-3">
-                  <p class="card-text mb-2"><i class="fas fa-map-marker-alt me-2"></i>${location}</p>
-                  <div class="weather-details mb-3">
-                    <div class="current-conditions mb-2"></div>
-                    <div class="hourly-forecast">
-                      <div class="hourly-breakdown d-flex overflow-auto"></div>
+              <div class="event-summary">
+                <div class="event-info">
+                  <h5 class="card-title">${event.race}</h5>
+                  <div class="event-meta">
+                    <div class="series-info">${displaySeries} • ${location}</div>
+                    <div class="date-time-info">
+                      <span>${event.date} — ${timeString}</span>
+                      <span id="${weatherId}" class="weather-preview ms-2"></span>
                     </div>
                   </div>
+                </div>
+                <div class="countdown-display">
                   <div id="${countdownId}" class="countdown-timer"></div>
+                  <button class="btn btn-sm btn-outline-info mt-2 ai-predict-btn" data-event-id="${event.series}-${event.date}">
+                    <i class="fas fa-info-circle me-1"></i>Race Info
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         `;
         
-        // Start the countdown and fetch weather after insertion
+        // Start the countdown timer and fetch weather
         setTimeout(async () => {
           const [hours, minutes] = (event.time_utc || "00:00").split(":");
           const eventDate = new Date(event.start);
           eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
           startCountdown(countdownId, eventDate.getTime());
           
-          // Fetch weather and update both summary icon and expanded details
-          try {
-            if (!event.latitude || !event.longitude) {
-              return;
-            }
-
-            const headers = {
-              "User-Agent": "(RacingCentral, info@racecentral.info)",
-              "Accept": "application/geo+json"
-            };
-
-            const pointResponse = await fetch(`https://api.weather.gov/points/${event.latitude},${event.longitude}`, { headers });
-            if (!pointResponse.ok) {
-              throw new Error(`Error fetching location metadata: ${pointResponse.status}`);
-            }
-            const pointData = await pointResponse.json();
-            
-            const forecastURL = pointData.properties?.forecast;
-            const hourlyForecastURL = pointData.properties?.forecastHourly;
-            
-            if (!forecastURL || !hourlyForecastURL) {
-              throw new Error("Forecast URL not available for this location.");
-            }
-
-            const [forecastResponse, hourlyResponse] = await Promise.all([
-              fetch(forecastURL, { headers }),
-              fetch(hourlyForecastURL, { headers })
-            ]);
-
-            if (!forecastResponse.ok || !hourlyResponse.ok) {
-              throw new Error(`Error fetching forecast data`);
-            }
-
-            const [forecastData, hourlyData] = await Promise.all([
-              forecastResponse.json(),
-              hourlyResponse.json()
-            ]);
-
-            const periods = forecastData.properties?.periods;
-            const hourlyPeriods = hourlyData.properties?.periods;
-
-            if (!periods?.length || !hourlyPeriods?.length) {
-              throw new Error("No forecast periods available");
-            }
-
-            // Find matching forecast period
-            let forecastPeriod = periods.find(period => {
-              const periodStart = new Date(period.startTime);
-              const periodEnd = new Date(period.endTime);
-              return eventDate >= periodStart && eventDate < periodEnd;
-            });
-
-            if (!forecastPeriod && periods.length > 0) {
-              forecastPeriod = periods.reduce((prev, cur) => {
-                const prevDiff = Math.abs(new Date(prev.startTime) - eventDate);
-                const curDiff = Math.abs(new Date(cur.startTime) - eventDate);
-                return curDiff < prevDiff ? cur : prev;
-              });
-            }
-
-            // Weather icons mapping
-            const weatherIcons = {
-              'sunny': '☀️',
-              'clear': '☀️',
-              'mostly clear': '🌤️',
-              'partly cloudy': '⛅',
-              'mostly cloudy': '🌥️',
-              'cloudy': '☁️',
-              'rain': '🌧️',
-              'showers': '🌧️',
-              'thunderstorm': '⛈️',
-              'snow': '🌨️',
-              'fog': '🌫️'
-            };
-
-            // Find appropriate weather icon
-            let weatherIcon = '☀️'; // default
-            const forecast = forecastPeriod.shortForecast.toLowerCase();
-            for (const [condition, icon] of Object.entries(weatherIcons)) {
-              if (forecast.includes(condition)) {
-                weatherIcon = icon;
-                break;
-              }
-            }
-
-            // Update the summary weather icon
-            const weatherIconElement = document.getElementById(weatherIconId);
-            if (weatherIconElement) {
-              const tempF = forecastPeriod.temperature;
-              const tempC = fahrenheitToCelsius(tempF);
-              weatherIconElement.innerHTML = `${weatherIcon} <span class="temp-summary">${tempF}°F / ${tempC}°C</span>`;
-              weatherIconElement.title = forecastPeriod.shortForecast;
-            }
-
-            // Get relevant hourly forecasts
-            const relevantHourlyForecasts = hourlyPeriods.filter(period => {
-              const periodTime = new Date(period.startTime).getTime();
-              return Math.abs(periodTime - eventDate.getTime()) <= 3 * 60 * 60 * 1000;
-            });
-
-            // Update expanded weather details
-            const expandedSection = document.querySelector(`#${collapseId} .weather-details`);
-            if (expandedSection) {
-              const tempF = forecastPeriod.temperature;
-              const tempC = fahrenheitToCelsius(tempF);
-              
-              expandedSection.querySelector('.current-conditions').innerHTML = `
-                <div class="d-flex align-items-center gap-3">
-                  <span style="font-size: 2rem;">${weatherIcon}</span>
-                  <div>
-                    <div class="temperature-display">
-                      <span class="temp-main">${tempF}°F / ${tempC}°C</span>
-                    </div>
-                    <div class="conditions-text">${forecastPeriod.shortForecast}</div>
-                    <div class="wind-info"><small>${forecastPeriod.windSpeed} ${forecastPeriod.windDirection}</small></div>
-                  </div>
-                </div>
-              `;
-
-              expandedSection.querySelector('.hourly-breakdown').innerHTML = relevantHourlyForecasts.map(hour => {
-                const hourTemp = hour.temperature;
-                const hourTempC = fahrenheitToCelsius(hourTemp);
-                const time = new Date(hour.startTime).toLocaleTimeString([], {hour: 'numeric'});
-                let hourIcon = '☀️';
-                const hourForecast = hour.shortForecast.toLowerCase();
-                for (const [condition, icon] of Object.entries(weatherIcons)) {
-                  if (hourForecast.includes(condition)) {
-                    hourIcon = icon;
-                    break;
-                  }
-                }
-                return `
-                  <div class="hour-item text-center me-4">
-                    <div class="time mb-1">${time}</div>
-                    <div class="icon mb-1" style="font-size: 1.5rem;">${hourIcon}</div>
-                    <div class="temp">${hourTemp}°F</div>
-                    <div class="temp-c">${hourTempC}°C</div>
-                  </div>
-                `;
-              }).join('');
-            }
-          } catch (error) {
-            console.error("Error fetching weather:", error);
-            const weatherIconElement = document.getElementById(weatherIconId);
-            if (weatherIconElement) {
-              weatherIconElement.remove();
-            }
-            const expandedSection = document.querySelector(`#${collapseId} .weather-details`);
-            if (expandedSection) {
-              expandedSection.innerHTML = `<p class='text-danger'>Weather forecast not available</p>`;
-            }
+          // Fetch weather preview
+          if (event.latitude && event.longitude) {
+            await fetchWeatherPreview(event, weatherId);
           }
         }, 0);
         
@@ -911,12 +894,28 @@
         }
       };
 
+      // Show upcoming events - prioritize today's events, then next few upcoming events
+      let eventsToShow = [];
+      
       if (todaysEvents.length > 0) {
-        displayEvents(todaysEvents);
-      } else if (weekendEvents.length > 0) {
-        displayEvents(weekendEvents);
-      } else if (nextEvent) {
-        displayEvents([nextEvent]);
+        eventsToShow = todaysEvents.slice(0, 3);
+      } else {
+        // Get next 3 upcoming events
+        const upcomingEvents = allEvents.filter(event => {
+          if (event.time_utc) {
+            const [hours, minutes] = event.time_utc.split(':').map(Number);
+            const eventDateTime = new Date(event.start);
+            eventDateTime.setUTCHours(hours, minutes, 0, 0);
+            return eventDateTime > now;
+          }
+          return event.start > now;
+        }).slice(0, 3);
+        
+        eventsToShow = upcomingEvents;
+      }
+      
+      if (eventsToShow.length > 0) {
+        displayEvents(eventsToShow);
       } else {
         upcomingDiv.innerHTML = "<p>No upcoming events scheduled.</p>";
       }
@@ -1280,13 +1279,198 @@
       });
     }
     
+    // AI Prediction Functions
+    async function generateAIPredictions() {
+      const aiSection = document.getElementById('aiPredictionsSection');
+      const aiContent = document.getElementById('aiPredictionsContent');
+      
+      // Show the section
+      aiSection.style.display = 'block';
+      
+      // Reset content to loading state
+      aiContent.innerHTML = `
+        <div class="text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Generating predictions...</span>
+          </div>
+          <p class="mt-2">Generating AI predictions...</p>
+        </div>
+      `;
+      
+      try {
+        // Get upcoming events
+        const allEvents = enhanceEventData();
+        allEvents.sort((a, b) => a.start - b.start);
+        const now = new Date();
+        
+        const upcomingEvents = allEvents.filter(event => {
+          if (event.time_utc) {
+            const [hours, minutes] = event.time_utc.split(':').map(Number);
+            const eventDateTime = new Date(event.start);
+            eventDateTime.setUTCHours(hours, minutes, 0, 0);
+            return eventDateTime > now;
+          }
+          return event.start > now;
+        }).slice(0, 3);
+        
+                   if (upcomingEvents.length === 0) {
+             aiContent.innerHTML = '<p class="text-muted">No upcoming events to analyze.</p>';
+             return;
+           }
+           
+           // Generate analysis for each event
+           const predictions = await aiPredictions.getBatchPredictions(upcomingEvents);
+        
+                 // Display analysis
+         let html = '';
+         predictions.forEach(({ event, prediction, success, error }) => {
+           if (success) {
+             // Use the new styled predictions HTML
+             const predictionsHTML = aiPredictions.generatePredictionsHTML(event);
+             html += `
+               <div class="ai-prediction-item mb-4">
+                 <h6 class="text-primary">${event.race}</h6>
+                 <div class="ai-prediction-content">
+                   ${formatAIPrediction(prediction)}
+                 </div>
+                 ${predictionsHTML}
+               </div>
+             `;
+           } else {
+             html += `
+               <div class="ai-prediction-item mb-4">
+                 <h6 class="text-danger">${event.race}</h6>
+                 <p class="text-muted">Unable to generate analysis: ${error}</p>
+               </div>
+             `;
+           }
+         });
+        
+        aiContent.innerHTML = html;
+        
+      } catch (error) {
+                 console.error('Error generating AI analysis:', error);
+         aiContent.innerHTML = `
+           <div class="alert alert-danger">
+             <i class="fas fa-exclamation-triangle me-2"></i>
+             Unable to generate race analysis. Please try again later.
+           </div>
+         `;
+      }
+    }
+    
+    async function generateModalAIPrediction() {
+      const button = document.getElementById('generateModalAIPrediction');
+      const resultDiv = document.getElementById('aiPredictionResult');
+      const event = eventDetailModal.currentEvent;
+      
+      if (!event) return;
+      
+             // Update button state
+       button.disabled = true;
+       button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Analyzing...';
+       
+       // Show loading state
+       resultDiv.innerHTML = `
+         <div class="text-center">
+           <div class="spinner-border spinner-border-sm text-primary" role="status">
+             <span class="visually-hidden">Generating analysis...</span>
+           </div>
+           <span class="ms-2">Analyzing race data...</span>
+         </div>
+       `;
+      
+      try {
+        // Get weather data if available
+        let weatherData = null;
+        const weatherElement = document.getElementById('weatherResult');
+        if (weatherElement && weatherElement.textContent.trim()) {
+          // Extract basic weather info from the weather section
+          weatherData = {
+            forecast: 'Available',
+            temperature: '75', // Placeholder - would need to extract from weather display
+            wind: 'Light'
+          };
+        }
+        
+        const prediction = await aiPredictions.getRacePrediction(event, weatherData);
+        const predictionsHTML = aiPredictions.generateCompactPredictionsHTML(event);
+        
+        resultDiv.innerHTML = `
+          <div class="ai-prediction-content">
+            ${formatAIPrediction(prediction)}
+          </div>
+          ${predictionsHTML}
+        `;
+        
+      } catch (error) {
+                 console.error('Error generating modal AI analysis:', error);
+         resultDiv.innerHTML = `
+           <div class="alert alert-warning">
+             <i class="fas fa-exclamation-triangle me-2"></i>
+             Unable to generate race analysis. Please try again later.
+           </div>
+         `;
+      } finally {
+                 // Reset button state
+         button.disabled = false;
+         button.innerHTML = '<i class="fas fa-robot me-1"></i>Get Race Insights';
+      }
+    }
+    
+    function formatAIPrediction(prediction) {
+      // Convert markdown-style formatting to HTML
+      return prediction
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>')
+        .replace(/^/, '<p>')
+        .replace(/$/, '</p>');
+    }
+    
     document.addEventListener("DOMContentLoaded", () => {
       setupThemeToggle();
       setupSearch();
       populateSchedules();
       displayUpcomingEvent();
       fetchNews();
+      setupAIPredictions();
     });
+    
+    function setupAIPredictions() {
+      // Main AI predictions button
+      document.getElementById('generateAIPredictions').addEventListener('click', generateAIPredictions);
+      
+      // Close AI predictions section
+      document.getElementById('closeAIPredictions').addEventListener('click', () => {
+        document.getElementById('aiPredictionsSection').style.display = 'none';
+      });
+      
+      // Modal AI prediction button
+      document.getElementById('generateModalAIPrediction').addEventListener('click', generateModalAIPrediction);
+      
+      // Individual event AI insight buttons
+      document.addEventListener('click', async (e) => {
+        if (e.target.closest('.ai-predict-btn')) {
+          const button = e.target.closest('.ai-predict-btn');
+          const eventId = button.getAttribute('data-event-id');
+          
+          // Find the event
+          const allEvents = enhanceEventData();
+          const event = allEvents.find(e => `${e.series}-${e.date}` === eventId);
+          
+          if (event) {
+            // Open modal with AI prediction
+            openEventModal(event);
+            // Auto-generate prediction after a short delay
+            setTimeout(() => {
+              generateModalAIPrediction();
+            }, 500);
+          }
+        }
+      });
+    }
 
     // Function to get current active tab events
     function getCurrentTabEvents() {

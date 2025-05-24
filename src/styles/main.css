@@ -1484,13 +1484,21 @@
       margin-bottom: 1rem;
     }
     
+    /* Mobile upcoming events header */
+    .upcoming-event .d-flex.justify-content-between {
+      flex-direction: column;
+      align-items: stretch !important;
+      gap: 1rem;
+    }
+    
     .upcoming-event h4 {
       font-size: 1.5rem;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0;
       display: flex;
       align-items: center;
       gap: 0.75rem;
       justify-content: center;
+      order: 1;
     }
     
     .upcoming-event h4::before {
@@ -1773,12 +1781,31 @@
       min-height: 44px;
     }
     
-    /* Top header buttons */
+    /* Header buttons mobile layout */
+    .upcoming-event .d-flex.gap-2 {
+      flex-direction: column;
+      gap: 0.75rem !important;
+      width: 100%;
+      margin-top: 0.5rem;
+      order: 2;
+    }
+    
     .upcoming-event .d-flex.gap-2 .btn {
-      padding: 0.75rem 1rem;
-      font-size: 0.85rem;
-      min-height: 40px;
-      border-radius: 20px;
+      padding: 0.875rem 1.5rem;
+      font-size: 0.9rem;
+      min-height: 48px;
+      border-radius: var(--border-radius-base);
+      font-weight: 600;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .upcoming-event .d-flex.gap-2 .btn:active {
+      transform: scale(0.98);
     }
     
     /* Modal mobile */

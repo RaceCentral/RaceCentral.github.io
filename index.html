@@ -44,9 +44,14 @@
         <div class="col-12">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Upcoming Races</h4>
-            <button id="generateAIPredictions" class="btn btn-sm btn-outline-primary">
-              <i class="fas fa-robot me-1"></i>AI Race Insights
-            </button>
+            <div class="d-flex gap-2">
+              <button id="configureAI" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-cog me-1"></i>AI Config
+              </button>
+              <button id="generateAIPredictions" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-robot me-1"></i>AI Race Insights
+              </button>
+            </div>
           </div>
           <div id="upcomingEventDetails" class="upcoming-events-list"></div>
           
@@ -200,6 +205,67 @@
       <h2>Latest News</h2>
       <div id="newsGrid" class="row g-4 mt-3"></div>
     </section>
+  </div>
+
+  <!-- AI Configuration Modal -->
+  <div class="modal fade" id="aiConfigModal" tabindex="-1" aria-labelledby="aiConfigModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="aiConfigModalLabel">
+            <i class="fas fa-robot me-2"></i>AI Configuration
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="aiStatus" class="alert alert-info mb-3">
+            <i class="fas fa-info-circle me-2"></i>
+            <span id="aiStatusText">AI predictions are currently using static data.</span>
+          </div>
+          
+          <div class="mb-3">
+            <h6>Enable Real AI Predictions</h6>
+            <p class="text-muted small">
+              To get real AI-powered race analysis, you can provide your own OpenAI API key. 
+              Your key is stored locally and never sent to our servers.
+            </p>
+            
+            <div class="mb-3">
+              <label for="apiKeyInput" class="form-label">OpenAI API Key (optional)</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="apiKeyInput" 
+                       placeholder="sk-..." aria-describedby="apiKeyHelp">
+                <button class="btn btn-outline-secondary" type="button" id="toggleApiKey">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <div id="apiKeyHelp" class="form-text">
+                Get your API key from <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI Platform</a>
+              </div>
+            </div>
+            
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-primary" id="saveApiKey">
+                <i class="fas fa-save me-1"></i>Save & Enable AI
+              </button>
+              <button type="button" class="btn btn-outline-danger" id="removeApiKey">
+                <i class="fas fa-trash me-1"></i>Remove Key
+              </button>
+            </div>
+          </div>
+          
+          <div class="mt-4">
+            <h6>Privacy & Security</h6>
+            <ul class="small text-muted">
+              <li>Your API key is stored only in your browser's local storage</li>
+              <li>API calls are made directly from your browser to OpenAI</li>
+              <li>We never see or store your API key on our servers</li>
+              <li>You can remove your key at any time</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Event Detail Modal (includes weather forecast functionality) -->
@@ -1592,7 +1658,7 @@
       setupAIPredictions();
     });
     
-    function setupAIPredictions() {
+        function setupAIPredictions() {
       // Main AI predictions button
       document.getElementById('generateAIPredictions').addEventListener('click', generateAIPredictions);
       
@@ -1604,7 +1670,82 @@
       // Modal AI prediction button
       document.getElementById('generateModalAIPrediction').addEventListener('click', generateModalAIPrediction);
       
+      // AI Configuration
+      setupAIConfiguration();
+    }
 
+    function setupAIConfiguration() {
+      const configBtn = document.getElementById('configureAI');
+      const modal = new bootstrap.Modal(document.getElementById('aiConfigModal'));
+      const apiKeyInput = document.getElementById('apiKeyInput');
+      const toggleBtn = document.getElementById('toggleApiKey');
+      const saveBtn = document.getElementById('saveApiKey');
+      const removeBtn = document.getElementById('removeApiKey');
+      const statusText = document.getElementById('aiStatusText');
+      
+      // Update UI based on current AI status
+      function updateAIStatus() {
+        const isEnabled = aiPredictions.isAIEnabled();
+        const hasUserKey = !!aiPredictions.userApiKey;
+        
+        if (hasUserKey) {
+          statusText.textContent = 'AI predictions enabled with your OpenAI API key.';
+          document.getElementById('aiStatus').className = 'alert alert-success mb-3';
+          configBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i>AI Active';
+          configBtn.className = 'btn btn-sm btn-success';
+        } else {
+          statusText.textContent = 'AI predictions are currently using static data.';
+          document.getElementById('aiStatus').className = 'alert alert-info mb-3';
+          configBtn.innerHTML = '<i class="fas fa-cog me-1"></i>AI Config';
+          configBtn.className = 'btn btn-sm btn-outline-secondary';
+        }
+      }
+      
+      // Show/hide API key
+      toggleBtn.addEventListener('click', () => {
+        const isPassword = apiKeyInput.type === 'password';
+        apiKeyInput.type = isPassword ? 'text' : 'password';
+        toggleBtn.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+      });
+      
+      // Open configuration modal
+      configBtn.addEventListener('click', () => {
+        updateAIStatus();
+        // Pre-fill input if key exists
+        if (aiPredictions.userApiKey) {
+          apiKeyInput.value = aiPredictions.userApiKey;
+        }
+        modal.show();
+      });
+      
+      // Save API key
+      saveBtn.addEventListener('click', () => {
+        const apiKey = apiKeyInput.value.trim();
+        if (apiKey) {
+          if (aiPredictions.setUserApiKey(apiKey)) {
+            updateAIStatus();
+            modal.hide();
+            alert('AI predictions enabled! You can now get real AI-powered race analysis.');
+          } else {
+            alert('Invalid API key format. Please check your key and try again.');
+          }
+        } else {
+          alert('Please enter an API key.');
+        }
+      });
+      
+      // Remove API key
+      removeBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to remove your API key? This will disable AI predictions.')) {
+          aiPredictions.removeUserApiKey();
+          apiKeyInput.value = '';
+          updateAIStatus();
+          modal.hide();
+        }
+      });
+      
+      // Initial status update
+      updateAIStatus();
     }
 
     // Function to get current active tab events

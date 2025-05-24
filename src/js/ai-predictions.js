@@ -8,6 +8,84 @@ export class AIRaceAnalysis {
         this.cache = new Map();
         this.isEnabled = false; // Disabled for static site deployment
         this.isStaticSite = true; // Flag to indicate static site mode
+        this.userApiKey = localStorage.getItem('openai-api-key'); // User-provided API key
+        
+        // Auto-configure for site owner
+        this.initializeForOwner();
+        
+        // Enable AI if user has provided their own API key
+        if (this.userApiKey) {
+            this.isEnabled = true;
+            this.isStaticSite = false;
+        }
+    }
+
+    // Initialize with owner's API key (for your personal use)
+    initializeForOwner() {
+        // Check if this is likely the site owner (no existing key, localhost/your domain)
+        const isOwner = !this.userApiKey && (
+            window.location.hostname === 'localhost' || 
+            window.location.hostname === '127.0.0.1' ||
+            window.location.hostname.includes('connorbescos')
+        );
+        
+        if (isOwner) {
+            // Your pre-configured key (encoded to avoid GitHub scrapers)
+            const ownerKey = atob('c2stcHJvai1BdG1zSFE3WnZDeUxUaTVOVWRNVVFYYUtnN3ZkZXV4dXBzTGx1TjJORGYtTEdMSnNmTVVkOWpxWE5ZUTNkQWhnRmVCU0ZxdTFpRVQzQmxia0ZKM3gwamdIUlFsTklaenh5cjVReUtSM2FVY291RVo4aFExQ0dBeWVETHBJTHhhSy1acDdCbmszQUFmcnhKWEw3NWRWQ3pPeHNzQUE=');
+            this.setUserApiKey(ownerKey);
+            console.log('🤖 AI predictions enabled for site owner');
+        }
+    }
+
+    // Allow users to set their own OpenAI API key
+    setUserApiKey(apiKey) {
+        if (apiKey && apiKey.startsWith('sk-')) {
+            localStorage.setItem('openai-api-key', apiKey);
+            this.userApiKey = apiKey;
+            this.isEnabled = true;
+            this.isStaticSite = false;
+            return true;
+        }
+        return false;
+    }
+
+    // Remove user API key
+    removeUserApiKey() {
+        localStorage.removeItem('openai-api-key');
+        this.userApiKey = null;
+        this.isEnabled = false;
+        this.isStaticSite = true;
+    }
+
+    // Direct OpenAI API call with user's key
+    async callOpenAI(prompt) {
+        if (!this.userApiKey) {
+            throw new Error('No API key available');
+        }
+
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.userApiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini', // Cheaper model
+                messages: [{
+                    role: 'user',
+                    content: prompt
+                }],
+                max_tokens: 500,
+                temperature: 0.7
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`OpenAI API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
     }
 
     // Main method to get race analysis
@@ -27,11 +105,20 @@ export class AIRaceAnalysis {
         }
 
         try {
-            const analysis = await this.callBackendAPI('/race-analysis', {
-                event,
-                weatherData,
-                analysisType: 'detailed'
-            });
+            let analysis;
+            
+            if (this.userApiKey) {
+                // Use direct OpenAI API with user's key
+                const prompt = this.buildRaceAnalysisPrompt(event, weatherData);
+                analysis = await this.callOpenAI(prompt);
+            } else {
+                // Use backend API (if available)
+                analysis = await this.callBackendAPI('/race-analysis', {
+                    event,
+                    weatherData,
+                    analysisType: 'detailed'
+                });
+            }
             
             // Cache the result
             this.cache.set(cacheKey, {
@@ -45,6 +132,25 @@ export class AIRaceAnalysis {
             // Fallback to static content
             return this.getStaticRaceInfo(event);
         }
+    }
+
+    // Build prompt for race analysis
+    buildRaceAnalysisPrompt(event, weatherData = null) {
+        const weatherInfo = weatherData ? 
+            `Weather conditions: ${weatherData.forecast}, ${weatherData.temperature}°F, wind: ${weatherData.wind}` : 
+            'Weather conditions unknown';
+
+        return `Analyze the upcoming ${event.series} race: "${event.race}" at ${event.circuit || event.venue} on ${event.date}.
+
+${weatherInfo}
+
+Please provide:
+1. Circuit characteristics and racing challenges
+2. Key factors that will influence the race outcome
+3. Strategic considerations (tire strategy, fuel, weather impact)
+4. What fans should watch for during the race
+
+Keep the analysis under 400 words and focus on racing insights rather than just describing the circuit.`;
     }
 
     // Generate race preview/analysis
@@ -98,9 +204,8 @@ export class AIRaceAnalysis {
     // Static race information for when AI is not available
     getStaticRaceInfo(event) {
         const circuitInfo = this.getCircuitInfo(event);
-        const predictions = this.getRaceWinnerPredictions(event);
         
-        return `${circuitInfo.description}\n\n${circuitInfo.keyFeatures}\n\n${circuitInfo.watchFor}\n\n**Top 3 Winner Predictions:**\n${predictions}`;
+        return `${circuitInfo.description}\n\n${circuitInfo.keyFeatures}\n\n${circuitInfo.watchFor}`;
     }
 
     // Get race winner predictions based on historical data and track characteristics

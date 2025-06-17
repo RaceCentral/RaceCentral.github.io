@@ -3,7 +3,7 @@
 
 // 2025 Schedule Data
 
-const f1Events = [
+  const f1Events = [
     { date: "Mar 15", race: "Australian GP", circuit: "Melbourne Grand Prix Circuit", time: "9:00 PM", time_utc: "04:00", series: "F1", city: "Melbourne", latitude: -37.8136, longitude: 144.9631, network: "ESPN" },
     { date: "Mar 23", race: "Chinese GP", circuit: "Shanghai International Circuit", time: "12:00 AM", time_utc: "07:00", series: "F1", city: "Shanghai", latitude: 31.2304, longitude: 121.4737, network: "ESPN" },
     { date: "Apr 5",  race: "Japanese GP", circuit: "Suzuka International Racing Course", time: "10:00 PM", time_utc: "05:00", series: "F1", city: "Suzuka", latitude: 34.8823, longitude: 136.5844, network: "ESPN" },
@@ -29,6 +29,11 @@ const f1Events = [
     { date: "Nov 30", race: "Qatar GP", circuit: "Losail International Circuit", time: "8:00 AM", time_utc: "16:00", series: "F1", city: "Lusail", latitude: 25.4181, longitude: 51.4904, network: "ESPN" },
     { date: "Dec 7", race: "Abu Dhabi GP", circuit: "Yas Marina Circuit", time: "5:00 AM", time_utc: "13:00", series: "F1", city: "Abu Dhabi", latitude: 24.4539, longitude: 54.3773, network: "ESPN" }
   ];
+
+  // Assign round numbers to F1 events for real-time results fetching
+  f1Events.forEach((event, index) => {
+    event.round = index + 1;
+  });
   
   const indyEvents = [
     { date: "Mar 2", race: "Firestone Grand Prix of St. Petersburg", venue: "Streets of St. Petersburg", time: "12:00 PM", time_utc: "17:00", series: "IndyCar", network: "FOX", city: "St. Petersburg", latitude: 27.7676, longitude: -82.6403 },

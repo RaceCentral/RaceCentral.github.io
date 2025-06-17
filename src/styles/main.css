@@ -1,29 +1,29 @@
 /* -------------------------------------------------------
    1. Root Variables - Modern Theme
    ------------------------------------------------------- */
-   :root {
-    --primary-color: #dc2626;        /* Bold red brand color */
-    --accent-color: #ef4444;         /* Lighter red accent */
-    --success-color: #10b981;        /* Green for success states */
-    --warning-color: #f59e0b;        /* Orange for warnings */
-    --info-color: #3b82f6;          /* Blue for info */
-    --background-body-light: #f8fafc;/* Clean light gray background */
-    --background-card-light: #ffffff;/* Pure white cards */
-    --background-body-dark: #0f172a; /* Deep dark blue background */
-    --background-card-dark: #1e293b; /* Dark slate cards */
-    --text-light-mode: #0f172a;      /* Dark slate text */
-    --text-dark-mode: #f8fafc;       /* Light text on dark */
-    --text-secondary: #64748b;       /* Secondary gray text */
-    --text-secondary-dark: #94a3b8;  /* Secondary text in dark mode */
-    --border-light: #e2e8f0;         /* Light borders */
-    --border-dark: #334155;          /* Dark borders */
-    --border-radius-base: 12px;      /* Larger radius for modern look */
-    --border-radius-lg: 16px;        /* Extra large radius */
-    --transition-speed: 0.2s;        /* Faster transitions */
-    --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-    --box-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --box-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
+  :root {
+   --primary-color: #1e40af;        /* Deep blue brand color */
+   --accent-color: #60a5fa;         /* Lighter blue accent */
+   --success-color: #16a34a;        /* Green for success states */
+   --warning-color: #f59e0b;        /* Orange for warnings */
+   --info-color: #0ea5e9;           /* Cyan for info */
+   --background-body-light: #f9fafb;/* Subtle light gray background */
+   --background-card-light: #ffffff;/* Pure white cards */
+   --background-body-dark: #0f172a; /* Deep dark blue background */
+   --background-card-dark: #1e293b; /* Dark slate cards */
+   --text-light-mode: #0f172a;      /* Dark slate text */
+   --text-dark-mode: #f8fafc;       /* Light text on dark */
+   --text-secondary: #64748b;       /* Secondary gray text */
+   --text-secondary-dark: #94a3b8;  /* Secondary text in dark mode */
+   --border-light: #e2e8f0;         /* Light borders */
+   --border-dark: #334155;          /* Dark borders */
+   --border-radius-base: 12px;      /* Larger radius for modern look */
+   --border-radius-lg: 16px;        /* Extra large radius */
+   --transition-speed: 0.2s;        /* Faster transitions */
+   --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+   --box-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+   --box-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+ }
   
   /* -------------------------------------------------------
      2. Base & Body - Enhanced Typography

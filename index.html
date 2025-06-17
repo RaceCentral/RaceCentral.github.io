@@ -350,6 +350,7 @@
     import { scheduleData, resultsData, parseEventDate, enhanceEventData, convertUTCtoLocal } from './src/js/data.js';
     import { downloadICS, downloadSeriesICS } from './src/js/calendar.js';
     import { aiPredictions } from './src/js/ai-predictions.js';
+    import { getF1RaceResults } from './src/js/api.js';
 
     /*******************************
      * Helper Functions
@@ -407,6 +408,33 @@
       
       updateCountdown();
       countdownElement.countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    // Fetch latest race results for completed F1 events
+    async function updateRealTimeResults() {
+      const now = new Date();
+      for (const event of scheduleData.f1Events) {
+        const raceEnd = new Date(event.start.getTime());
+        raceEnd.setDate(raceEnd.getDate() + 1);
+        const raceName = event.race.replace(' GP', '').toLowerCase();
+        const existing = resultsData.f1Past.results.find(r => r.grandPrix?.toLowerCase().includes(raceName));
+        if (!existing && now > raceEnd) {
+          try {
+            const data = await getF1RaceResults(event.round);
+            const results = data?.MRData?.RaceTable?.Races?.[0]?.Results;
+            if (results && results.length >= 3) {
+              resultsData.f1Past.results.push({
+                grandPrix: event.race.replace(' GP', ''),
+                winner: results[0].Driver.familyName,
+                second: results[1].Driver.familyName,
+                third: results[2].Driver.familyName
+              });
+            }
+          } catch (err) {
+            console.error('Failed to fetch F1 results', err);
+          }
+        }
+      }
     }
     
     function populateTable(tableBodyId, events, columns) {
@@ -1649,9 +1677,10 @@
         .replace(/$/, '</p>');
     }
     
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
       setupThemeToggle();
       setupSearch();
+      await updateRealTimeResults();
       populateSchedules();
       displayUpcomingEvent();
       fetchNews();

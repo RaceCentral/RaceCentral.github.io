@@ -3,10 +3,20 @@
    =============================================== */
 
 /* Fix Bootstrap conflicts and improve layout */
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .container {
     max-width: 100% !important;
     padding: 1rem;
     margin: 0 auto;
+}
+
+/* Remove Bootstrap's default margins that might cause spacing issues */
+.my-4 {
+    margin: 0 !important;
 }
 
 /* Fix header layout issues */
@@ -463,6 +473,13 @@ body.dark-mode .quick-nav-btn {
 body.dark-mode .quick-nav-btn:hover {
     background-color: #dc2626;
     color: white;
+}
+
+/* Footer dark mode support */
+body.dark-mode footer {
+    background-color: #1f2937 !important;
+    color: #9ca3af !important;
+    border-color: #374151 !important;
 }
 
 /* Additional layout fixes */

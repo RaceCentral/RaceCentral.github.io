@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or "Racing Site" }}</title>
+    <title>{{ title or "2025 Racing Schedules" }}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -14,22 +14,12 @@
     <link rel="stylesheet" href="/assets/_css/ui-fixes.css">
 </head>
 <body>
-    <header>
-        <h1>{{ title or "Racing Site" }}</h1>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <!-- Add more navigation links here -->
-            </ul>
-        </nav>
-    </header>
-
     <main>
         {{ content | safe }}
     </main>
 
-    <footer>
-        <p>&copy; {{ "now" | date("%Y") }} Racing Site</p>
+    <footer style="text-align: center; padding: 2rem 1rem; background-color: #f8fafc; color: #6b7280; margin-top: 3rem; border-top: 1px solid #e5e7eb;">
+        <p>&copy; {{ "now" | date("%Y") }} RaceCentral.info - Racing Schedules & News</p>
     </footer>
 
     <!-- Bootstrap JavaScript -->

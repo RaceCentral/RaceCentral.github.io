@@ -826,6 +826,12 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
   }
   
   function displayUpcomingEvent() {
+    // Check if data is available
+    if (!window.scheduleData || !window.scheduleData.f1Events || !window.scheduleData.indyEvents || !window.scheduleData.nascarEvents) {
+      console.warn('Schedule data not available');
+      return;
+    }
+    
     const allEvents = enhanceEventData(window.scheduleData.f1Events.concat(window.scheduleData.indyEvents, window.scheduleData.nascarEvents));
     allEvents.sort((a, b) => a.start - b.start);
     const now = new Date();
@@ -1083,6 +1089,11 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
   
   // Updated showPastRacesBtn event listener block
   const showPastRacesBtn = document.getElementById('showPastRaces');
+  if (!showPastRacesBtn) {
+    console.warn('Show past races button not found');
+    return;
+  }
+  
   let pastRacesVisible = true;
   showPastRacesBtn.addEventListener('click', function() {
     pastRacesVisible = !pastRacesVisible;
@@ -1288,6 +1299,12 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
 
   // Function to populate schedule tables
   function populateSchedules() {
+    // Check if data is available
+    if (!window.scheduleData || !window.scheduleData.f1Events || !window.scheduleData.indyEvents || !window.scheduleData.nascarEvents) {
+      console.error('Schedule data not available for populateSchedules');
+      return;
+    }
+    
     const f1Table = document.getElementById('f1-schedule');
     const indyTable = document.getElementById('indy-schedule');
     const nascarTable = document.getElementById('nascar-schedule');
@@ -1298,6 +1315,12 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
     const indyMobile = document.getElementById('indy-schedule-mobile');
     const nascarMobile = document.getElementById('nascar-schedule-mobile');
     const combinedMobile = document.getElementById('combined-schedule-mobile');
+    
+    // Check if DOM elements exist
+    if (!f1Table || !indyTable || !nascarTable || !combinedTable) {
+      console.error('Required table elements not found');
+      return;
+    }
 
     // Clear existing content
     [f1Table, indyTable, nascarTable, combinedTable].forEach(table => {
@@ -1341,7 +1364,17 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
   // Update search functionality to be more modern
   function setupSearch() {
     const searchInput = document.getElementById("searchInput");
+    if (!searchInput) {
+      console.warn('Search input element not found');
+      return;
+    }
+    
     const searchContainer = searchInput.parentElement;
+    if (!searchContainer) {
+      console.warn('Search container not found');
+      return;
+    }
+    
     searchContainer.className = "search-container";
     
     // Add search icon
@@ -1462,6 +1495,11 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
   function setupThemeToggle() {
     const themeToggle = document.getElementById("themeToggle");
     const themeIcon = document.getElementById("themeIcon");
+    
+    if (!themeToggle || !themeIcon) {
+      console.warn('Theme toggle elements not found');
+      return;
+    }
     
     function updateToggleIcon() {
       if (document.body.classList.contains("dark-mode")) {
@@ -1781,7 +1819,9 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
     }
 
     // Add event listener for calendar button
-    document.getElementById('downloadICSBtn').addEventListener('click', () => {
+    const downloadBtn = document.getElementById('downloadICSBtn');
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
       const events = getCurrentTabEvents();
       const seriesName = getActiveSeriesName();
       if (events && events.length > 0) {
@@ -1791,7 +1831,8 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
         alert(message);
         downloadSeriesICS(events, seriesName);
       }
-    });
+      });
+    }
 
     // Update calendar button text based on active tab
     document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
@@ -1827,10 +1868,13 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
     });
 
     // Add event listener for modal download button
-    document.getElementById('modalDownloadICS').addEventListener('click', () => {
-      const event = eventDetailModal.currentEvent;
-      if (event) {
-        downloadICS(event);
-      }
-    });
+    const modalDownloadBtn = document.getElementById('modalDownloadICS');
+    if (modalDownloadBtn) {
+      modalDownloadBtn.addEventListener('click', () => {
+        const event = eventDetailModal.currentEvent;
+        if (event) {
+          downloadICS(event);
+        }
+      });
+    }
   </script>

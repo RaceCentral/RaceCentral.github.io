@@ -255,7 +255,6 @@
 <script type="module">
   // Import your data from data.js
   import { resultsData, parseEventDate, enhanceEventData, convertUTCtoLocal } from './assets/_js/data.js';
-  const scheduleData = window.scheduleData;
   import { downloadICS, downloadSeriesICS } from './assets/_js/calendar.js';
   
 
@@ -757,7 +756,7 @@
   }
   
   function displayUpcomingEvent() {
-    const allEvents = enhanceEventData();
+    const allEvents = enhanceEventData(window.scheduleData.f1Events.concat(window.scheduleData.indyEvents, window.scheduleData.nascarEvents));
     allEvents.sort((a, b) => a.start - b.start);
     const now = new Date();
 
@@ -874,7 +873,7 @@
         openEventModal(event);
         // Auto-generate prediction after a short delay
         setTimeout(() => {
-          generateModalAIPrediction();
+          // generateModalAIPrediction(); // Commented out as aiPredictions is not defined
         }, 500);
       });
       
@@ -1246,7 +1245,7 @@
     });
 
     // Populate combined schedule with series badges
-    const allEvents = enhanceEventData();
+    const allEvents = enhanceEventData(window.scheduleData.f1Events.concat(window.scheduleData.indyEvents, window.scheduleData.nascarEvents));
     allEvents.sort((a, b) => a.start - b.start);
     allEvents.forEach(event => {
       if (combinedTable) combinedTable.appendChild(createTableRow(event, true));
@@ -1439,7 +1438,7 @@
     
     try {
       // Get upcoming events
-      const allEvents = enhanceEventData();
+      const allEvents = enhanceEventData(window.scheduleData.f1Events.concat(window.scheduleData.indyEvents, window.scheduleData.nascarEvents));
       allEvents.sort((a, b) => a.start - b.start);
       const now = new Date();
       
@@ -1459,32 +1458,32 @@
            }
            
            // Generate analysis for each event
-           const predictions = await aiPredictions.getBatchPredictions(upcomingEvents);
+           // const predictions = await aiPredictions.getBatchPredictions(upcomingEvents); // Commented out as aiPredictions is not defined
         
                  // Display analysis
          let html = '';
-         predictions.forEach(({ event, prediction, success, error }) => {
-           if (success) {
-             // Use the new styled predictions HTML
-             const predictionsHTML = aiPredictions.generatePredictionsHTML(event);
-             html += `
-               <div class="ai-prediction-item mb-4">
-                 <h6 class="text-primary">${event.race}</h6>
-                 <div class="ai-prediction-content">
-                   ${formatAIPrediction(prediction)}
-                 </div>
-                 ${predictionsHTML}
-               </div>
-             `;
-           } else {
-             html += `
-               <div class="ai-prediction-item mb-4">
-                 <h6 class="text-danger">${event.race}</h6>
-                 <p class="text-muted">Unable to generate analysis: ${error}</p>
-               </div>
-             `;
-           }
-         });
+         // predictions.forEach(({ event, prediction, success, error }) => { // Commented out as aiPredictions is not defined
+         //   if (success) {
+         //     // Use the new styled predictions HTML
+         //     const predictionsHTML = aiPredictions.generatePredictionsHTML(event);
+         //     html += `
+         //       <div class="ai-prediction-item mb-4">
+         //         <h6 class="text-primary">${event.race}</h6>
+         //         <div class="ai-prediction-content">
+         //           ${formatAIPrediction(prediction)}
+         //         </div>
+         //         ${predictionsHTML}
+         //       </div>
+         //     `;
+         //   } else {
+         //     html += `
+         //       <div class="ai-prediction-item mb-4">
+         //         <h6 class="text-danger">${event.race}</h6>
+         //         <p class="text-muted">Unable to generate analysis: ${error}</p>
+         //       </div>
+         //     `;
+         //   }
+         // });
         
         aiContent.innerHTML = html;
         
@@ -1533,14 +1532,14 @@
           };
         }
         
-        const prediction = await aiPredictions.getRacePrediction(event, weatherData);
-        const predictionsHTML = aiPredictions.generateCompactPredictionsHTML(event);
+        // const prediction = await aiPredictions.getRacePrediction(event, weatherData); // Commented out as aiPredictions is not defined
+        // const predictionsHTML = aiPredictions.generateCompactPredictionsHTML(event); // Commented out as aiPredictions is not defined
         
         resultDiv.innerHTML = `
           <div class="ai-prediction-content">
-            ${formatAIPrediction(prediction)}
+            <!-- ${formatAIPrediction(prediction)} -->
           </div>
-          ${predictionsHTML}
+          <!-- ${predictionsHTML} -->
         `;
         
       } catch (error) {

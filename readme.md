@@ -10,6 +10,7 @@ A modern web application for tracking motorsport schedules across Formula 1, Ind
   - NASCAR Cup Series (Regular Season & Playoffs)
   - Timezone-aware event times
   - Past race results integration
+  - Awesome
 
 - **UI Features**
   - Elegant dark/light mode

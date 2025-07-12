@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Racing Site Test</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">🏎️ Racing Schedule Test</h1>
+        
+        <!-- Test Bootstrap Components -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-flag-checkered"></i> F1</h5>
+                        <p class="card-text">Formula 1 races</p>
+                        <button class="btn btn-primary">View Schedule</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-car"></i> IndyCar</h5>
+                        <p class="card-text">IndyCar races</p>
+                        <button class="btn btn-success">View Schedule</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-trophy"></i> NASCAR</h5>
+                        <p class="card-text">NASCAR races</p>
+                        <button class="btn btn-warning">View Schedule</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Data Loading -->
+        <div class="alert alert-info">
+            <h4>Data Test:</h4>
+            <div id="dataTest">Loading...</div>
+        </div>
+
+        <!-- Test Table -->
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Series</th>
+                        <th>Race</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleTable">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Test data (sample)
+        const testScheduleData = {
+            f1Events: [
+                { date: "Mar 15", race: "Australian GP", series: "F1", time: "9:00 PM" },
+                { date: "Mar 23", race: "Chinese GP", series: "F1", time: "12:00 AM" }
+            ],
+            indyEvents: [
+                { date: "Mar 2", race: "St. Petersburg GP", series: "IndyCar", time: "12:00 PM" }
+            ],
+            nascarEvents: [
+                { date: "Feb 16", race: "Daytona 500", series: "NASCAR Cup", time: "1:30 PM" }
+            ]
+        };
+
+        // Test Bootstrap and basic functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded successfully');
+            
+            // Test data
+            const dataTest = document.getElementById('dataTest');
+            if (testScheduleData && testScheduleData.f1Events) {
+                dataTest.innerHTML = `
+                    ✅ F1 Events: ${testScheduleData.f1Events.length}<br>
+                    ✅ IndyCar Events: ${testScheduleData.indyEvents.length}<br>
+                    ✅ NASCAR Events: ${testScheduleData.nascarEvents.length}
+                `;
+            } else {
+                dataTest.innerHTML = '❌ Data loading failed';
+            }
+
+            // Populate test table
+            const tableBody = document.getElementById('scheduleTable');
+            const allEvents = [
+                ...testScheduleData.f1Events,
+                ...testScheduleData.indyEvents,
+                ...testScheduleData.nascarEvents
+            ];
+
+            allEvents.forEach(event => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${event.date}</td>
+                    <td><span class="badge bg-primary">${event.series}</span></td>
+                    <td>${event.race}</td>
+                    <td>${event.time}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            console.log('Test completed successfully');
+        });
+    </script>
+</body>
+</html>

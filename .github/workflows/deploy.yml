@@ -12,34 +12,32 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    
+
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
-      
+      uses: actions/checkout@v4.2.2  # ✅ Latest stable 4.x release  [oai_citation:0‡Release Alert](https://releasealert.dev/github/actions/checkout?utm_source=chatgpt.com)
+
     - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        
+      uses: actions/setup-node@v4  # v4 is current major release
+
     - name: Install dependencies
       run: npm install
-      
+
     - name: Build site
       run: npm run build
-      
+
     - name: Setup Pages
-      uses: actions/configure-pages@v4
-      
+      uses: actions/configure-pages@v4  # Matches deploy artifact flow
+
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@v3  # Required by deploy-pages@v4 ()
       with:
-        path: '_site'
-        
+        path: _site
+
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v4
       if: github.ref == 'refs/heads/main'
+      uses: actions/deploy-pages@v4  # v4 required, works with upload-pages-artifact@v3 ()
 
 permissions:
   contents: read

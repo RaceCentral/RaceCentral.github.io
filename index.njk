@@ -1089,10 +1089,7 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
   
   // Updated showPastRacesBtn event listener block
   const showPastRacesBtn = document.getElementById('showPastRaces');
-  if (!showPastRacesBtn) {
-    console.warn('Show past races button not found');
-    return;
-  }
+  if (showPastRacesBtn) {
   
   let pastRacesVisible = true;
   showPastRacesBtn.addEventListener('click', function() {
@@ -1127,6 +1124,7 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
       });
     });
   });
+  } // End of if block for showPastRacesBtn
 
   // Function to create mobile card for an event
   function createMobileCard(event) {

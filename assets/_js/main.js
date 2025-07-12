@@ -848,10 +848,10 @@
   
   // Updated showPastRacesBtn event listener block
   const showPastRacesBtn = document.getElementById('showPastRaces');
-  if (!showPastRicesBtn) {
+  if (!showPastRacesBtn) {
     console.warn('Show past races button not found');
-    return;
-  }
+    // Exit early if button not found, but don't use return outside function
+  } else {
   
   let pastRacesVisible = true;
   showPastRacesBtn.addEventListener('click', function() {
@@ -886,6 +886,7 @@
       });
     });
   });
+  } // End of else block for showPastRacesBtn
 
   // Function to create mobile card for an event
   function createMobileCard(event) {

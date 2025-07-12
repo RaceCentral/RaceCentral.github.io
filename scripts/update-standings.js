@@ -1,4 +1,3 @@
-
 // This script fetches the F1 driver and team standings from the Ergast API and formats it for the data.js file.
 // It requires the 'node-fetch' package to be installed (npm install node-fetch).
 
@@ -20,31 +19,39 @@ async function fetchStandings() {
 
     const driverStandings = driverData.MRData.StandingsTable.StandingsLists[0].DriverStandings.map(standing => {
       return {
-        position: standing.position,
+        position: parseInt(standing.position),
         driver: `${standing.Driver.givenName} ${standing.Driver.familyName}`,
-        points: standing.points
+        points: parseFloat(standing.points)
       };
     });
 
     const teamStandings = teamData.MRData.StandingsTable.StandingsLists[0].ConstructorStandings.map(standing => {
       return {
-        position: standing.position,
+        position: parseInt(standing.position),
         team: standing.Constructor.name,
-        points: standing.points
+        points: parseFloat(standing.points)
       };
     });
 
-    const dataJsContent = fs.readFileSync('assets/_js/data.js', 'utf8');
+    // Read existing results.json
+    let resultsJson = {};
+    try {
+      resultsJson = JSON.parse(fs.readFileSync('_data/results.json', 'utf8'));
+    } catch (readError) {
+      console.warn('Could not read _data/results.json, creating new one.', readError.message);
+    }
 
-    const newF1DriverStandings = `const f1PastStandings = ${JSON.stringify(driverStandings, null, 2)};`;
-    const newF1TeamStandings = `const f1TeamStandings = ${JSON.stringify(teamStandings, null, 2)};`;
+    // Update F1 standings in resultsJson
+    if (!resultsJson.f1Past) {
+      resultsJson.f1Past = {};
+    }
+    resultsJson.f1Past.standings = driverStandings;
+    resultsJson.f1Past.teamStandings = teamStandings; // Add team standings
 
-    let updatedContent = dataJsContent.replace(/const f1PastStandings = \[[\s\S]*?\];/, newF1DriverStandings);
-    updatedContent = updatedContent.replace(/const f1TeamStandings = \[[\s\S]*?\];/, newF1TeamStandings);
+    // Write updated results.json back
+    fs.writeFileSync('_data/results.json', JSON.stringify(resultsJson, null, 2));
 
-    fs.writeFileSync('assets/_js/data.js', updatedContent);
-
-    console.log('Successfully updated F1 standings in data.js');
+    console.log('Successfully updated F1 standings in _data/results.json');
 
   } catch (error) {
     console.error('Error fetching or updating F1 standings:', error);

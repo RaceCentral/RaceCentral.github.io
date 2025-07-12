@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2025 Racing Schedules</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/_css/main.css">
     <link rel="stylesheet" href="/assets/_css/ai-enhancements.css">
 </head>
@@ -253,10 +258,53 @@
   window.resultsData = {"f1Past":{"standings":[{"position":1,"driver":"Max Verstappen (Red Bull Racing Honda RBPT)","points":437},{"position":2,"driver":"Lando Norris (McLaren Mercedes)","points":374},{"position":3,"driver":"Charles Leclerc (Ferrari)","points":356}],"results":[]},"indyPast":{"standings":[{"position":1,"driver":"Álex Palou (Chip Ganassi Racing)","points":544},{"position":2,"driver":"Colton Herta (Andretti Global with Curb-Agajanian)","points":513},{"position":3,"driver":"Scott Dixon (Chip Ganassi Racing)","points":487}],"results":[]},"nascarPast":{"standings":[{"position":1,"driver":"Joey Logano (Team Penske)","points":5040},{"position":2,"driver":"Ryan Blaney (Team Penske)","points":5035},{"position":3,"driver":"Denny Hamlin (Joe Gibbs Racing)","points":5030}],"results":[]}};
 </script>
 <!-- Application Script -->
-<script type="module">
-  // Import your data from data.js
-  import { parseEventDate, enhanceEventData, convertUTCtoLocal } from './assets/_js/data.js';
-  import { downloadICS, downloadSeriesICS } from './assets/_js/calendar.js';
+<script>
+  // Helper functions (inline for simplicity)
+  function parseEventDate(dateStr) {
+    const [month, day] = dateStr.split(" ");
+    const months = {
+      "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
+      "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
+    };
+    const date = new Date(Date.UTC(2025, months[month], parseInt(day)));
+    return date;
+  }
+
+  function enhanceEventData(events) {
+    return events.map(event => {
+      const displaySeries = event.series.includes("NASCAR") ? "NASCAR" : event.series;
+      return {
+        ...event,
+        start: parseEventDate(event.date),
+        displaySeries
+      };
+    });
+  }
+
+  function convertUTCtoLocal(dateStr, timeUTC) {
+    if (!timeUTC) return "";
+    const [month, day] = dateStr.split(" ");
+    const months = {
+      "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
+      "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
+    };
+    const [hours, minutes] = timeUTC.split(":");
+    const date = new Date(Date.UTC(2025, months[month], parseInt(day), parseInt(hours), parseInt(minutes)));
+    return date.toLocaleTimeString([], { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      timeZoneName: 'short'
+    });
+  }
+
+  // Simple calendar download functions
+  function downloadICS(event) {
+    alert('Calendar download feature coming soon!');
+  }
+  
+  function downloadSeriesICS(series) {
+    alert('Series calendar download feature coming soon!');
+  }
   
 
   /*******************************
@@ -1765,9 +1813,7 @@
         <p>&copy; NaN Racing Site</p>
     </footer>
 
-    <script src="/assets/_js/api.js"></script>
-    <script src="/assets/_js/calendar.js"></script>
-    <script src="/assets/_js/config.js"></script>
-    <script src="/assets/_js/data.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -29,7 +29,7 @@ async function fetchNascarSchedule() {
 
     fs.writeFileSync('_data/nascar.json', JSON.stringify(formattedRaces, null, 2));
 
-    console.log('Successfully fetched and saved NASCAR schedule to assets/_data/nascar.json');
+    console.log('Successfully fetched and saved NASCAR schedule to _data/nascar.json');
 
   } catch (error) {
     console.error('Error fetching or updating NASCAR schedule:', error);

@@ -238,10 +238,53 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
   window.resultsData = {{ results | dump | safe }};
 </script>
 <!-- Application Script -->
-<script type="module">
-  // Import your data from data.js
-  import { parseEventDate, enhanceEventData, convertUTCtoLocal } from './assets/_js/data.js';
-  import { downloadICS, downloadSeriesICS } from './assets/_js/calendar.js';
+<script>
+  // Helper functions (inline for simplicity)
+  function parseEventDate(dateStr) {
+    const [month, day] = dateStr.split(" ");
+    const months = {
+      "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
+      "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
+    };
+    const date = new Date(Date.UTC(2025, months[month], parseInt(day)));
+    return date;
+  }
+
+  function enhanceEventData(events) {
+    return events.map(event => {
+      const displaySeries = event.series.includes("NASCAR") ? "NASCAR" : event.series;
+      return {
+        ...event,
+        start: parseEventDate(event.date),
+        displaySeries
+      };
+    });
+  }
+
+  function convertUTCtoLocal(dateStr, timeUTC) {
+    if (!timeUTC) return "";
+    const [month, day] = dateStr.split(" ");
+    const months = {
+      "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
+      "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
+    };
+    const [hours, minutes] = timeUTC.split(":");
+    const date = new Date(Date.UTC(2025, months[month], parseInt(day), parseInt(hours), parseInt(minutes)));
+    return date.toLocaleTimeString([], { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      timeZoneName: 'short'
+    });
+  }
+
+  // Simple calendar download functions
+  function downloadICS(event) {
+    alert('Calendar download feature coming soon!');
+  }
+  
+  function downloadSeriesICS(series) {
+    alert('Series calendar download feature coming soon!');
+  }
   
 
   /*******************************

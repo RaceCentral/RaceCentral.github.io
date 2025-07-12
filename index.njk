@@ -188,7 +188,7 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
               </div>
             </div>
             <div class="col-md-6">
-              <p><strong>Time Until Race</strong></p>
+              <p><strong>Time Until Race</p>
               <div id="modalCountdown" class="countdown-timer mb-3"></div>
             </div>
           </div>
@@ -232,20 +232,14 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
 
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Make Eleventy data available globally
-    window.scheduleData = {{ schedule | dump | safe }};
-  </script>
-  <!-- Application Script -->
+<script>
+  // Make Eleventy data available globally
+  window.scheduleData = {{ schedule | dump | safe }};
+</script>
+<!-- Application Script -->
 <script type="module">
   // Import your data from data.js
   import { resultsData, parseEventDate, enhanceEventData, convertUTCtoLocal } from './assets/_js/data.js';
-  </script>
-  <script>
-    // Make Eleventy data available globally
-    window.scheduleData = {{ schedule | dump | safe }};
-  </script>
-  <script type="module">
   import { downloadICS, downloadSeriesICS } from './assets/_js/calendar.js';
   
 
@@ -833,26 +827,26 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
       const displaySeries = event.series === "NASCAR Cup" ? "NASCAR" : event.series;
       
       const cardHTML = `
-        <div class="card upcoming-event-item" data-series="${event.series}" style="cursor: pointer;">
-          <div class="card-body">
-            <div class="event-summary">
-              <div class="event-info">
-                <h5 class="card-title">${event.race}</h5>
-                <div class="event-meta">
-                  <div class="series-info">${displaySeries} • ${location}</div>
-                  <div class="date-time-info">
-                    <span>${event.date} — ${timeString}</span>
-                    <span id="${weatherId}" class="weather-preview ms-2"></span>
+          <div class="card upcoming-event-item" data-series="${event.series}" style="cursor: pointer;">
+            <div class="card-body">
+              <div class="event-summary">
+                <div class="event-info">
+                  <h5 class="card-title">${event.race}</h5>
+                  <div class="event-meta">
+                    <div class="series-info">${displaySeries} • ${location}</div>
+                    <div class="date-time-info">
+                      <span>${event.date} — ${timeString}</span>
+                      <span id="${weatherId}" class="weather-preview ms-2"></span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="countdown-display">
-                <div id="${countdownId}" class="countdown-timer"></div>
+                <div class="countdown-display">
+                  <div id="${countdownId}" class="countdown-timer"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      `;
+        `;
       
       // Create the DOM element and add click handler
       const cardElement = document.createElement('div');
@@ -934,46 +928,46 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
   
       const newsGrid = document.getElementById("newsGrid");
       newsGrid.innerHTML = `
-        <div class="col-md-4">
-          <div class="card news-card h-100">
-            <div class="card-body">
-              <h5 class="card-title news-title">F1 News</h5>
-              ${f1News.map(item => `
-                <div class="news-item mb-3">
-                  <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
-                  <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
-                </div>
-              `).join('')}
+          <div class="col-md-4">
+            <div class="card news-card h-100">
+              <div class="card-body">
+                <h5 class="card-title news-title">F1 News</h5>
+                ${f1News.map(item => `
+                  <div class="news-item mb-3">
+                    <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
+                    <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
+                  </div>
+                `).join('')}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card news-card h-100">
-            <div class="card-body">
-              <h5 class="card-title news-title">IndyCar News</h5>
-              ${indyNews.map(item => `
-                <div class="news-item mb-3">
-                  <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
-                  <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
-                </div>
-              `).join('')}
+          <div class="col-md-4">
+            <div class="card news-card h-100">
+              <div class="card-body">
+                <h5 class="card-title news-title">IndyCar News</h5>
+                ${indyNews.map(item => `
+                  <div class="news-item mb-3">
+                    <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
+                    <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
+                  </div>
+                `).join('')}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card news-card h-100">
-            <div class="card-body">
-              <h5 class="card-title news-title">NASCAR News</h5>
-              ${nascarNews.map(item => `
-                <div class="news-item mb-3">
-                  <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
-                  <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
-                </div>
-              `).join('')}
+          <div class="col-md-4">
+            <div class="card news-card h-100">
+              <div class="card-body">
+                <h5 class="card-title news-title">NASCAR News</h5>
+                ${nascarNews.map(item => `
+                  <div class="news-item mb-3">
+                    <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
+                    <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
+                  </div>
+                `).join('')}
+              </div>
             </div>
           </div>
-        </div>
-      `;
+        `;
     } catch (error) {
       document.getElementById("newsGrid").innerHTML = "<p class='text-danger'>Unable to fetch news.</p>";
       console.error("Error fetching news:", error);
@@ -1084,26 +1078,26 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
       
       if (results.length > 0) {
         resultHTML = `
-          <div class="race-results mt-2 p-2" style="background: rgba(${seriesColor === '#e10600' ? '225,6,0' : seriesColor === '#00d4aa' ? '0,212,170' : '255,211,32'}, 0.1); border-radius: 8px;">
-            <small><strong>Results:</strong></small><br>
-            ${results.map(result => `
-              <small>🥇 ${result.winner} • 🥈 ${result.second} • 🥉 ${result.third}</small>
-            `).join('<br>')}
-          </div>
-        `;
+            <div class="race-results mt-2 p-2" style="background: rgba(${seriesColor === '#e10600' ? '225,6,0' : seriesColor === '#00d4aa' ? '0,212,170' : '255,211,32'}, 0.1); border-radius: 8px;">
+              <small><strong>Results:</strong></small><br>
+              ${results.map(result => `
+                <small>🥇 ${result.winner} • 🥈 ${result.second} • 🥉 ${result.third}</small>
+              `).join('<br>')}
+            </div>
+          `;
       }
     }
     
     card.innerHTML = `
-      <div class="event-date">${event.date} • ${localTime || event.time}</div>
-      <div class="event-title">${event.race}</div>
-      <div class="event-details">
-        <div><i class="fas fa-trophy me-1"></i>${event.displaySeries}</div>
-        <div><i class="fas fa-map-marker-alt me-1"></i>${event.circuit || event.venue}</div>
-        <div><i class="fas fa-tv me-1"></i>${event.network || 'TBA'}</div>
-      </div>
-      ${resultHTML}
-    `;
+        <div class="event-date">${event.date} • ${localTime || event.time}</div>
+        <div class="event-title">${event.race}</div>
+        <div class="event-details">
+          <div><i class="fas fa-trophy me-1"></i>${event.displaySeries}</div>
+          <div><i class="fas fa-map-marker-alt me-1"></i>${event.circuit || event.venue}</div>
+          <div><i class="fas fa-tv me-1"></i>${event.network || 'TBA'}</div>
+        </div>
+        ${resultHTML}
+      `;
     
     card.addEventListener('click', () => openEventModal(event));
     return card;
@@ -1160,16 +1154,16 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
 
       if (results.length > 0) {
         podiumHTML = '<div class="podium-results">' +
-          results.map(result => {
-            let resultTitle = results.length > 1 ? `<strong>${result.race}:</strong><br>` : "";
-            return `
-              ${resultTitle}
-              <span><span class="podium-position">1st:</span> ${result.winner}</span>
-              <span><span class="podium-position">2nd:</span> ${result.second}</span>
-              <span><span class="podium-position">3rd:</span> ${result.third}</span>
-            `;
-          }).join('<hr class="podium-divider">') +
-          '</div>';
+            results.map(result => {
+              let resultTitle = results.length > 1 ? `<strong>${result.race}:</strong><br>` : "";
+              return `
+                ${resultTitle}
+                <span><span class="podium-position">1st:</span> ${result.winner}</span>
+                <span><span class="podium-position">2nd:</span> ${result.second}</span>
+                <span><span class="podium-position">3rd:</span> ${result.third}</span>
+              `;
+            }).join('<hr class="podium-divider">') +
+            '</div>';
       }
     }
 
@@ -1229,7 +1223,7 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
     });
 
     // Populate NASCAR schedule (both regular and playoff events)
-    const allNascarEvents = [...scheduleData.nascarRegularEvents, ...scheduleData.nascarPlayoffEvents];
+    const allNascarEvents = [...scheduleData.nascarEvents]; // Use the single nascarEvents array
     allNascarEvents.forEach(event => {
       if (nascarTable) nascarTable.appendChild(createTableRow(event));
       if (nascarMobile) nascarMobile.appendChild(createMobileCard(event));
@@ -1443,297 +1437,303 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
         return event.start > now;
       }).slice(0, 3);
       
-                 if (upcomingEvents.length === 0) {
-           aiContent.innerHTML = '<p class="text-muted">No upcoming events to analyze.</p>';
-           return;
-         }
-         
-         // Generate analysis for each event
-         const predictions = await aiPredictions.getBatchPredictions(upcomingEvents);
-      
-               // Display analysis
-       let html = '';
-       predictions.forEach(({ event, prediction, success, error }) => {
-         if (success) {
-           // Use the new styled predictions HTML
-           const predictionsHTML = aiPredictions.generatePredictionsHTML(event);
-           html += `
-             <div class="ai-prediction-item mb-4">
-               <h6 class="text-primary">${event.race}</h6>
-               <div class="ai-prediction-content">
-                 ${formatAIPrediction(prediction)}
+                   if (upcomingEvents.length === 0) {
+             aiContent.innerHTML = '<p class="text-muted">No upcoming events to analyze.</p>';
+             return;
+           }
+           
+           // Generate analysis for each event
+           const predictions = await aiPredictions.getBatchPredictions(upcomingEvents);
+        
+                 // Display analysis
+         let html = '';
+         predictions.forEach(({ event, prediction, success, error }) => {
+           if (success) {
+             // Use the new styled predictions HTML
+             const predictionsHTML = aiPredictions.generatePredictionsHTML(event);
+             html += `
+               <div class="ai-prediction-item mb-4">
+                 <h6 class="text-primary">${event.race}</h6>
+                 <div class="ai-prediction-content">
+                   ${formatAIPrediction(prediction)}
+                 </div>
+                 ${predictionsHTML}
                </div>
-               ${predictionsHTML}
-             </div>
-           `;
-         } else {
-           html += `
-             <div class="ai-prediction-item mb-4">
-               <h6 class="text-danger">${event.race}</h6>
-               <p class="text-muted">Unable to generate analysis: ${error}</p>
-             </div>
-           `;
-         }
-       });
-      
-      aiContent.innerHTML = html;
-      
-    } catch (error) {
-               console.error('Error generating AI analysis:', error);
+             `;
+           } else {
+             html += `
+               <div class="ai-prediction-item mb-4">
+                 <h6 class="text-danger">${event.race}</h6>
+                 <p class="text-muted">Unable to generate analysis: ${error}</p>
+               </div>
+             `;
+           }
+         });
+        
+        aiContent.innerHTML = html;
+        
+      } catch (error) {
+                 console.error('Error generating AI analysis:', error);
          aiContent.innerHTML = `
            <div class="alert alert-danger">
              <i class="fas fa-exclamation-triangle me-2"></i>
              Unable to generate race analysis. Please try again later.
            </div>
          `;
-    }
-  }
-  
-  async function generateModalAIPrediction() {
-    const button = document.getElementById('generateModalAIPrediction');
-    const resultDiv = document.getElementById('aiPredictionResult');
-    const event = eventDetailModal.currentEvent;
-    
-    if (!event) return;
-    
-           // Update button state
-     button.disabled = true;
-     button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Analyzing...';
-     
-     // Show loading state
-     resultDiv.innerHTML = `
-       <div class="text-center">
-         <div class="spinner-border spinner-border-sm text-primary" role="status">
-           <span class="visually-hidden">Generating analysis...</span>
-         </div>
-         <span class="ms-2">Analyzing race data...</span>
-       </div>
-     `;
-    
-    try {
-      // Get weather data if available
-      let weatherData = null;
-      const weatherElement = document.getElementById('weatherResult');
-      if (weatherElement && weatherElement.textContent.trim()) {
-        // Extract basic weather info from the weather section
-        weatherData = {
-          forecast: 'Available',
-          temperature: '75', // Placeholder - would need to extract from weather display
-          wind: 'Light'
-        };
       }
+    }
+    
+    async function generateModalAIPrediction() {
+      const button = document.getElementById('generateModalAIPrediction');
+      const resultDiv = document.getElementById('aiPredictionResult');
+      const event = eventDetailModal.currentEvent;
       
-      const prediction = await aiPredictions.getRacePrediction(event, weatherData);
-      const predictionsHTML = aiPredictions.generateCompactPredictionsHTML(event);
+      if (!event) return;
       
-      resultDiv.innerHTML = `
-        <div class="ai-prediction-content">
-          ${formatAIPrediction(prediction)}
-        </div>
-        ${predictionsHTML}
-      `;
+             // Update button state
+       button.disabled = true;
+       button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Analyzing...';
+       
+       // Show loading state
+       resultDiv.innerHTML = `
+         <div class="text-center">
+           <div class="spinner-border spinner-border-sm text-primary" role="status">
+             <span class="visually-hidden">Generating analysis...</span>
+           </div>
+           <span class="ms-2">Analyzing race data...</span>
+         </div>
+       `;
       
-    } catch (error) {
-               console.error('Error generating modal AI analysis:', error);
+      try {
+        // Get weather data if available
+        let weatherData = null;
+        const weatherElement = document.getElementById('weatherResult');
+        if (weatherElement && weatherElement.textContent.trim()) {
+          // Extract basic weather info from the weather section
+          weatherData = {
+            forecast: 'Available',
+            temperature: '75', // Placeholder - would need to extract from weather display
+            wind: 'Light'
+          };
+        }
+        
+        const prediction = await aiPredictions.getRacePrediction(event, weatherData);
+        const predictionsHTML = aiPredictions.generateCompactPredictionsHTML(event);
+        
+        resultDiv.innerHTML = `
+          <div class="ai-prediction-content">
+            ${formatAIPrediction(prediction)}
+          </div>
+          ${predictionsHTML}
+        `;
+        
+      } catch (error) {
+                 console.error('Error generating modal AI analysis:', error);
          resultDiv.innerHTML = `
            <div class="alert alert-warning">
              <i class="fas fa-exclamation-triangle me-2"></i>
              Unable to generate race analysis. Please try again later.
            </div>
          `;
-    } finally {
-               // Reset button state
-       button.disabled = false;
-       button.innerHTML = '<i class="fas fa-robot me-1"></i>Get Race Insights';
-    }
-  }
-  
-  function formatAIPrediction(prediction) {
-    // Convert markdown-style formatting to HTML
-    return prediction
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/\n\n/g, '</p><p>')
-      .replace(/\n/g, '<br>')
-      .replace(/^/, '<p>')
-      .replace(/$/, '</p>');
-  }
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    setupThemeToggle();
-    setupSearch();
-    populateSchedules();
-    displayUpcomingEvent();
-    fetchNews();
-    setupPushNotifications();
-  });
-
-  function setupPushNotifications() {
-    const subscribeButton = document.getElementById('subscribeButton');
-
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-      console.warn('Push notifications not supported.');
-      subscribeButton.disabled = true;
-      subscribeButton.title = 'Push notifications not supported by your browser.';
-      return;
-    }
-
-    // Placeholder for a real VAPID public key from your server
-    // In a real application, this would be fetched from your backend.
-    const VAPID_PUBLIC_KEY = 'YOUR_VAPID_PUBLIC_KEY_HERE'; 
-
-    function urlBase64ToUint8Array(base64String) {
-      const padding = '='.repeat((4 - base64String.length % 4) % 4);
-      const base64 = (base64String + padding)
-        .replace(/\-/g, '+')
-        .replace(/_/g, '/');
-
-      const rawData = window.atob(base64);
-      const outputArray = new Uint8Array(rawData.length);
-
-      for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i);
+      } finally {
+                 // Reset button state
+         button.disabled = false;
+         button.innerHTML = '<i class="fas fa-robot me-1"></i>Get Race Insights';
       }
-      return outputArray;
     }
-
-    async function subscribeUser() {
-      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-      const pushSubscription = await serviceWorkerRegistration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-      });
-
-      console.log('Push Subscription:', JSON.stringify(pushSubscription));
-      alert('Successfully subscribed to push notifications! (Subscription logged to console)');
-      // In a real app, you would send this pushSubscription to your backend server
-      // fetch('/api/save-subscription', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify(pushSubscription)
-      // });
+    
+    function formatAIPrediction(prediction) {
+      // Convert markdown-style formatting to HTML
+      return prediction
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>')
+        .replace(/^/, '<p>')
+        .replace(/$/, '</p>');
     }
-
-    subscribeButton.addEventListener('click', async () => {
-      try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-          await subscribeUser();
-        } else {
-          alert('Permission for notifications was denied.');
-        }
-      } catch (error) {
-        console.error('Error subscribing to push notifications:', error);
-        alert('Failed to subscribe to push notifications. See console for details.');
-      }
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      setupThemeToggle();
+      setupSearch();
+      populateSchedules();
+      displayUpcomingEvent();
+      fetchNews();
+      setupPushNotifications();
     });
 
-    // Check current subscription status on load
-    navigator.serviceWorker.ready.then(registration => {
-      registration.pushManager.getSubscription().then(subscription => {
-        if (subscription) {
-          console.log('Already subscribed:', subscription);
-          subscribeButton.textContent = 'Notifications On';
-          subscribeButton.classList.remove('btn-primary');
-          subscribeButton.classList.add('btn-success');
-        } else {
-          subscribeButton.textContent = 'Subscribe to Notifications';
-          subscribeButton.classList.remove('btn-success');
-          subscribeButton.classList.add('btn-primary');
+    function setupPushNotifications() {
+      const subscribeButton = document.getElementById('subscribeButton');
+
+      if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+        console.warn('Push notifications not supported.');
+        subscribeButton.disabled = true;
+        subscribeButton.title = 'Push notifications not supported by your browser.';
+        return;
+      }
+
+      // Placeholder for a real VAPID public key from your server
+      // In a real application, this would be fetched from your backend.
+      const VAPID_PUBLIC_KEY = 'YOUR_VAPID_PUBLIC_KEY_HERE'; 
+
+      function urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding)
+          .replace(/\-/g, '+')
+          .replace(/_/g, '/');
+
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+          outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+      }
+
+      async function subscribeUser() {
+        const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+        const pushSubscription = await serviceWorkerRegistration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+        });
+
+        console.log('Push Subscription:', JSON.stringify(pushSubscription));
+        alert('Successfully subscribed to push notifications! (Subscription logged to console)');
+        // In a real app, you would send this pushSubscription to your backend server
+        // fetch('/api/save-subscription', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify(pushSubscription)
+        // });
+      }
+
+      subscribeButton.addEventListener('click', async () => {
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            await subscribeUser();
+          } else {
+            alert('Permission for notifications was denied.');
+          }
+        } catch (error) {
+          console.error('Error subscribing to push notifications:', error);
+          alert('Failed to subscribe to push notifications. See console for details.');
         }
       });
-    });
-  }
-  
-      
 
-  // Function to get current active tab events
-  function getCurrentTabEvents() {
-    const activeTabId = document.querySelector('.tab-pane.active').id;
-    switch (activeTabId) {
-      case 'f1':
-        return scheduleData.f1Events;
-      case 'indycar':
-        return scheduleData.indyEvents;
-      case 'nascar':
-        return [...scheduleData.nascarRegularEvents, ...scheduleData.nascarPlayoffEvents];
-      case 'all':
-        return enhanceEventData();
-      default:
-        return [];
+      // Check current subscription status on load
+      navigator.serviceWorker.ready.then(registration => {
+        registration.pushManager.getSubscription().then(subscription => {
+          if (subscription) {
+            console.log('Already subscribed:', subscription);
+            subscribeButton.textContent = 'Notifications On';
+            subscribeButton.classList.remove('btn-primary');
+            subscribeButton.classList.add('btn-success');
+          } else {
+            subscribeButton.textContent = 'Subscribe to Notifications';
+            subscribeButton.classList.remove('btn-success');
+            subscribeButton.classList.add('btn-primary');
+          }
+        });
+      });
     }
-  }
+    
+        
 
-  // Function to get series name from active tab
-  function getActiveSeriesName() {
-    const activeTabId = document.querySelector('.tab-pane.active').id;
-    switch (activeTabId) {
-      case 'f1':
-        return 'F1';
-      case 'indycar':
-        return 'IndyCar';
-      case 'nascar':
-        return 'NASCAR';
-      case 'all':
-        return 'All-Series';
-      default:
-        return '';
+    // Function to get current active tab events
+    function getCurrentTabEvents() {
+      const activeTabId = document.querySelector('.tab-pane.active').id;
+      switch (activeTabId) {
+        case 'f1':
+          return window.scheduleData.f1Events;
+        case 'indycar':
+          return window.scheduleData.indyEvents;
+        case 'nascar':
+          // Assuming nascarEvents in scheduleData is already split or handled
+          return window.scheduleData.nascarEvents; 
+        case 'all':
+          // Combine all events from window.scheduleData
+          return [
+            ...window.scheduleData.f1Events,
+            ...window.scheduleData.indyEvents,
+            ...window.scheduleData.nascarEvents
+          ];
+        default:
+          return [];
+      }
     }
-  }
 
-  // Add event listener for calendar button
-  document.getElementById('downloadICSBtn').addEventListener('click', () => {
-    const events = getCurrentTabEvents();
-    const seriesName = getActiveSeriesName();
-    if (events && events.length > 0) {
-      const totalEvents = events.length;
-      const message = `Downloading ${totalEvents} ${seriesName} events as an ICS file.\n\n` +
-                     `You can import this file into any calendar application.`;
-      alert(message);
-      downloadSeriesICS(events, seriesName);
+    // Function to get series name from active tab
+    function getActiveSeriesName() {
+      const activeTabId = document.querySelector('.tab-pane.active').id;
+      switch (activeTabId) {
+        case 'f1':
+          return 'F1';
+        case 'indycar':
+          return 'IndyCar';
+        case 'nascar':
+          return 'NASCAR';
+        case 'all':
+          return 'All-Series';
+        default:
+          return '';
+      }
     }
-  });
 
-  // Update calendar button text based on active tab
-  document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
-    tab.addEventListener('shown.bs.tab', () => {
+    // Add event listener for calendar button
+    document.getElementById('downloadICSBtn').addEventListener('click', () => {
+      const events = getCurrentTabEvents();
       const seriesName = getActiveSeriesName();
-      const buttonText = seriesName === 'All-Series' ? 'Download Calendar' : `Download ${seriesName} Calendar`;
-      document.getElementById('downloadICSBtn').innerHTML = `<i class="fas fa-calendar-plus me-1"></i> ${buttonText}`;
+      if (events && events.length > 0) {
+        const totalEvents = events.length;
+        const message = `Downloading ${totalEvents} ${seriesName} events as an ICS file.\n\n` +
+                       `You can import this file into any calendar application.`;
+        alert(message);
+        downloadSeriesICS(events, seriesName);
+      }
     });
-  });
 
-  // Store the current event when opening the modal
-  const eventDetailModal = document.getElementById('eventDetailModal');
-  let previousActiveElement = null;
+    // Update calendar button text based on active tab
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+      tab.addEventListener('shown.bs.tab', () => {
+        const seriesName = getActiveSeriesName();
+        const buttonText = seriesName === 'All-Series' ? 'Download Calendar' : `Download ${seriesName} Calendar`;
+        document.getElementById('downloadICSBtn').innerHTML = `<i class="fas fa-calendar-plus me-1"></i> ${buttonText}`;
+      });
+    });
 
-  eventDetailModal.addEventListener('show.bs.modal', (event) => {
-    // Store the element that had focus before opening the modal
-    previousActiveElement = document.activeElement;
-  });
+    // Store the current event when opening the modal
+    const eventDetailModal = document.getElementById('eventDetailModal');
+    let previousActiveElement = null;
 
-  eventDetailModal.addEventListener('shown.bs.modal', () => {
-    // Focus the first focusable element in the modal
-    const firstFocusableElement = eventDetailModal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-    if (firstFocusableElement) {
-      firstFocusableElement.focus();
-    }
-  });
+    eventDetailModal.addEventListener('show.bs.modal', (event) => {
+      // Store the element that had focus before opening the modal
+      previousActiveElement = document.activeElement;
+    });
 
-  eventDetailModal.addEventListener('hidden.bs.modal', () => {
-    // Restore focus to the previously focused element
-    if (previousActiveElement) {
-      previousActiveElement.focus();
-    }
-  });
+    eventDetailModal.addEventListener('shown.bs.modal', () => {
+      // Focus the first focusable element in the modal
+      const firstFocusableElement = eventDetailModal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (firstFocusableElement) {
+        firstFocusableElement.focus();
+      }
+    });
 
-  // Add event listener for modal download button
-  document.getElementById('modalDownloadICS').addEventListener('click', () => {
-    const event = eventDetailModal.currentEvent;
-    if (event) {
-      downloadICS(event);
-    }
-  });
-</script>
+    eventDetailModal.addEventListener('hidden.bs.modal', () => {
+      // Restore focus to the previously focused element
+      if (previousActiveElement) {
+        previousActiveElement.focus();
+      }
+    });
+
+    // Add event listener for modal download button
+    document.getElementById('modalDownloadICS').addEventListener('click', () => {
+      const event = eventDetailModal.currentEvent;
+      if (event) {
+        downloadICS(event);
+      }
+    });
+  </script>

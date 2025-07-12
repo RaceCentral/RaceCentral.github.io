@@ -39,6 +39,6 @@ def scrape_indycar_schedule():
 
 if __name__ == "__main__":
     indycar_schedule = scrape_indycar_schedule()
-    with open('assets/_data/indycar.json', 'w') as f:
+    with open('_data/indycar.json', 'w') as f:
         json.dump(indycar_schedule, f, indent=2)
     print("Successfully scraped and saved IndyCar schedule to assets/_data/indycar.json")

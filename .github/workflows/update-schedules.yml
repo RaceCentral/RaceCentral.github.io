@@ -20,10 +20,8 @@ jobs:
           node-version: '20'
 
       - name: Install Node.js dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Fetch and update data
-        
       - name: Set up Python
         uses: actions/setup-python@v5
         with:

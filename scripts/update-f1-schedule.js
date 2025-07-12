@@ -28,7 +28,7 @@ async function fetchF1Schedule() {
       };
     });
 
-    fs.writeFileSync('assets/_data/f1.json', JSON.stringify(formattedRaces, null, 2));
+    fs.writeFileSync('_data/f1.json', JSON.stringify(formattedRaces, null, 2));
 
     console.log('Successfully fetched and saved F1 schedule to assets/_data/f1.json');
 

@@ -203,7 +203,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <p><strong>Time Until Race</p>
+              <p><strong>Time Until Race</strong></p>
               <div id="modalCountdown" class="countdown-timer mb-3"></div>
             </div>
           </div>
@@ -1226,19 +1226,19 @@
     });
 
     // Populate F1 schedule
-    scheduleData.f1Events.forEach(event => {
+    window.scheduleData.f1Events.forEach(event => {
       if (f1Table) f1Table.appendChild(createTableRow(event));
       if (f1Mobile) f1Mobile.appendChild(createMobileCard(event));
     });
 
     // Populate IndyCar schedule
-    scheduleData.indyEvents.forEach(event => {
+    window.scheduleData.indyEvents.forEach(event => {
       if (indyTable) indyTable.appendChild(createTableRow(event));
       if (indyMobile) indyMobile.appendChild(createMobileCard(event));
     });
 
     // Populate NASCAR schedule (both regular and playoff events)
-    const allNascarEvents = [...scheduleData.nascarEvents]; // Use the single nascarEvents array
+    const allNascarEvents = [...window.scheduleData.nascarEvents]; // Use the single nascarEvents array
     allNascarEvents.forEach(event => {
       if (nascarTable) nascarTable.appendChild(createTableRow(event));
       if (nascarMobile) nascarMobile.appendChild(createMobileCard(event));
@@ -1752,7 +1752,6 @@
       }
     });
   </script>
-
     </main>
 
     <footer>

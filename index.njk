@@ -241,21 +241,62 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
 <script>
   // Helper functions (inline for simplicity)
   function parseEventDate(dateStr) {
-    const [month, day] = dateStr.split(" ");
+    if (!dateStr || typeof dateStr !== 'string') {
+      console.warn('Invalid date string:', dateStr);
+      return new Date(); // Return current date as fallback
+    }
+    
+    const parts = dateStr.split(" ");
+    if (parts.length < 2) {
+      console.warn('Invalid date format:', dateStr);
+      return new Date();
+    }
+    
+    const [month, day] = parts;
     const months = {
       "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
       "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
     };
-    const date = new Date(Date.UTC(2025, months[month], parseInt(day)));
+    
+    if (!months.hasOwnProperty(month)) {
+      console.warn('Invalid month:', month);
+      return new Date();
+    }
+    
+    const dayNum = parseInt(day);
+    if (isNaN(dayNum)) {
+      console.warn('Invalid day:', day);
+      return new Date();
+    }
+    
+    const date = new Date(Date.UTC(2025, months[month], dayNum));
     return date;
   }
 
   function enhanceEventData(events) {
+    if (!Array.isArray(events)) {
+      console.warn('enhanceEventData: events is not an array:', events);
+      return [];
+    }
+    
     return events.map(event => {
-      const displaySeries = event.series.includes("NASCAR") ? "NASCAR" : event.series;
+      if (!event || typeof event !== 'object') {
+        console.warn('Invalid event object:', event);
+        return {
+          date: 'Jan 1',
+          race: 'Unknown Race',
+          series: 'Unknown',
+          start: new Date(),
+          displaySeries: 'Unknown'
+        };
+      }
+      
+      const displaySeries = (event.series && event.series.includes("NASCAR")) ? "NASCAR" : (event.series || "Unknown");
+      const startDate = parseEventDate(event.date);
+      
       return {
         ...event,
-        start: parseEventDate(event.date),
+        start: startDate,
         displaySeries
       };
     });
@@ -1080,7 +1121,10 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
   function createMobileCard(event) {
     const card = document.createElement('div');
     card.className = 'mobile-schedule-card';
-    card.setAttribute('data-date', event.start.toISOString());
+    
+    // Safely handle the date attribute
+    const eventDate = event.start || new Date();
+    card.setAttribute('data-date', eventDate.toISOString());
     
     const localTime = convertUTCtoLocal(event.date, event.time_utc);
     const nowRow = new Date();
@@ -1094,7 +1138,7 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
     card.style.borderLeft = `4px solid ${seriesColor}`;
     
     let resultHTML = '';
-    if (event.start < nowRow) {
+    if (eventDate < nowRow) {
       card.classList.add('completed-race');
       // Add results if available (similar logic as table)
       let results = [];
@@ -1156,11 +1200,14 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
   // Function to create a table row for an event
   function createTableRow(event, includeSeriesBadge = false) {
     const row = document.createElement('tr');
-    row.setAttribute('data-date', event.start.toISOString());
+    
+    // Safely handle the date attribute
+    const eventDate = event.start || new Date();
+    row.setAttribute('data-date', eventDate.toISOString());
     const localTime = convertUTCtoLocal(event.date, event.time_utc);
     const nowRow = new Date();
     const todayUTC = new Date(Date.UTC(nowRow.getUTCFullYear(), nowRow.getUTCMonth(), nowRow.getUTCDate()));
-    if (event.start < todayUTC) {
+    if (eventDate < todayUTC) {
       row.classList.add('completed-race');
     }
 
@@ -1172,7 +1219,7 @@ keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, ra
 
     // Find race results for completed races
     let podiumHTML = '';
-    if (event.start < nowRow) {
+    if (eventDate < nowRow) {
       let results = [];
       if (event.series === "F1") {
         const raceName = event.race.replace(" GP", "");

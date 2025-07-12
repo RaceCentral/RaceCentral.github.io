@@ -1,0 +1,2073 @@
+/* -------------------------------------------------------
+   1. Root Variables - Modern Theme
+   ------------------------------------------------------- */
+   :root {
+    --primary-color: #dc2626;        /* Bold red brand color */
+    --accent-color: #ef4444;         /* Lighter red accent */
+    --success-color: #10b981;        /* Green for success states */
+    --warning-color: #f59e0b;        /* Orange for warnings */
+    --info-color: #3b82f6;          /* Blue for info */
+    --background-body-light: #f8fafc;/* Clean light gray background */
+    --background-card-light: #ffffff;/* Pure white cards */
+    --background-body-dark: #0f172a; /* Deep dark blue background */
+    --background-card-dark: #1e293b; /* Dark slate cards */
+    --text-light-mode: #0f172a;      /* Dark slate text */
+    --text-dark-mode: #f8fafc;       /* Light text on dark */
+    --text-secondary: #64748b;       /* Secondary gray text */
+    --text-secondary-dark: #94a3b8;  /* Secondary text in dark mode */
+    --border-light: #e2e8f0;         /* Light borders */
+    --border-dark: #334155;          /* Dark borders */
+    --border-radius-base: 12px;      /* Larger radius for modern look */
+    --border-radius-lg: 16px;        /* Extra large radius */
+    --transition-speed: 0.2s;        /* Faster transitions */
+    --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --box-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --box-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  /* -------------------------------------------------------
+     2. Base & Body - Enhanced Typography
+     ------------------------------------------------------- */
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    margin: 0;
+    background-color: var(--background-body-light);
+    color: var(--text-light-mode);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition:
+      background-color var(--transition-speed) ease,
+      color var(--transition-speed) ease;
+  }
+  
+  body.dark-mode {
+    background-color: var(--background-body-dark);
+    color: var(--text-dark-mode);
+  }
+  
+  /* -------------------------------------------------------
+     3. Header - Bold Modern Design
+     ------------------------------------------------------- */
+  .site-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #b91c1c 100%);
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--box-shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+    background-size: 20px 20px;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  
+  .site-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* -------------------------------------------------------
+     4. Container - Modern Card Design
+     ------------------------------------------------------- */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem;
+    background: var(--background-card-light);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-lg);
+    border: 1px solid var(--border-light);
+    transition:
+      background-color var(--transition-speed) ease,
+      box-shadow var(--transition-speed) ease,
+      border-color var(--transition-speed) ease;
+  }
+  
+  body.dark-mode .container {
+    background: var(--background-card-dark);
+    border-color: var(--border-dark);
+    box-shadow: var(--box-shadow-lg);
+  }
+  
+  /* -------------------------------------------------------
+     5. Upcoming Event (Hero) Section - Enhanced Calendar Style
+     ------------------------------------------------------- */
+  .upcoming-event {
+    background: var(--background-card-light);
+    padding: 2.5rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-lg);
+    margin-bottom: 2.5rem;
+    color: var(--text-light-mode);
+    border: 1px solid var(--border-light);
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-speed) ease;
+  }
+  
+  .upcoming-event::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  }
+  
+  .upcoming-event h4 {
+    margin-bottom: 2.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-light-mode);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+  
+  .upcoming-event h4::before {
+    content: '🏁';
+    font-size: 2.2rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+  
+  .upcoming-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .upcoming-event-item {
+    background: var(--background-card-light);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--box-shadow);
+    transition: all var(--transition-speed) ease;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .upcoming-event-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .upcoming-event-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow-hover);
+    border-color: var(--primary-color);
+  }
+  
+  .upcoming-event-item[style*="cursor: pointer"]:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--box-shadow-hover);
+    border-color: var(--primary-color);
+  }
+  
+  .upcoming-event-item .card-body {
+    padding: 0;
+  }
+  
+  .upcoming-event-item .event-summary {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 2rem;
+  }
+  
+  .upcoming-event-item .event-summary::before {
+    content: '';
+    position: absolute;
+    left: -1.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Series-specific indicator colors - Enhanced gradients */
+  .upcoming-event-item[data-series="F1"] .event-summary::before {
+    background: linear-gradient(180deg, #e10600, #dc2626); /* F1 Red gradient */
+  }
+  
+  .upcoming-event-item[data-series="IndyCar"] .event-summary::before {
+    background: linear-gradient(180deg, #00d4aa, #10b981); /* IndyCar Teal gradient */
+  }
+  
+  .upcoming-event-item[data-series="NASCAR"],
+  .upcoming-event-item[data-series="NASCAR Cup"] .event-summary::before {
+    background: linear-gradient(180deg, #ffd320, #f59e0b); /* NASCAR Yellow gradient */
+  }
+  
+  .upcoming-event-item .event-info {
+    flex: 1;
+  }
+  
+  .upcoming-event-item .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--text-light-mode);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+  
+  .upcoming-event-item .event-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+  
+  .upcoming-event-item .series-info {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1rem;
+  }
+  
+  .upcoming-event-item .venue-info {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  
+  .upcoming-event-item .date-time-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.6);
+    margin-top: 0.25rem;
+  }
+
+  .upcoming-event-item .weather-preview {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.05);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    white-space: nowrap;
+    cursor: help;
+  }
+  
+  .upcoming-event-item .countdown-display {
+    text-align: right;
+    min-width: 120px;
+  }
+  
+  .upcoming-event-item .countdown-badge {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: #ffffff;
+    padding: 0.75rem 1.25rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: inline-block;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    letter-spacing: 0.02em;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .upcoming-event-item .countdown-timer {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-light-mode);
+    margin-bottom: 0.25rem;
+  }
+  
+  .upcoming-event-item .countdown-label {
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Remove old series badge styling in favor of colored indicators */
+  .upcoming-event-item .series-badge {
+    display: none;
+  }
+  
+  /* Remove expand button and collapsible content for clean design */
+  .upcoming-event-item .btn-expand {
+    display: none;
+  }
+  
+  .upcoming-event-item .collapse {
+    display: none;
+  }
+  
+  /* Dark mode overrides - Enhanced */
+  body.dark-mode .upcoming-event {
+    background: var(--background-card-dark);
+    color: var(--text-dark-mode);
+    border-color: var(--border-dark);
+  }
+  
+  body.dark-mode .upcoming-event h4 {
+    color: var(--text-dark-mode);
+  }
+  
+  body.dark-mode .upcoming-event-item {
+    background: var(--background-card-dark);
+    border-color: var(--border-dark);
+    color: var(--text-dark-mode);
+  }
+  
+  body.dark-mode .upcoming-event-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--box-shadow-hover);
+  }
+  
+  body.dark-mode .upcoming-event-item .card-title {
+    color: var(--text-dark-mode);
+  }
+  
+  body.dark-mode .upcoming-event-item .series-info {
+    color: var(--accent-color);
+  }
+  
+  body.dark-mode .upcoming-event-item .venue-info {
+    color: var(--text-secondary-dark);
+  }
+  
+  body.dark-mode .upcoming-event-item .date-time-info {
+    color: var(--text-secondary-dark);
+  }
+
+  body.dark-mode .upcoming-event-item .weather-preview {
+    color: var(--text-secondary-dark);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  body.dark-mode .upcoming-event-item .countdown-timer {
+    color: var(--text-dark-mode);
+  }
+  
+  body.dark-mode .upcoming-event-item .countdown-label {
+    color: var(--text-secondary-dark);
+  }
+  
+  /* View Full Calendar link styling */
+  .view-calendar-link {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  
+  .view-calendar-link a {
+    color: #e10600;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .view-calendar-link a:hover {
+    color: #b8050a;
+    text-decoration: none;
+  }
+  
+  body.dark-mode .view-calendar-link {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  body.dark-mode .view-calendar-link a {
+    color: #ff6b6b;
+  }
+  
+  body.dark-mode .view-calendar-link a:hover {
+    color: #ff5252;
+  }
+
+  /* AI Predictions Styling */
+  .ai-predictions-section {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* AI Predictions Card Styling */
+  .ai-predictions-section .card {
+    background: var(--background-card-light);
+    border-color: var(--primary-color);
+  }
+
+  .ai-predictions-section .card-header {
+    background-color: var(--primary-color) !important;
+    border-bottom: none;
+  }
+
+  .ai-predictions-section .card-body {
+    background: var(--background-card-light);
+  }
+
+  /* Dark mode AI predictions card */
+  body.dark-mode .ai-predictions-section .card {
+    background: var(--background-card-dark);
+    border-color: var(--accent-color);
+  }
+
+  body.dark-mode .ai-predictions-section .card-header {
+    background-color: #1a1f25 !important;
+    color: var(--text-dark-mode) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  body.dark-mode .ai-predictions-section .card-body {
+    background: var(--background-card-dark);
+    color: var(--text-dark-mode);
+  }
+
+  body.dark-mode .ai-predictions-section .btn-outline-light {
+    color: var(--text-dark-mode);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  body.dark-mode .ai-predictions-section .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Close button styling for AI predictions */
+  .ai-predictions-section .card-header .btn-outline-light {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    background: transparent;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    transition: all var(--transition-speed) ease;
+  }
+
+  .ai-predictions-section .card-header .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+  }
+
+  /* Dark mode specific styling for close button */
+  body.dark-mode .ai-predictions-section .card-header .btn-outline-light {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-dark-mode);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  body.dark-mode .ai-predictions-section .card-header .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: var(--text-dark-mode);
+  }
+
+  .ai-prediction-item {
+    border-left: 3px solid var(--primary-color);
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ai-prediction-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-light-mode);
+  }
+
+  .ai-prediction-content p {
+    margin-bottom: 0.75rem;
+  }
+
+  .ai-prediction-content strong {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+
+  .ai-predict-btn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    transition: all 0.2s ease;
+  }
+
+  .ai-predict-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Dark mode AI predictions */
+  body.dark-mode .ai-prediction-item {
+    border-left-color: var(--accent-color);
+  }
+
+  body.dark-mode .ai-prediction-item h6 {
+    color: var(--accent-color) !important;
+  }
+
+  body.dark-mode .ai-prediction-content {
+    color: var(--text-dark-mode);
+  }
+
+  body.dark-mode .ai-prediction-content strong {
+    color: var(--accent-color);
+  }
+
+  /* Race Winner Predictions Styling */
+  .race-predictions {
+    background: var(--background-card-light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: all var(--transition-speed);
+  }
+
+  .race-predictions h5 {
+    color: var(--text-light-mode);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .race-predictions h5::before {
+    content: '🏆';
+    font-size: 1.2rem;
+  }
+
+  .predictions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .prediction-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+  }
+
+  .prediction-item:last-child {
+    border-bottom: none;
+  }
+
+  .prediction-item:hover {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+    margin: 0 -0.5rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .prediction-position {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  .prediction-position.first {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #1a1a1a;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  }
+
+  .prediction-position.second {
+    background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
+    color: #1a1a1a;
+    box-shadow: 0 2px 8px rgba(192, 192, 192, 0.3);
+  }
+
+  .prediction-position.third {
+    background: linear-gradient(135deg, #cd7f32, #daa520);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(205, 127, 50, 0.3);
+  }
+
+  .prediction-details {
+    flex: 1;
+  }
+
+  .prediction-driver {
+    font-weight: 600;
+    color: var(--text-light-mode);
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .prediction-reason {
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.7);
+    line-height: 1.4;
+  }
+
+  .prediction-confidence {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
+    flex-shrink: 0;
+  }
+
+  .confidence-bar {
+    width: 60px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .confidence-fill {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .confidence-text {
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+  }
+
+  /* Series-specific prediction styling */
+  .race-predictions[data-series="F1"] {
+    border-left: 4px solid #e10600;
+  }
+
+  .race-predictions[data-series="IndyCar"] {
+    border-left: 4px solid #00d4aa;
+  }
+
+  .race-predictions[data-series="NASCAR"],
+  .race-predictions[data-series="NASCAR Cup"] {
+    border-left: 4px solid #ffd320;
+  }
+
+  /* Dark mode race predictions */
+  body.dark-mode .race-predictions {
+    background: var(--background-card-dark);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  body.dark-mode .race-predictions h5 {
+    color: var(--text-dark-mode);
+  }
+
+  body.dark-mode .prediction-item {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+
+  body.dark-mode .prediction-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  body.dark-mode .prediction-driver {
+    color: var(--text-dark-mode);
+  }
+
+  body.dark-mode .prediction-reason {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  body.dark-mode .confidence-bar {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  body.dark-mode .confidence-fill {
+    background: var(--accent-color);
+  }
+
+  body.dark-mode .confidence-text {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Compact predictions for modal/small spaces */
+  .predictions-compact .prediction-item {
+    padding: 0.5rem 0;
+  }
+
+  .predictions-compact .prediction-position {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+    margin-right: 0.75rem;
+  }
+
+  .predictions-compact .prediction-driver {
+    font-size: 0.9rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .predictions-compact .prediction-reason {
+    font-size: 0.8rem;
+  }
+
+  .predictions-compact .prediction-confidence {
+    display: none;
+  }
+
+  /* Animation for predictions loading */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .race-predictions.loading {
+    animation: fadeInUp 0.4s ease-out;
+  }
+
+  .prediction-item {
+    animation: fadeInUp 0.3s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .prediction-item:nth-child(1) { animation-delay: 0.1s; }
+  .prediction-item:nth-child(2) { animation-delay: 0.2s; }
+  .prediction-item:nth-child(3) { animation-delay: 0.3s; }
+  
+  /* -------------------------------------------------------
+     6. Tables & Schedule
+     ------------------------------------------------------- */
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius-base);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    background: var(--background-card-light);
+    transition:
+      background-color var(--transition-speed),
+      box-shadow var(--transition-speed);
+  }
+  
+  /* Ensure cells inherit table background in both modes */
+  .table th,
+  .table td {
+    background-color: inherit;
+    transition: background-color 0.2s;
+  }
+  
+  /* Table header styling */
+  .table thead th {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.75rem;
+    border: none;
+  }
+  
+  /* Table body cells */
+  .table tbody td {
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+  }
+  
+  /* Hover effect on table rows */
+  .table tbody tr:hover td {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+  
+  /* Completed race row style */
+  .completed-race {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+  .completed-race td {
+    opacity: 0.9;
+  }
+  
+  /* Podium results inside completed race */
+  .podium-results {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    background: var(--accent-color);
+    color: #fff;
+    border-radius: var(--border-radius-base);
+  }
+  
+  /* Dark mode overrides for table */
+  .dark-mode .table {
+    background-color: var(--background-card-dark);
+    box-shadow: none;
+  }
+  
+  .dark-mode .table thead th {
+    background-color: var(--accent-color);
+    color: #000;
+  }
+  
+  /* Explicitly set text color in dark mode for table cells */
+  .dark-mode .table tbody td,
+  .dark-mode .table tbody th {
+    color: var(--text-dark-mode);
+  }
+  
+  .dark-mode .table tbody td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .dark-mode .table tbody tr:hover td {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  .dark-mode .completed-race {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+  
+  /* Series badges */
+  .series-badge {
+    display: inline-block;
+    padding: 0.35rem 0.6rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #ffffff;
+    transition: background-color var(--transition-speed), opacity var(--transition-speed);
+  }
+  
+  /* F1 Series */
+  .series-badge[data-series="F1"] {
+    background-color: #e72424;
+  }
+  
+  /* IndyCar Series */
+  .series-badge[data-series="IndyCar"] {
+    background-color: #ea580c;
+  }
+  
+  /* NASCAR Series - handle both NASCAR and NASCAR Cup */
+  .series-badge[data-series="NASCAR"],
+  .series-badge[data-series="NASCAR Cup"] {
+    background-color: #16a34a;
+  }
+  
+  /* Dark mode overrides for series badges */
+  body.dark-mode .series-badge {
+    opacity: 0.95;
+  }
+  
+  /* Hero card series badge specific styling */
+  .upcoming-event-item .series-badge {
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  /* -------------------------------------------------------
+     7. Nav Tabs
+     ------------------------------------------------------- */
+  .nav-tabs {
+    display: flex;
+    gap: 0.5rem;
+    background: #e1e4e8;
+    border-radius: var(--border-radius-base);
+    padding: 0.5rem;
+    border: none;
+    margin-bottom: 1rem;
+  }
+  
+  .nav-tabs .nav-link {
+    border: none;
+    border-radius: var(--border-radius-base);
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    color: var(--text-light-mode);
+    background: transparent;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+  }
+  
+  .nav-tabs .nav-link:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+  }
+  
+  .nav-tabs .nav-link.active {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+  
+  .dark-mode .nav-tabs {
+    background: #30363d;
+  }
+  
+  .dark-mode .nav-tabs .nav-link {
+    color: var(--text-dark-mode);
+  }
+  
+  .dark-mode .nav-tabs .nav-link:hover {
+    background-color: var(--accent-color);
+    color: #000;
+  }
+  
+  /* -------------------------------------------------------
+     8. Search Input
+     ------------------------------------------------------- */
+  .search-container {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 2rem 0.75rem 2.5rem;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius-base);
+    background: var(--background-card-light);
+    color: var(--text-light-mode);
+    box-shadow: var(--box-shadow);
+    transition: all var(--transition-speed);
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: var(--box-shadow-hover);
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-color);
+  }
+  
+  body.dark-mode .search-input {
+    background: var(--background-card-dark);
+    color: var(--text-dark-mode);
+    border: 1px solid #444;
+  }
+  
+  /* -------------------------------------------------------
+     9. Theme Toggle Button
+     ------------------------------------------------------- */
+  #themeToggle {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 0.75rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    font-size: 1.3rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #themeToggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+  }
+  
+  body.dark-mode #themeToggle {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+  }
+  
+  body.dark-mode #themeToggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* -------------------------------------------------------
+     10. Countdown Timer & Weather
+     ------------------------------------------------------- */
+  .countdown-timer {
+    font-family: 'Inter', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    text-align: center;
+    background: #fdfdfd;
+    border-radius: var(--border-radius-base);
+    margin-top: 0.5rem;
+    color: var(--text-light-mode);
+    border: 1px solid #ddd;
+    box-shadow: var(--box-shadow);
+  }
+  
+  body.dark-mode .countdown-timer {
+    background: var(--background-card-dark);
+    color: var(--text-dark-mode);
+    border: 1px solid #444;
+  }
+  
+  .weather-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  body.dark-mode .weather-card {
+    background: var(--background-card-dark);
+  }
+  
+  .weather-summary {
+    position: relative;
+  }
+  
+  .temperature-display .temp-main {
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+  
+  .conditions-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  
+  .wind-info {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .btn-expand {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    color: var(--text-color);
+    transition: transform 0.2s ease;
+  }
+  
+  .btn-expand:hover {
+    color: var(--primary);
+  }
+  
+  .btn-expand.collapsed i {
+    transform: rotate(0deg);
+  }
+  
+  .btn-expand i {
+    transform: rotate(180deg);
+    transition: transform 0.2s ease;
+  }
+  
+  .hourly-forecast {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .hour-item {
+    min-width: 80px;
+  }
+  
+  .hour-item .time {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .hour-item .temp {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .hour-item .temp-c {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  /* -------------------------------------------------------
+     11. Show Past Races Button
+     ------------------------------------------------------- */
+  .show-past-races {
+    background-color: var(--background-card-light);
+    color: var(--text-light-mode);
+    border: 1px solid var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-base);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all var(--transition-speed);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .show-past-races:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+  }
+  
+  .show-past-races.active {
+    background-color: var(--accent-color);
+    color: #fff;
+  }
+  
+  body.dark-mode .show-past-races {
+    background-color: var(--background-card-dark);
+    color: var(--text-dark-mode);
+    border: 1px solid var(--accent-color);
+  }
+  
+  /* -------------------------------------------------------
+     12. News Section
+     ------------------------------------------------------- */
+  .news-title {
+    color: var(--text-light-mode);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  body.dark-mode .news-title {
+    color: var(--text-dark-mode);
+  }
+  
+  .news-card {
+    background-color: var(--background-card-light);
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius-base);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    margin-bottom: 1rem;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .news-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow-hover);
+  }
+  
+  body.dark-mode .news-card {
+    background-color: var(--background-card-dark);
+    border-color: #444;
+  }
+  
+  .news-item {
+    border-bottom: 1px solid #eee;
+    padding: 0.75rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  .news-item:last-child {
+    border-bottom: none;
+  }
+  
+  .news-item:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+  
+  .news-link {
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .news-link:hover {
+    color: var(--accent-color);
+  }
+  
+  .news-date {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+  }
+  
+  body.dark-mode .news-link {
+    color: var(--accent-color);
+  }
+  
+  /* -------------------------------------------------------
+     13. Modal
+     ------------------------------------------------------- */
+  .modal-content {
+    border-radius: var(--border-radius-base);
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-header {
+    border-bottom: none;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 1rem;
+    border-top-left-radius: var(--border-radius-base);
+    border-top-right-radius: var(--border-radius-base);
+  }
+  
+  .modal-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  
+  body.dark-mode .modal-header {
+    background-color: var(--accent-color);
+    color: #000;
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+    background: var(--background-card-light);
+  }
+  
+  body.dark-mode .modal-body {
+    background: var(--background-card-dark);
+  }
+  
+  /* -------------------------------------------------------
+     14. Mobile-First Responsive Design
+     ------------------------------------------------------- */
+  
+  /* Large tablets and small desktops */
+  @media (max-width: 1024px) {
+    .container {
+      padding: 2rem;
+    }
+    
+    .upcoming-event {
+      padding: 2rem;
+    }
+    
+    .site-header {
+      padding: 1.5rem 1rem;
+    }
+    
+    .site-header h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  /* Tablets */
+  @media (max-width: 768px) {
+    .site-header {
+      padding: 1.25rem 1rem;
+      flex-direction: row;
+      gap: 1rem;
+    }
+    
+    .site-header h1 {
+      font-size: 1.75rem;
+    }
+    
+    #themeToggle {
+      width: 48px;
+      height: 48px;
+      font-size: 1.2rem;
+      padding: 0.5rem;
+    }
+    
+    .container {
+      padding: 1.5rem;
+      margin: 1rem;
+      border-radius: var(--border-radius-base);
+    }
+    
+    .upcoming-event {
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .upcoming-event h4 {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .upcoming-event-item {
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .upcoming-event-item .event-summary {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      padding-left: 1.5rem;
+    }
+    
+    .upcoming-event-item .countdown-display {
+      align-self: flex-end;
+      text-align: right;
+    }
+    
+    .nav-tabs {
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      padding: 0.25rem;
+    }
+    
+    .nav-tabs .nav-link {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      min-width: auto;
+      flex: 1;
+      text-align: center;
+    }
+    
+    .quick-nav {
+      margin: 1rem 0;
+    }
+    
+    .quick-nav-btn {
+      padding: 0.6rem 1rem;
+      margin: 0.25rem;
+      font-size: 0.9rem;
+    }
+    
+    /* Table responsiveness */
+    .table-responsive {
+      border-radius: var(--border-radius-base);
+      overflow: hidden;
+    }
+    
+    .table {
+      margin-bottom: 0;
+      font-size: 0.85rem;
+    }
+    
+    .table th,
+    .table td {
+      padding: 0.6rem 0.4rem;
+      vertical-align: middle;
+    }
+    
+    /* Hide less important columns on tablets */
+    #all table thead tr th:nth-child(6),
+    #all table tbody tr td:nth-child(6) {
+      display: none;
+    }
+    
+    #f1 table thead tr th:nth-child(5),
+    #f1 table tbody tr td:nth-child(5) {
+      display: none;
+    }
+    
+    #indycar table thead tr th:nth-child(5),
+    #indycar table tbody tr td:nth-child(5) {
+      display: none;
+    }
+    
+    #nascar table thead tr th:nth-child(5),
+    #nascar table tbody tr td:nth-child(5) {
+      display: none;
+    }
+    
+    /* Predictions on tablet */
+    .race-predictions {
+      padding: 1.25rem;
+    }
+    
+    .prediction-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 1rem 0;
+    }
+    
+    .prediction-position {
+      margin-right: 0;
+      margin-bottom: 0.5rem;
+    }
+    
+    .prediction-confidence {
+      margin-left: 0;
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .confidence-bar {
+      width: 100px;
+    }
+  }
+  
+  /* Hide mobile schedule containers on desktop */
+  .mobile-schedule-container {
+    display: none;
+  }
+  
+  /* Mobile phones */
+  @media (max-width: 576px) {
+    body {
+      font-size: 16px; /* Better readability on mobile */
+      line-height: 1.5;
+    }
+    
+    .site-header {
+      padding: 1rem 0.75rem;
+      margin-bottom: 0.75rem;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+    
+    .site-header h1 {
+      font-size: 1.75rem;
+      line-height: 1.2;
+      order: 1;
+    }
+    
+    #themeToggle {
+      width: 48px;
+      height: 48px;
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      order: 2;
+      align-self: center;
+    }
+    
+    .container {
+      padding: 1rem 0.75rem;
+      margin: 0.5rem;
+      border-radius: var(--border-radius-base);
+    }
+    
+    .upcoming-event {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    /* Mobile upcoming events header */
+    .upcoming-event .d-flex.justify-content-between {
+      flex-direction: column;
+      align-items: stretch !important;
+      gap: 1rem;
+    }
+    
+    .upcoming-event h4 {
+      font-size: 1.5rem;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      justify-content: center;
+      order: 1;
+    }
+    
+    .upcoming-event h4::before {
+      font-size: 1.75rem;
+    }
+    
+    .upcoming-event-item {
+      padding: 1.25rem;
+      margin-bottom: 0.75rem;
+      border-radius: var(--border-radius-base);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .upcoming-event-item:active {
+      transform: scale(0.98);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    }
+    
+    .upcoming-event-item .event-summary {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      padding-left: 1rem;
+    }
+    
+    .upcoming-event-item .event-summary::before {
+      left: -1.25rem;
+      height: 100%;
+      width: 4px;
+      border-radius: 2px;
+    }
+    
+    .upcoming-event-item .card-title {
+      font-size: 1.3rem;
+      line-height: 1.3;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    
+    .upcoming-event-item .event-meta {
+      gap: 0.75rem;
+    }
+    
+    .upcoming-event-item .series-info {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+    
+    .upcoming-event-item .date-time-info {
+      font-size: 0.95rem;
+      gap: 0.75rem;
+    }
+    
+    .upcoming-event-item .countdown-display {
+      align-self: stretch;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    
+    .upcoming-event-item .countdown-badge {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      border-radius: 25px;
+      display: block;
+      text-align: center;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+    }
+    
+    /* Navigation - Mobile Optimized */
+    .nav-tabs {
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      background: var(--background-card-light);
+      border-radius: var(--border-radius-base);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .nav-tabs .nav-link {
+      padding: 1rem;
+      text-align: center;
+      border-radius: var(--border-radius-base);
+      font-size: 1rem;
+      font-weight: 600;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+    
+    .nav-tabs .nav-link:active {
+      transform: scale(0.98);
+    }
+    
+    .nav-tabs .nav-link.active {
+      background: var(--primary-color);
+      color: #ffffff;
+      border-color: var(--primary-color);
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+    }
+    
+    .quick-nav {
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .quick-nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin: 0;
+      padding: 1rem;
+      text-align: center;
+      min-height: 48px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--border-radius-base);
+      transition: all 0.2s ease;
+    }
+    
+    .quick-nav-btn:active {
+      transform: scale(0.98);
+    }
+    
+    /* Mobile table - card layout */
+    .table-responsive {
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+    
+    .table {
+      display: none; /* Hide table on mobile */
+    }
+    
+    /* Show mobile schedule containers on mobile */
+    .mobile-schedule-container {
+      display: block !important;
+    }
+    
+    /* Mobile card layout for schedule */
+    .mobile-schedule-card {
+      background: var(--background-card-light);
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius-base);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--box-shadow);
+      transition: all var(--transition-speed) ease;
+    }
+    
+    .mobile-schedule-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--box-shadow-hover);
+    }
+    
+    .mobile-schedule-card .event-date {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .mobile-schedule-card .event-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-light-mode);
+      margin-bottom: 0.5rem;
+    }
+    
+    .mobile-schedule-card .event-details {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    
+    /* Dark mode mobile cards */
+    body.dark-mode .mobile-schedule-card {
+      background: var(--background-card-dark);
+      border-color: var(--border-dark);
+    }
+    
+    body.dark-mode .mobile-schedule-card .event-title {
+      color: var(--text-dark-mode);
+    }
+    
+    body.dark-mode .mobile-schedule-card .event-date,
+    body.dark-mode .mobile-schedule-card .event-details {
+      color: var(--text-secondary-dark);
+    }
+    
+    /* Mobile predictions */
+    .race-predictions {
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .race-predictions h5 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .prediction-item {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+      padding: 1rem 0;
+      border-left: 3px solid var(--primary-color);
+      padding-left: 1rem;
+      margin-left: 0;
+      border-radius: 0;
+    }
+    
+    .prediction-position {
+      align-self: flex-start;
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+    
+    .prediction-driver {
+      font-size: 1rem;
+    }
+    
+    .prediction-reason {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .prediction-confidence {
+      margin-left: 0;
+      margin-top: 0.5rem;
+    }
+    
+    /* Search input mobile */
+    .search-input {
+      padding: 1rem 3rem 1rem 3rem;
+      font-size: 16px; /* Prevent zoom on iOS */
+      border-radius: var(--border-radius-base);
+      min-height: 48px;
+      box-shadow: var(--box-shadow);
+      border: 2px solid var(--border-light);
+    }
+    
+    .search-input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+    
+    .search-icon {
+      font-size: 1.1rem;
+      left: 1rem;
+    }
+    
+    /* Buttons mobile-friendly */
+    .btn {
+      padding: 0.875rem 1.75rem;
+      font-size: 1rem;
+      min-height: 48px; /* Touch target size */
+      font-weight: 600;
+      border-radius: var(--border-radius-base);
+      transition: all 0.2s ease;
+    }
+    
+    .btn:active {
+      transform: scale(0.98);
+    }
+    
+    .btn-sm {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.9rem;
+      min-height: 44px;
+    }
+    
+    /* Header buttons mobile layout */
+    .upcoming-event .d-flex.gap-2 {
+      flex-direction: column;
+      gap: 0.75rem !important;
+      width: 100%;
+      margin-top: 0.5rem;
+      order: 2;
+    }
+    
+    .upcoming-event .d-flex.gap-2 .btn {
+      padding: 0.875rem 1.5rem;
+      font-size: 0.9rem;
+      min-height: 48px;
+      border-radius: var(--border-radius-base);
+      font-weight: 600;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .upcoming-event .d-flex.gap-2 .btn:active {
+      transform: scale(0.98);
+    }
+    
+    /* Modal mobile */
+    .modal-dialog {
+      margin: 1rem;
+    }
+    
+    .modal-content {
+      border-radius: var(--border-radius-base);
+    }
+    
+    .modal-header {
+      padding: 1rem;
+    }
+    
+    .modal-body {
+      padding: 1rem;
+    }
+    
+    /* News section mobile */
+    #newsGrid .col-md-6 {
+      margin-bottom: 1rem;
+    }
+    
+    .news-card {
+      border-radius: var(--border-radius-base);
+    }
+    
+    /* Hide desktop elements on mobile */
+    .d-mobile-none {
+      display: none !important;
+    }
+    
+    /* Mobile dark mode enhancements */
+    body.dark-mode .nav-tabs {
+      background: var(--background-card-dark);
+    }
+    
+    body.dark-mode .nav-tabs .nav-link.active {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+    
+    body.dark-mode .search-input {
+      background: var(--background-card-dark);
+      border-color: var(--border-dark);
+      color: var(--text-dark-mode);
+    }
+    
+    body.dark-mode .search-input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+    
+    /* Better mobile touch feedback */
+    @media (hover: none) and (pointer: coarse) {
+      .upcoming-event-item:hover {
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .upcoming-event-item:active {
+        transform: scale(0.98);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+  
+  /* Extra small phones */
+  @media (max-width: 400px) {
+    .site-header h1 {
+      font-size: 1.3rem;
+    }
+    
+    .container {
+      margin: 0.25rem;
+      padding: 0.75rem;
+    }
+    
+    .upcoming-event {
+      padding: 1rem;
+    }
+    
+    .upcoming-event-item {
+      padding: 1rem;
+    }
+    
+    .nav-tabs .nav-link {
+      font-size: 0.8rem;
+      padding: 0.6rem;
+    }
+  }
+  
+  /* High DPI screens */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .site-header::before {
+      background-size: 40px 40px;
+    }
+  }
+  
+  /* Touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    .upcoming-event-item:hover {
+      transform: none;
+      box-shadow: var(--box-shadow);
+    }
+    
+    .btn:hover {
+      transform: none;
+    }
+    
+    .prediction-item:hover {
+      background: transparent;
+      margin: 0;
+      padding: 0.75rem 0;
+    }
+    
+    /* Make touch targets larger */
+    .nav-tabs .nav-link {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #themeToggle {
+      min-width: 48px;
+      min-height: 48px;
+    }
+  }
+  
+  /* Custom Button Overrides - Modern Theme */
+  .btn {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    background: var(--background-card-light);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-base);
+    transition: all var(--transition-speed) ease;
+    box-shadow: var(--box-shadow);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .btn:hover,
+  .btn:focus {
+    background: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: var(--box-shadow-hover);
+  }
+  
+  /* Primary button variant */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: #ffffff;
+    border-color: var(--primary-color);
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    transform: translateY(-2px);
+  }
+
+  /* Ensure links styled as buttons get consistent appearance */
+  a.btn {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+  }
+
+  /* Map Container Styling */
+  .map-container {
+    height: 250px; /* Fixed height for the map */
+    width: 100%;
+    border-radius: var(--border-radius-base);
+    margin-top: 1rem;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    background-color: #e0e0e0; /* Placeholder background */
+  }
+
+  /* Quick Navigation Button Overrides */
+  .quick-nav-btn {
+    background-color: var(--background-card-light);
+    color: var(--text-light-mode);
+    border: 1px solid var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-base);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all var(--transition-speed);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--box-shadow);
+    text-decoration: none;
+  }
+
+  .quick-nav-btn:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+  }
+
+  body.dark-mode .quick-nav-btn {
+    background-color: var(--background-card-dark);
+    color: var(--text-dark-mode);
+    border: 1px solid var(--accent-color);
+  }
+
+  body.dark-mode .quick-nav-btn:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+  }
+
+  .event-info-group {
+    background: var(--background-card-light);
+    padding: 1rem;
+    border-radius: var(--border-radius-base);
+    margin-bottom: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .event-info-group p {
+    margin-bottom: 0.5rem;
+  }
+
+  .event-info-group p:first-child {
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .dark-mode .event-info-group {
+    background: var(--background-card-dark);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .dark-mode .event-info-group p:first-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  #downloadICSBtn {
+    font-size: 0.75rem; 
+    padding: 0.25rem 0.5rem; 
+  }
+  
+  #showPastRaces{
+    font-size: 0.75rem; 
+    padding: 0.25rem 0.5rem; 
+  }

@@ -1,0 +1,1739 @@
+---
+layout: base.njk
+title: 2025 Racing Schedules
+description: Stay updated with the latest 2025 racing schedules for F1, IndyCar, and NASCAR. Get race details, weather forecasts, and AI-powered insights.
+keywords: F1, Formula 1, IndyCar, NASCAR, racing, motorsports, 2025 schedule, race calendar, AI predictions, race results, track maps
+---
+
+<div class="container my-4">
+  <!-- Header with Theme Toggle -->
+  <header class="site-header d-flex justify-content-between align-items-center">
+    <h1 class="text-center">2025 Racing Schedules!</h1>
+    <button id="subscribeButton" class="btn btn-primary" aria-label="Subscribe to Notifications">
+      <i class="fas fa-bell"></i>
+    </button>
+    <button id="themeToggle" class="btn btn-secondary" aria-label="Toggle Dark Mode">
+      <i class="fas" id="themeIcon"></i>
+    </button>
+  </header>
+  <!-- Quick Navigation Buttons -->
+  <div class="quick-nav text-center my-3">
+    <a href="#schedule" class="quick-nav-btn mx-2">Full Schedule</a>
+    <a href="#news" class="quick-nav-btn mx-2">News</a>
+  </div>
+
+  <!-- Upcoming Event Section -->
+  <div id="upcoming-event" class="upcoming-event">
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">Upcoming Races</h4>
+        </div>
+        <div id="upcomingEventDetails" class="upcoming-events-list"></div>
+        
+        <div class="view-calendar-link">
+          <a href="#schedule">View Full Calendar →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule Section -->
+  <section id="schedule" class="schedule-section">
+    <h2>2025 Race Schedule</h2>
+    
+    <!-- Global Search -->
+    <div class="search-container">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search events...">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <!-- Past Races Toggle -->
+    <div class="mb-3">
+      <button id="showPastRaces" class="btn btn-primary">
+        Show Past Races
+      </button>
+      <button class="btn btn-primary" type="button" id="downloadICSBtn">
+        <i class="fas fa-calendar-plus me-1"></i> Download Calendar
+      </button>
+    </div>
+
+    <!-- Schedule Tabs -->
+    <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#all">All Series</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#f1">F1</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#indycar">IndyCar</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nascar">NASCAR</button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="scheduleTabContent">
+      <!-- Combined Schedule -->
+      <div class="tab-pane fade show active" id="all" role="tabpanel">
+        <div class="table-responsive">
+          <table class="table table-hover schedule-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Series</th>
+                <th>Race</th>
+                <th>Venue</th>
+                <th>Time</th>
+                <th>Network</th>
+              </tr>
+            </thead>
+            <tbody id="combined-schedule"></tbody>
+          </table>
+        </div>
+        <div id="combined-schedule-mobile" class="mobile-schedule-container"></div>
+      </div>
+
+      <!-- F1 Schedule -->
+      <div class="tab-pane fade" id="f1" role="tabpanel">
+        <div class="table-responsive">
+          <table class="table table-hover schedule-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Race</th>
+                <th>Circuit</th>
+                <th>Time</th>
+                <th>Network</th>
+              </tr>
+            </thead>
+            <tbody id="f1-schedule"></tbody>
+          </table>
+        </div>
+        <div id="f1-schedule-mobile" class="mobile-schedule-container"></div>
+      </div>
+
+      <!-- IndyCar Schedule -->
+      <div class="tab-pane fade" id="indycar" role="tabpanel">
+        <div class="table-responsive">
+          <table class="table table-hover schedule-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Race</th>
+                <th>Venue</th>
+                <th>Time</th>
+                <th>Network</th>
+              </tr>
+            </thead>
+            <tbody id="indy-schedule"></tbody>
+          </table>
+        </div>
+        <div id="indy-schedule-mobile" class="mobile-schedule-container"></div>
+      </div>
+
+      <!-- NASCAR Schedule -->
+      <div class="tab-pane fade" id="nascar" role="tabpanel">
+        <div class="table-responsive">
+          <table class="table table-hover schedule-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Race</th>
+                <th>Venue</th>
+                <th>Time</th>
+                <th>Network</th>
+              </tr>
+            </thead>
+            <tbody id="nascar-schedule"></tbody>
+          </table>
+        </div>
+        <div id="nascar-schedule-mobile" class="mobile-schedule-container"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News Section -->
+  <section id="news" class="mt-5">
+    <h2>Latest News</h2>
+    <div id="newsGrid" class="row g-4 mt-3"></div>
+  </section>
+</div>
+
+<!-- Event Detail Modal (includes weather forecast functionality) -->
+<div class="modal fade" id="eventDetailModal" tabindex="-1" aria-labelledby="modalTitle" aria-modal="true" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Event Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="event-details">
+          <div class="series-badge mb-3" id="modalEventSeries"></div>
+          <h5 class="mb-3" id="modalEventRace"></h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="event-info-group">
+                <p><strong>Date & Time</strong></p>
+                <p class="mb-1"><i class="fas fa-calendar me-2"></i><span id="modalEventDate"></span></p>
+                <p class="mb-1"><i class="fas fa-clock me-2"></i><span id="modalEventTime"></span></p>
+                <p class="mb-3"><i class="fas fa-tv me-2"></i><span id="modalEventNetwork"></span></p>
+              </div>
+              <div class="event-info-group">
+                <p><strong>Track Information</strong></p>
+                <p class="mb-1"><i class="fas fa-map-marker-alt me-2"></i><span id="modalEventLocation"></span></p>
+                <p class="mb-1"><i class="fas fa-city me-2"></i><span id="modalEventCity"></span></p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Time Until Race</strong></p>
+              <div id="modalCountdown" class="countdown-timer mb-3"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Weather Section -->
+        <div id="weatherSection" class="mt-4">
+          <h6>Weather Forecast</h6>
+          <div id="weatherResult" class="mt-2"></div>
+        </div>
+        
+        <!-- Track Map Section -->
+        <div id="trackMapSection" class="mt-4">
+          <h6>Track Location</h6>
+          <div id="trackMap" class="map-container"></div>
+        </div>
+        
+        <!-- Social Share -->
+        <div id="socialShare" class="mt-4">
+          <h6>Share this event</h6>
+          <div class="d-flex gap-2">
+            <a href="#" id="shareTwitter" class="btn btn-sm btn-outline-primary">
+              Share on X
+            </a>
+          </div>
+        </div>
+
+        <!-- Calendar Integration -->
+        <div id="calendarIntegration" class="mt-4">
+          <h6>Add to Calendar</h6>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" type="button" id="modalDownloadICS">
+              <i class="fas fa-calendar-plus me-1"></i> Download Calendar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Make Eleventy data available globally
+    window.scheduleData = {{ schedule | dump | safe }};
+  </script>
+  <!-- Application Script -->
+<script type="module">
+  // Import your data from data.js
+  import { resultsData, parseEventDate, enhanceEventData, convertUTCtoLocal } from './assets/_js/data.js';
+  </script>
+  <script>
+    // Make Eleventy data available globally
+    window.scheduleData = {{ schedule | dump | safe }};
+  </script>
+  <script type="module">
+  import { downloadICS, downloadSeriesICS } from './assets/_js/calendar.js';
+  
+
+  /*******************************
+   * Helper Functions
+   *******************************/
+  
+  function clearCountdown(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.textContent = '';
+      if (element.countdownInterval) {
+        clearInterval(element.countdownInterval);
+        element.countdownInterval = null;
+      }
+    }
+  }
+  
+  function startCountdown(elementId, startTime) {
+    clearCountdown(elementId);
+    const countdownElement = document.getElementById(elementId);
+    
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = startTime - now;
+      
+      if (distance < 0) {
+        clearCountdown(elementId);
+        countdownElement.innerHTML = '<div class="countdown-badge">LIVE</div>';
+        return;
+      }
+      
+      // Calculate time units
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      
+      // Format the display based on time remaining
+      let displayText = '';
+      let labelText = '';
+      
+      if (days > 0) {
+        displayText = `${days} DAY${days > 1 ? 'S' : ''}`;
+        labelText = 'DAYS';
+      } else if (hours > 0) {
+        displayText = `${hours}:${minutes.toString().padStart(2, '0')}`;
+        labelText = 'HOURS';
+      } else {
+        displayText = `${minutes}:${Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0')}`;
+        labelText = 'MINUTES';
+      }
+      
+      countdownElement.innerHTML = `
+        <div class="countdown-badge">${displayText}</div>
+      `;
+    };
+    
+    updateCountdown();
+    countdownElement.countdownInterval = setInterval(updateCountdown, 1000);
+  }
+  
+  function populateTable(tableBodyId, events, columns) {
+    const tbody = document.getElementById(tableBodyId);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    events.forEach(event => {
+      const tr = document.createElement("tr");
+      const eventStartDate = parseEventDate(event.date);
+      tr.setAttribute("data-start", eventStartDate.toISOString());
+      
+      // Check if the race is completed
+      if (Date.now() >= eventStartDate.getTime() + 24 * 60 * 60 * 1000) {
+        tr.classList.add("completed-race");
+        
+        // Find race results
+        let results = [];
+        if (event.series === "F1") {
+          const raceName = event.race.replace(" GP", "");
+          const result = resultsData.f1Past.results.find(r => 
+            r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||
+            raceName.toLowerCase().includes(r.grandPrix.toLowerCase())
+          );
+          if (result) results.push(result);
+        } else if (event.series === "IndyCar") {
+          const result = resultsData.indyPast.results.find(r => 
+            r.race.toLowerCase().includes(event.race.toLowerCase()) ||
+            event.race.toLowerCase().includes(r.race.toLowerCase())
+          );
+          if (result) results.push(result);
+        } else if (event.series.includes("NASCAR")) {
+          if (event.race.includes("Duel")) {
+            results = resultsData.nascarPast.results.filter(r => 
+              r.race.toLowerCase().includes("duel")
+            );
+          } else {
+            const eventShortName = event.race.split(" at ")[0].toLowerCase();
+            const result = resultsData.nascarPast.results.find(r => 
+              r.race.toLowerCase().includes(eventShortName) ||
+              eventShortName.includes(r.race.toLowerCase())
+            );
+            if (result) results.push(result);
+          }
+        }
+        
+        // Create cells with podium information
+        columns.forEach(col => {
+          const td = document.createElement("td");
+          if (col === "time") {
+            td.textContent = event.time_utc ? convertUTCtoLocal(event.date, event.time_utc) : "";
+          } else if (col === "network") {
+            td.textContent = event.network || "";
+          } else if (col === "venue") {
+            td.textContent = event.circuit || event.venue;
+          } else {
+            td.textContent = event[col];
+          }
+          
+          // Add podium information to the race name cell
+          if (col === "race" && results.length > 0) {
+            const podiumDiv = document.createElement("div");
+            podiumDiv.className = "podium-results";
+            
+            const podiumHTML = results.map(result => {
+              let resultTitle = results.length > 1 ? `<strong>${result.race}:</strong><br>` : "";
+              return `
+                ${resultTitle}
+                <span><span class="podium-position">1st:</span> ${result.winner}</span>
+                <span><span class="podium-position">2nd:</span> ${result.second}</span>
+                <span><span class="podium-position">3rd:</span> ${result.third}</span>
+              `;
+            }).join('<hr class="podium-divider">');
+            
+            podiumDiv.innerHTML = podiumHTML;
+            td.appendChild(podiumDiv);
+          }
+          
+          tr.appendChild(td);
+        });
+      } else {
+        // Regular event without results
+        columns.forEach(col => {
+          const td = document.createElement("td");
+          if (col === "time") {
+            td.textContent = event.time_utc ? convertUTCtoLocal(event.date, event.time_utc) : "";
+          } else if (col === "network") {
+            td.textContent = event.network || "";
+          } else if (col === "venue") {
+            td.textContent = event.circuit || event.venue;
+          } else {
+            td.textContent = event[col];
+          }
+          tr.appendChild(td);
+        });
+      }
+      
+      tr.addEventListener("click", () => openEventModal(event));
+      tbody.appendChild(tr);
+    });
+  }
+  
+  function celsiusToFahrenheit(celsius) {
+    return Math.round((celsius * 9/5) + 32);
+  }
+
+  // Add temperature conversion helper function
+  function fahrenheitToCelsius(fahrenheit) {
+    return Math.round((fahrenheit - 32) * 5 / 9);
+  }
+
+  async function fetchWeatherPreview(event, weatherId) {
+    const weatherElement = document.getElementById(weatherId);
+    if (!weatherElement || !event.latitude || !event.longitude) return;
+
+    try {
+      // Required headers for the NWS API
+      const headers = {
+        "User-Agent": "(RacingCentral, info@racecentral.info)",
+        "Accept": "application/geo+json"
+      };
+
+      // Retrieve metadata from the NWS API
+      const pointResponse = await fetch(`https://api.weather.gov/points/${event.latitude},${event.longitude}`, { headers });
+      if (!pointResponse.ok) throw new Error(`Error fetching location metadata: ${pointResponse.status}`);
+      
+      const pointData = await pointResponse.json();
+      const forecastURL = pointData.properties?.forecast;
+      if (!forecastURL) throw new Error("Forecast URL not available for this location.");
+
+      // Fetch forecast data
+      const forecastResponse = await fetch(forecastURL, { headers });
+      if (!forecastResponse.ok) throw new Error(`Error fetching forecast data: ${forecastResponse.status}`);
+      
+      const forecastData = await forecastResponse.json();
+      const periods = forecastData.properties?.periods;
+      if (!periods?.length) throw new Error("No forecast periods available");
+
+      // Adjust eventDate using event.time_utc if available
+      let eventDate = new Date(event.start);
+      if (event.time_utc) {
+        const [hours, minutes] = event.time_utc.split(":");
+        eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
+      }
+
+      // Find matching forecast period
+      let forecastPeriod = periods.find(period => {
+        const periodStart = new Date(period.startTime);
+        const periodEnd = new Date(period.endTime);
+        return eventDate >= periodStart && eventDate < periodEnd;
+      });
+
+      // Fallback: If no exact period is found, choose the closest period
+      if (!forecastPeriod && periods.length > 0) {
+        forecastPeriod = periods.reduce((prev, cur) => {
+          const prevDiff = Math.abs(new Date(prev.startTime) - eventDate);
+          const curDiff = Math.abs(new Date(cur.startTime) - eventDate);
+          return curDiff < prevDiff ? cur : prev;
+        });
+      }
+
+      if (!forecastPeriod) throw new Error("No matching forecast period found");
+
+      // Weather icons mapping
+      const weatherIcons = {
+        'sunny': '☀️',
+        'clear': '☀️',
+        'mostly clear': '🌤️',
+        'partly cloudy': '⛅',
+        'mostly cloudy': '🌥️',
+        'cloudy': '☁️',
+        'rain': '🌧️',
+        'showers': '🌧️',
+        'thunderstorm': '⛈️',
+        'snow': '🌨️',
+        'fog': '🌫️'
+      };
+
+      // Find appropriate weather icon
+      let weatherIcon = '☀️'; // default
+      const forecast = forecastPeriod.shortForecast.toLowerCase();
+      for (const [condition, icon] of Object.entries(weatherIcons)) {
+        if (forecast.includes(condition)) {
+          weatherIcon = icon;
+          break;
+        }
+      }
+
+      const tempF = forecastPeriod.temperature;
+      const tempC = fahrenheitToCelsius(tempF);
+      
+      // Display compact weather preview
+      weatherElement.innerHTML = `${weatherIcon} ${tempF}°F`;
+      weatherElement.title = `${forecastPeriod.shortForecast} - ${tempF}°F / ${tempC}°C`;
+      
+    } catch (error) {
+      console.error("Error fetching weather preview:", error);
+      // Silently fail for weather preview
+    }
+  }
+
+  async function fetchWeather(event, containerId) {
+    const weatherContainer = document.getElementById(containerId);
+    if (!weatherContainer) return;
+
+    if (!event.latitude || !event.longitude) {
+      weatherContainer.innerHTML = "<p class='text-muted'>Weather data not available for this location.</p>";
+      return;
+    }
+
+    try {
+      weatherContainer.innerHTML = `
+        <div class="weather-loading">
+          <div class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden">Loading weather data...</span>
+          </div>
+          <span class="ms-2">Loading forecast...</span>
+        </div>
+      `;
+
+      // Required headers for the NWS API
+      const headers = {
+        "User-Agent": "(RacingCentral, info@racecentral.info)",
+        "Accept": "application/geo+json"
+      };
+
+      // Retrieve metadata from the NWS API
+      const pointResponse = await fetch(`https://api.weather.gov/points/${event.latitude},${event.longitude}`, { headers });
+      if (!pointResponse.ok) {
+        throw new Error(`Error fetching location metadata: ${pointResponse.status}`);
+      }
+      const pointData = await pointResponse.json();
+      
+      const forecastURL = pointData.properties?.forecast;
+      const hourlyForecastURL = pointData.properties?.forecastHourly;
+      
+      if (!forecastURL || !hourlyForecastURL) {
+        throw new Error("Forecast URL not available for this location.");
+      }
+
+      // Fetch both regular and hourly forecast data
+      const [forecastResponse, hourlyResponse] = await Promise.all([
+        fetch(forecastURL, { headers }),
+        fetch(hourlyForecastURL, { headers })
+      ]);
+
+      if (!forecastResponse.ok || !hourlyResponse.ok) {
+        throw new Error(`Error fetching forecast data: ${forecastResponse.status}, ${hourlyResponse.status}`);
+      }
+
+      const [forecastData, hourlyData] = await Promise.all([
+        forecastResponse.json(),
+        hourlyResponse.json()
+      ]);
+
+      const periods = forecastData.properties?.periods;
+      const hourlyPeriods = hourlyData.properties?.periods;
+
+      if (!periods?.length || !hourlyPeriods?.length) {
+        throw new Error("No forecast periods available for this location.");
+      }
+
+      // Adjust eventDate using event.time_utc if available
+      let eventDate = new Date(event.start);
+      if (event.time_utc) {
+        const [hours, minutes] = event.time_utc.split(":");
+        eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
+      }
+
+      // Find matching forecast period
+      let forecastPeriod = periods.find(period => {
+        const periodStart = new Date(period.startTime);
+        const periodEnd = new Date(period.endTime);
+        return eventDate >= periodStart && eventDate < periodEnd;
+      });
+
+      // Fallback: If no exact period is found, choose the closest period
+      if (!forecastPeriod && periods.length > 0) {
+        forecastPeriod = periods.reduce((prev, cur) => {
+          const prevDiff = Math.abs(new Date(prev.startTime) - eventDate);
+          const curDiff = Math.abs(new Date(cur.startTime) - eventDate);
+          return curDiff < prevDiff ? cur : prev;
+        });
+      }
+
+      if (!forecastPeriod) {
+        throw new Error("No matching forecast period found for the event time.");
+      }
+
+      const tempF = forecastPeriod.temperature;
+      const tempC = fahrenheitToCelsius(tempF);
+      const wind = forecastPeriod.windSpeed;
+      const windDir = forecastPeriod.windDirection;
+      const shortForecast = forecastPeriod.shortForecast;
+      
+      // Get hourly forecasts around event time (3 hours before and after)
+      const eventTime = eventDate.getTime();
+      const relevantHourlyForecasts = hourlyPeriods.filter(period => {
+        const periodTime = new Date(period.startTime).getTime();
+        return Math.abs(periodTime - eventTime) <= 3 * 60 * 60 * 1000; // 3 hours before/after
+      });
+
+      // Weather icons mapping based on forecast text
+      const weatherIcons = {
+        'sunny': '☀️',
+        'clear': '☀️',
+        'mostly clear': '🌤️',
+        'partly cloudy': '⛅',
+        'mostly cloudy': '🌥️',
+        'cloudy': '☁️',
+        'rain': '🌧️',
+        'showers': '🌧️',
+        'thunderstorm': '⛈️',
+        'snow': '🌨️',
+        'fog': '🌫️'
+      };
+
+      // Find appropriate weather icon
+      let weatherIcon = '☀️'; // default
+      const forecast = shortForecast.toLowerCase();
+      for (const [condition, icon] of Object.entries(weatherIcons)) {
+        if (forecast.includes(condition)) {
+          weatherIcon = icon;
+          break;
+        }
+      }
+
+      // Create unique ID for the collapse section
+      const collapseId = `hourlyForecast-${Date.now()}`;
+
+      // Create the main weather card with the new compact design
+      const mainWeatherCard = `
+        <div class="weather-card">
+          <div class="weather-summary d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <div class="weather-icon me-3">
+                <span style="font-size: 2rem;">${weatherIcon}</span>
+              </div>
+              <div>
+                <div class="temperature-display">
+                  <span class="temp-main">${tempF}°F / ${tempC}°C</span>
+                </div>
+                <div class="conditions-text">${shortForecast}</div>
+                <div class="wind-info"><small>${wind} ${windDir}</small></div>
+              </div>
+            </div>
+            <button class="btn-expand collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+          </div>
+          
+          <div class="collapse" id="${collapseId}">
+            <div class="hourly-forecast mt-3">
+              <div class="hourly-breakdown d-flex overflow-auto">
+                ${relevantHourlyForecasts.map(hour => {
+                  const hourTemp = hour.temperature;
+                  const hourTempC = fahrenheitToCelsius(hourTemp);
+                  const time = new Date(hour.startTime).toLocaleTimeString([], {hour: 'numeric'});
+                  let hourIcon = '☀️';
+                  const hourForecast = hour.shortForecast.toLowerCase();
+                  for (const [condition, icon] of Object.entries(weatherIcons)) {
+                    if (hourForecast.includes(condition)) {
+                      hourIcon = icon;
+                      break;
+                    }
+                  }
+                  return `
+                    <div class="hour-item text-center me-4">
+                      <div class="time mb-1">${time}</div>
+                      <div class="icon mb-1" style="font-size: 1.5rem;">${hourIcon}</div>
+                      <div class="temp">${hourTemp}°F</div>
+                      <div class="temp-c">${hourTempC}°C</div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      weatherContainer.innerHTML = mainWeatherCard;
+    } catch (error) {
+      console.error("Error fetching weather:", error);
+      weatherContainer.innerHTML = `<p class='text-danger'>Weather forecast not available: ${error.message}</p>`;
+    }
+  }
+  
+  function openEventModal(event) {
+    const modal = new bootstrap.Modal(document.getElementById("eventDetailModal"));
+    
+    // Clear any existing weather data
+    document.getElementById("weatherResult").innerHTML = '';
+    
+    // Update modal content with proper series badge
+    const seriesBadgeElement = document.getElementById("modalEventSeries");
+    const displaySeries = event.series === "NASCAR Cup" ? "NASCAR" : event.series;
+    seriesBadgeElement.setAttribute('data-series', event.series);
+    seriesBadgeElement.textContent = displaySeries;
+    
+    // Store the current event data
+    eventDetailModal.currentEvent = event;
+    
+    // Update other modal content
+    document.getElementById("modalEventRace").textContent = event.race;
+    document.getElementById("modalEventDate").textContent = event.date;
+    document.getElementById("modalEventLocation").textContent = event.circuit || event.venue || "TBA";
+    document.getElementById("modalEventTime").textContent = event.time_utc ? 
+      convertUTCtoLocal(event.date, event.time_utc) : "TBA";
+    document.getElementById("modalEventNetwork").textContent = event.network || "";
+    document.getElementById("modalEventCity").textContent = event.city || "TBA";
+    
+    // Start countdown
+    const [hours, minutes] = (event.time_utc || "00:00").split(":");
+    const eventDate = new Date(event.start);
+    eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
+    startCountdown("modalCountdown", eventDate.getTime());
+    
+    // Automatically fetch weather
+    fetchWeather(event, "weatherResult");
+
+    // Display map link if coordinates are available
+    const trackMapSection = document.getElementById("trackMapSection");
+    const trackMapDiv = document.getElementById("trackMap");
+    if (event.latitude && event.longitude) {
+      trackMapSection.style.display = 'block';
+      const mapLink = `https://www.google.com/maps/search/?api=1&query=${event.latitude},${event.longitude}`;
+      trackMapDiv.innerHTML = `<a href="${mapLink}" target="_blank" class="btn btn-info w-100"><i class="fas fa-map-marker-alt me-2"></i>View on Google Maps</a>`;
+    } else {
+      trackMapSection.style.display = 'none';
+      trackMapDiv.innerHTML = '';
+    }
+    
+    // Update share link
+    const shareText = `Check out the ${event.race} on ${event.date}! #Motorsports`;
+    document.getElementById("shareTwitter").href = 
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+    
+    modal.show();
+  }
+  
+  function displayUpcomingEvent() {
+    const allEvents = enhanceEventData();
+    allEvents.sort((a, b) => a.start - b.start);
+    const now = new Date();
+
+    // Get current week's Friday-Sunday range
+    const currentDay = now.getDay(); // 0 = Sunday, 6 = Saturday
+    const daysUntilFriday = currentDay <= 5 ? 5 - currentDay : (5 + 7 - currentDay);
+    const daysUntilSunday = currentDay <= 0 ? 0 : (7 - currentDay);
+    
+    const fridayDate = new Date(now);
+    fridayDate.setDate(now.getDate() - daysUntilFriday);
+    fridayDate.setHours(0, 0, 0, 0);
+    
+    const sundayDate = new Date(now);
+    sundayDate.setDate(now.getDate() + daysUntilSunday);
+    sundayDate.setHours(23, 59, 59, 999);
+
+    // Find today's events that haven't finished yet
+    const todaysEvents = allEvents.filter(event => {
+      const eventDate = new Date(event.start);
+      // Check if the event is today
+      if (eventDate.toDateString() === now.toDateString()) {
+        // If the event has a specific time, check if it's still upcoming or currently happening
+        if (event.time_utc) {
+          const [hours, minutes] = event.time_utc.split(':').map(Number);
+          const eventDateTime = new Date(eventDate);
+          eventDateTime.setUTCHours(hours, minutes, 0, 0);
+          
+          // Consider an event as "happening" for 4 hours after start time
+          const eventEndTime = new Date(eventDateTime);
+          eventEndTime.setHours(eventEndTime.getHours() + 4);
+          
+          return eventEndTime > now;
+        }
+        return true; // If no specific time, show it
+      }
+      return false;
+    });
+
+    // Find upcoming weekend events (only those that haven't happened yet)
+    const weekendEvents = allEvents.filter(event => {
+      const eventDate = new Date(event.start);
+      // Check if the event is within the weekend date range
+      if (eventDate >= fridayDate && eventDate <= sundayDate) {
+        // If the event has a specific time, check if it's still upcoming or currently happening
+        if (event.time_utc) {
+          const [hours, minutes] = event.time_utc.split(':').map(Number);
+          const eventDateTime = new Date(eventDate);
+          eventDateTime.setUTCHours(hours, minutes, 0, 0);
+          
+          // Consider an event as "happening" for 4 hours after start time
+          const eventEndTime = new Date(eventDateTime);
+          eventEndTime.setHours(eventEndTime.getHours() + 4);
+          
+          return eventEndTime > now;
+        }
+        return true; // If no specific time, show it
+      }
+      return false;
+    });
+
+    // Find next event (first future event)
+    const nextEvent = allEvents.find(event => {
+      // If event has a specific time, use it for comparison
+      if (event.time_utc) {
+        const [hours, minutes] = event.time_utc.split(':').map(Number);
+        const eventDateTime = new Date(event.start);
+        eventDateTime.setUTCHours(hours, minutes, 0, 0);
+        return eventDateTime > now;
+      }
+      // Otherwise just compare dates
+      return event.start > now;
+    });
+
+    const upcomingDiv = document.getElementById("upcomingEventDetails");
+    
+    async function createEventCard(event) {
+      const location = event.circuit || event.venue || "TBA";
+      const timeString = event.time_utc ? convertUTCtoLocal(event.date, event.time_utc) : "TBA";
+      const countdownId = `countdown-${event.series.replace(/\s+/g, '-').toLowerCase()}`;
+      const weatherId = `weather-${countdownId}`;
+      
+      // Format series display name
+      const displaySeries = event.series === "NASCAR Cup" ? "NASCAR" : event.series;
+      
+      const cardHTML = `
+        <div class="card upcoming-event-item" data-series="${event.series}" style="cursor: pointer;">
+          <div class="card-body">
+            <div class="event-summary">
+              <div class="event-info">
+                <h5 class="card-title">${event.race}</h5>
+                <div class="event-meta">
+                  <div class="series-info">${displaySeries} • ${location}</div>
+                  <div class="date-time-info">
+                    <span>${event.date} — ${timeString}</span>
+                    <span id="${weatherId}" class="weather-preview ms-2"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="countdown-display">
+                <div id="${countdownId}" class="countdown-timer"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Create the DOM element and add click handler
+      const cardElement = document.createElement('div');
+      cardElement.innerHTML = cardHTML;
+      const card = cardElement.firstElementChild;
+      
+      // Add click handler to open modal
+      card.addEventListener('click', () => {
+        openEventModal(event);
+        // Auto-generate prediction after a short delay
+        setTimeout(() => {
+          generateModalAIPrediction();
+        }, 500);
+      });
+      
+      // Start the countdown timer and fetch weather
+      setTimeout(async () => {
+        const [hours, minutes] = (event.time_utc || "00:00").split(":");
+        const eventDate = new Date(event.start);
+        eventDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
+        startCountdown(countdownId, eventDate.getTime());
+        
+        // Fetch weather preview
+        if (event.latitude && event.longitude) {
+          await fetchWeatherPreview(event, weatherId);
+        }
+      }, 0);
+      
+      return card;
+    }
+
+    const displayEvents = async (events) => {
+      if (events.length > 0) {
+        const cards = await Promise.all(events.map(event => createEventCard(event)));
+        upcomingDiv.innerHTML = '';
+        cards.forEach(card => upcomingDiv.appendChild(card));
+      } else {
+        upcomingDiv.innerHTML = "<p>No upcoming events scheduled.</p>";
+      }
+    };
+
+    // Show upcoming events - prioritize today's events, then next few upcoming events
+    let eventsToShow = [];
+    
+    if (todaysEvents.length > 0) {
+      eventsToShow = todaysEvents.slice(0, 3);
+    } else {
+      // Get next 3 upcoming events
+      const upcomingEvents = allEvents.filter(event => {
+        if (event.time_utc) {
+          const [hours, minutes] = event.time_utc.split(':').map(Number);
+          const eventDateTime = new Date(event.start);
+          eventDateTime.setUTCHours(hours, minutes, 0, 0);
+          return eventDateTime > now;
+        }
+        return event.start > now;
+      }).slice(0, 3);
+      
+      eventsToShow = upcomingEvents;
+    }
+    
+    if (eventsToShow.length > 0) {
+      displayEvents(eventsToShow);
+    } else {
+      upcomingDiv.innerHTML = "<p>No upcoming events scheduled.</p>";
+    }
+  }
+  
+  async function fetchNews() {
+    const f1Feed = "https://www.motorsport.com/rss/f1/news/";
+    const indyFeed = "https://www.motorsport.com/rss/indycar/news/";
+    const nascarFeed = "https://www.motorsport.com/rss/nascar-cup/news/";
+    try {
+      const [f1News, indyNews, nascarNews] = await Promise.all([
+        fetchRSS(f1Feed),
+        fetchRSS(indyFeed),
+        fetchRSS(nascarFeed)
+      ]);
+  
+      const newsGrid = document.getElementById("newsGrid");
+      newsGrid.innerHTML = `
+        <div class="col-md-4">
+          <div class="card news-card h-100">
+            <div class="card-body">
+              <h5 class="card-title news-title">F1 News</h5>
+              ${f1News.map(item => `
+                <div class="news-item mb-3">
+                  <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
+                  <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card news-card h-100">
+            <div class="card-body">
+              <h5 class="card-title news-title">IndyCar News</h5>
+              ${indyNews.map(item => `
+                <div class="news-item mb-3">
+                  <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
+                  <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card news-card h-100">
+            <div class="card-body">
+              <h5 class="card-title news-title">NASCAR News</h5>
+              ${nascarNews.map(item => `
+                <div class="news-item mb-3">
+                  <a href="${item.link}" target="_blank" class="news-link">${item.title}</a>
+                  <p class="news-date"><small>${new Date(item.pubDate).toLocaleDateString()}</small></p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    } catch (error) {
+      document.getElementById("newsGrid").innerHTML = "<p class='text-danger'>Unable to fetch news.</p>";
+      console.error("Error fetching news:", error);
+    }
+  }
+  
+  async function fetchRSS(url) {
+    try {
+      const rss2jsonAPI = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
+      const response = await fetch(rss2jsonAPI);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.status !== 'ok') {
+        throw new Error('Failed to fetch RSS feed');
+      }
+      return data.items.slice(0, 5).map(item => ({
+        title: item.title || "",
+        link: item.link || "#",
+        pubDate: item.pubDate || ""
+      }));
+    } catch (error) {
+      console.error('Error fetching RSS:', error);
+      return [];
+    }
+  }
+  
+  // Updated showPastRacesBtn event listener block
+  const showPastRacesBtn = document.getElementById('showPastRaces');
+  let pastRacesVisible = true;
+  showPastRacesBtn.addEventListener('click', function() {
+    pastRacesVisible = !pastRacesVisible;
+    this.textContent = pastRacesVisible ? 'Hide Past Races' : 'Show Past Races';
+    
+    // Handle table rows
+    const tables = document.querySelectorAll('.schedule-table');
+    tables.forEach(table => {
+      const rows = table.querySelectorAll('tr[data-date]');
+      rows.forEach(row => {
+        const eventDate = new Date(row.getAttribute('data-date'));
+        if (Date.now() >= eventDate.getTime() + 24 * 60 * 60 * 1000) {
+          row.style.display = pastRacesVisible ? 'table-row' : 'none';
+        } else {
+          row.style.display = '';
+        }
+      });
+    });
+    
+    // Handle mobile cards
+    const mobileContainers = document.querySelectorAll('.mobile-schedule-container');
+    mobileContainers.forEach(container => {
+      const cards = container.querySelectorAll('.mobile-schedule-card[data-date]');
+      cards.forEach(card => {
+        const eventDate = new Date(card.getAttribute('data-date'));
+        if (Date.now() >= eventDate.getTime() + 24 * 60 * 60 * 1000) {
+          card.style.display = pastRacesVisible ? 'block' : 'none';
+        } else {
+          card.style.display = '';
+        }
+      });
+    });
+  });
+
+  // Function to create mobile card for an event
+  function createMobileCard(event) {
+    const card = document.createElement('div');
+    card.className = 'mobile-schedule-card';
+    card.setAttribute('data-date', event.start.toISOString());
+    
+    const localTime = convertUTCtoLocal(event.date, event.time_utc);
+    const nowRow = new Date();
+    
+    // Create series color indicator
+    let seriesColor = 'var(--primary-color)';
+    if (event.series === 'F1') seriesColor = '#e10600';
+    else if (event.series === 'IndyCar') seriesColor = '#00d4aa';
+    else if (event.series.includes('NASCAR')) seriesColor = '#ffd320';
+    
+    card.style.borderLeft = `4px solid ${seriesColor}`;
+    
+    let resultHTML = '';
+    if (event.start < nowRow) {
+      card.classList.add('completed-race');
+      // Add results if available (similar logic as table)
+      let results = [];
+      if (event.series === "F1") {
+        const raceName = event.race.replace(" GP", "");
+        const result = resultsData.f1Past.results.find(r => 
+          r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||
+          raceName.toLowerCase().includes(r.grandPrix.toLowerCase())
+        );
+        if (result) results.push(result);
+      } else if (event.series === "IndyCar") {
+        const result = resultsData.indyPast.results.find(r => 
+          r.race.toLowerCase().includes(event.race.toLowerCase()) ||
+          event.race.toLowerCase().includes(r.race.toLowerCase())
+        );
+        if (result) results.push(result);
+      } else if (event.series.includes("NASCAR")) {
+        const eventShortName = event.race.split(" at ")[0].toLowerCase();
+        const result = resultsData.nascarPast.results.find(r => 
+          r.race.toLowerCase().includes(eventShortName) ||
+          eventShortName.includes(r.race.toLowerCase())
+        );
+        if (result) results.push(result);
+      }
+      
+      if (results.length > 0) {
+        resultHTML = `
+          <div class="race-results mt-2 p-2" style="background: rgba(${seriesColor === '#e10600' ? '225,6,0' : seriesColor === '#00d4aa' ? '0,212,170' : '255,211,32'}, 0.1); border-radius: 8px;">
+            <small><strong>Results:</strong></small><br>
+            ${results.map(result => `
+              <small>🥇 ${result.winner} • 🥈 ${result.second} • 🥉 ${result.third}</small>
+            `).join('<br>')}
+          </div>
+        `;
+      }
+    }
+    
+    card.innerHTML = `
+      <div class="event-date">${event.date} • ${localTime || event.time}</div>
+      <div class="event-title">${event.race}</div>
+      <div class="event-details">
+        <div><i class="fas fa-trophy me-1"></i>${event.displaySeries}</div>
+        <div><i class="fas fa-map-marker-alt me-1"></i>${event.circuit || event.venue}</div>
+        <div><i class="fas fa-tv me-1"></i>${event.network || 'TBA'}</div>
+      </div>
+      ${resultHTML}
+    `;
+    
+    card.addEventListener('click', () => openEventModal(event));
+    return card;
+  }
+  
+  // Function to create a table row for an event
+  function createTableRow(event, includeSeriesBadge = false) {
+    const row = document.createElement('tr');
+    row.setAttribute('data-date', event.start.toISOString());
+    const localTime = convertUTCtoLocal(event.date, event.time_utc);
+    const nowRow = new Date();
+    const todayUTC = new Date(Date.UTC(nowRow.getUTCFullYear(), nowRow.getUTCMonth(), nowRow.getUTCDate()));
+    if (event.start < todayUTC) {
+      row.classList.add('completed-race');
+    }
+
+    // Create series badge if needed
+    let seriesBadgeHTML = '';
+    if (includeSeriesBadge) {
+      seriesBadgeHTML = `<div class="series-badge" data-series="${event.displaySeries}">${event.displaySeries}</div>`;
+    }
+
+    // Find race results for completed races
+    let podiumHTML = '';
+    if (event.start < nowRow) {
+      let results = [];
+      if (event.series === "F1") {
+        const raceName = event.race.replace(" GP", "");
+        const result = resultsData.f1Past.results.find(r => 
+          r.grandPrix.toLowerCase().includes(raceName.toLowerCase()) ||
+          raceName.toLowerCase().includes(r.grandPrix.toLowerCase())
+        );
+        if (result) results.push(result);
+      } else if (event.series === "IndyCar") {
+        const result = resultsData.indyPast.results.find(r => 
+          r.race.toLowerCase().includes(event.race.toLowerCase()) ||
+          event.race.toLowerCase().includes(r.race.toLowerCase())
+        );
+        if (result) results.push(result);
+      } else if (event.series.includes("NASCAR")) {
+        if (event.race.includes("Duel")) {
+          results = resultsData.nascarPast.results.filter(r => 
+            r.race.toLowerCase().includes("duel")
+          );
+        } else {
+          const eventShortName = event.race.split(" at ")[0].toLowerCase();
+          const result = resultsData.nascarPast.results.find(r => 
+            r.race.toLowerCase().includes(eventShortName) ||
+            eventShortName.includes(r.race.toLowerCase())
+          );
+          if (result) results.push(result);
+        }
+      }
+
+      if (results.length > 0) {
+        podiumHTML = '<div class="podium-results">' +
+          results.map(result => {
+            let resultTitle = results.length > 1 ? `<strong>${result.race}:</strong><br>` : "";
+            return `
+              ${resultTitle}
+              <span><span class="podium-position">1st:</span> ${result.winner}</span>
+              <span><span class="podium-position">2nd:</span> ${result.second}</span>
+              <span><span class="podium-position">3rd:</span> ${result.third}</span>
+            `;
+          }).join('<hr class="podium-divider">') +
+          '</div>';
+      }
+    }
+
+    // Create row content
+    const cells = includeSeriesBadge ? [
+      event.date,
+      seriesBadgeHTML,
+      `${event.race}${podiumHTML}`,
+      event.circuit || event.venue,
+      localTime || event.time,
+      event.network || ''
+    ] : [
+      event.date,
+      `${event.race}${podiumHTML}`,
+      event.circuit || event.venue,
+      localTime || event.time,
+      event.network || ''
+    ];
+
+    row.innerHTML = cells.map(cell => `<td>${cell}</td>`).join('');
+    row.addEventListener('click', () => openEventModal(event));
+    
+    return row;
+  }
+
+  // Function to populate schedule tables
+  function populateSchedules() {
+    const f1Table = document.getElementById('f1-schedule');
+    const indyTable = document.getElementById('indy-schedule');
+    const nascarTable = document.getElementById('nascar-schedule');
+    const combinedTable = document.getElementById('combined-schedule');
+    
+    // Mobile containers
+    const f1Mobile = document.getElementById('f1-schedule-mobile');
+    const indyMobile = document.getElementById('indy-schedule-mobile');
+    const nascarMobile = document.getElementById('nascar-schedule-mobile');
+    const combinedMobile = document.getElementById('combined-schedule-mobile');
+
+    // Clear existing content
+    [f1Table, indyTable, nascarTable, combinedTable].forEach(table => {
+      if (table) table.innerHTML = '';
+    });
+    [f1Mobile, indyMobile, nascarMobile, combinedMobile].forEach(container => {
+      if (container) container.innerHTML = '';
+    });
+
+    // Populate F1 schedule
+    scheduleData.f1Events.forEach(event => {
+      if (f1Table) f1Table.appendChild(createTableRow(event));
+      if (f1Mobile) f1Mobile.appendChild(createMobileCard(event));
+    });
+
+    // Populate IndyCar schedule
+    scheduleData.indyEvents.forEach(event => {
+      if (indyTable) indyTable.appendChild(createTableRow(event));
+      if (indyMobile) indyMobile.appendChild(createMobileCard(event));
+    });
+
+    // Populate NASCAR schedule (both regular and playoff events)
+    const allNascarEvents = [...scheduleData.nascarRegularEvents, ...scheduleData.nascarPlayoffEvents];
+    allNascarEvents.forEach(event => {
+      if (nascarTable) nascarTable.appendChild(createTableRow(event));
+      if (nascarMobile) nascarMobile.appendChild(createMobileCard(event));
+    });
+
+    // Populate combined schedule with series badges
+    const allEvents = enhanceEventData();
+    allEvents.sort((a, b) => a.start - b.start);
+    allEvents.forEach(event => {
+      if (combinedTable) combinedTable.appendChild(createTableRow(event, true));
+      if (combinedMobile) combinedMobile.appendChild(createMobileCard(event));
+    });
+
+    // Set initial state of past races visibility
+    showPastRacesBtn.click(); // This will hide past races initially
+  }
+  
+  // Update search functionality to be more modern
+  function setupSearch() {
+    const searchInput = document.getElementById("searchInput");
+    const searchContainer = searchInput.parentElement;
+    searchContainer.className = "search-container";
+    
+    // Add search icon
+    const searchIcon = document.createElement("i");
+    searchIcon.className = "search-icon fas fa-search";
+    searchContainer.insertBefore(searchIcon, searchInput);
+    
+    // Add debounced search
+    let searchTimeout;
+    searchInput.addEventListener("input", function(e) {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        const searchTerm = e.target.value.toLowerCase();
+        const activeTab = document.querySelector(".tab-pane.active");
+        
+        // Search table rows
+        activeTab.querySelectorAll("tbody tr").forEach(row => {
+          // Get text content only from cells
+          const rowText = Array.from(row.querySelectorAll("td")).map(cell => {
+            // Create a temporary div to strip HTML
+            const div = document.createElement('div');
+            div.innerHTML = cell.innerHTML;
+            // Get text content and handle series badges specially
+            const badge = div.querySelector('.series-badge');
+            if (badge) {
+              return badge.textContent;
+            }
+            return div.textContent;
+          }).join(' ').toLowerCase();
+
+          if (searchTerm === "") {
+            // Show row and restore original content
+            row.style.display = "";
+            if (row.classList.contains("completed-race") && !pastRacesVisible) {
+              row.style.display = "none";
+            }
+            row.querySelectorAll("td").forEach(cell => {
+              if (cell.dataset.original) {
+                cell.innerHTML = cell.dataset.original;
+              }
+            });
+          } else {
+            if (rowText.includes(searchTerm)) {
+              row.style.display = "";
+              // Highlight matches in text nodes only
+              row.querySelectorAll("td").forEach(cell => {
+                const originalHTML = cell.innerHTML;
+                // Store original HTML if not already stored
+                if (!cell.dataset.original) {
+                  cell.dataset.original = originalHTML;
+                }
+                
+                // Create temporary element to manipulate HTML
+                const temp = document.createElement('div');
+                temp.innerHTML = originalHTML;
+                
+                // Function to highlight text in a node
+                function highlightText(node) {
+                  if (node.nodeType === 3) { // Text node
+                    const text = node.textContent;
+                    const regex = new RegExp(searchTerm, 'gi');
+                    if (regex.test(text)) {
+                      const span = document.createElement('span');
+                      span.innerHTML = text.replace(regex, match => `<mark>${match}</mark>`);
+                      node.parentNode.replaceChild(span, node);
+                    }
+                  } else if (node.nodeType === 1) { // Element node
+                    // Don't highlight inside series badges
+                    if (!node.classList || !node.classList.contains('series-badge')) {
+                      Array.from(node.childNodes).forEach(highlightText);
+                    }
+                  }
+                }
+                
+                // Apply highlighting
+                Array.from(temp.childNodes).forEach(highlightText);
+                cell.innerHTML = temp.innerHTML;
+              });
+            } else {
+              row.style.display = "none";
+            }
+          }
+        });
+        
+        // Search mobile cards
+        activeTab.querySelectorAll(".mobile-schedule-card").forEach(card => {
+          const cardText = card.textContent.toLowerCase();
+          
+          if (searchTerm === "") {
+            // Show card and restore original content
+            card.style.display = "";
+            if (card.classList.contains("completed-race") && !pastRacesVisible) {
+              card.style.display = "none";
+            }
+            // Restore original content
+            if (card.dataset.original) {
+              card.innerHTML = card.dataset.original;
+            }
+          } else {
+            if (cardText.includes(searchTerm)) {
+              card.style.display = "";
+              // Store original HTML if not already stored
+              if (!card.dataset.original) {
+                card.dataset.original = card.innerHTML;
+              }
+              // Apply highlighting
+              const regex = new RegExp(searchTerm, 'gi');
+              card.innerHTML = card.innerHTML.replace(regex, match => `<mark>${match}</mark>`);
+            } else {
+              card.style.display = "none";
+            }
+          }
+        });
+      }, 200);
+    });
+  }
+  
+  function setupThemeToggle() {
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    
+    function updateToggleIcon() {
+      if (document.body.classList.contains("dark-mode")) {
+        themeIcon.textContent = "☀️"; // Sun icon in dark mode
+      } else {
+        themeIcon.textContent = "🌙"; // Moon icon in light mode
+      }
+    }
+    
+    // Check for stored preference first
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme) {
+      document.body.classList.toggle("dark-mode", storedTheme === "dark");
+    } else {
+      // If no stored preference, use system preference
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.body.classList.toggle("dark-mode", prefersDark);
+    }
+    
+    updateToggleIcon();
+    
+    // Listen for system theme changes
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      // Only apply system preference if user hasn't set their own preference
+      if (!localStorage.getItem("theme")) {
+        document.body.classList.toggle("dark-mode", e.matches);
+        updateToggleIcon();
+      }
+    });
+    
+    // Handle manual toggle
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+      updateToggleIcon();
+    });
+  }
+  
+  // AI Prediction Functions
+  async function generateAIPredictions() {
+    const aiSection = document.getElementById('aiPredictionsSection');
+    const aiContent = document.getElementById('aiPredictionsContent');
+    
+    // Show the section
+    aiSection.style.display = 'block';
+    
+    // Reset content to loading state
+    aiContent.innerHTML = `
+      <div class="text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Generating predictions...</span>
+        </div>
+        <p class="mt-2">Generating AI predictions...</p>
+      </div>
+    `;
+    
+    try {
+      // Get upcoming events
+      const allEvents = enhanceEventData();
+      allEvents.sort((a, b) => a.start - b.start);
+      const now = new Date();
+      
+      const upcomingEvents = allEvents.filter(event => {
+        if (event.time_utc) {
+          const [hours, minutes] = event.time_utc.split(':').map(Number);
+          const eventDateTime = new Date(event.start);
+          eventDateTime.setUTCHours(hours, minutes, 0, 0);
+          return eventDateTime > now;
+        }
+        return event.start > now;
+      }).slice(0, 3);
+      
+                 if (upcomingEvents.length === 0) {
+           aiContent.innerHTML = '<p class="text-muted">No upcoming events to analyze.</p>';
+           return;
+         }
+         
+         // Generate analysis for each event
+         const predictions = await aiPredictions.getBatchPredictions(upcomingEvents);
+      
+               // Display analysis
+       let html = '';
+       predictions.forEach(({ event, prediction, success, error }) => {
+         if (success) {
+           // Use the new styled predictions HTML
+           const predictionsHTML = aiPredictions.generatePredictionsHTML(event);
+           html += `
+             <div class="ai-prediction-item mb-4">
+               <h6 class="text-primary">${event.race}</h6>
+               <div class="ai-prediction-content">
+                 ${formatAIPrediction(prediction)}
+               </div>
+               ${predictionsHTML}
+             </div>
+           `;
+         } else {
+           html += `
+             <div class="ai-prediction-item mb-4">
+               <h6 class="text-danger">${event.race}</h6>
+               <p class="text-muted">Unable to generate analysis: ${error}</p>
+             </div>
+           `;
+         }
+       });
+      
+      aiContent.innerHTML = html;
+      
+    } catch (error) {
+               console.error('Error generating AI analysis:', error);
+         aiContent.innerHTML = `
+           <div class="alert alert-danger">
+             <i class="fas fa-exclamation-triangle me-2"></i>
+             Unable to generate race analysis. Please try again later.
+           </div>
+         `;
+    }
+  }
+  
+  async function generateModalAIPrediction() {
+    const button = document.getElementById('generateModalAIPrediction');
+    const resultDiv = document.getElementById('aiPredictionResult');
+    const event = eventDetailModal.currentEvent;
+    
+    if (!event) return;
+    
+           // Update button state
+     button.disabled = true;
+     button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Analyzing...';
+     
+     // Show loading state
+     resultDiv.innerHTML = `
+       <div class="text-center">
+         <div class="spinner-border spinner-border-sm text-primary" role="status">
+           <span class="visually-hidden">Generating analysis...</span>
+         </div>
+         <span class="ms-2">Analyzing race data...</span>
+       </div>
+     `;
+    
+    try {
+      // Get weather data if available
+      let weatherData = null;
+      const weatherElement = document.getElementById('weatherResult');
+      if (weatherElement && weatherElement.textContent.trim()) {
+        // Extract basic weather info from the weather section
+        weatherData = {
+          forecast: 'Available',
+          temperature: '75', // Placeholder - would need to extract from weather display
+          wind: 'Light'
+        };
+      }
+      
+      const prediction = await aiPredictions.getRacePrediction(event, weatherData);
+      const predictionsHTML = aiPredictions.generateCompactPredictionsHTML(event);
+      
+      resultDiv.innerHTML = `
+        <div class="ai-prediction-content">
+          ${formatAIPrediction(prediction)}
+        </div>
+        ${predictionsHTML}
+      `;
+      
+    } catch (error) {
+               console.error('Error generating modal AI analysis:', error);
+         resultDiv.innerHTML = `
+           <div class="alert alert-warning">
+             <i class="fas fa-exclamation-triangle me-2"></i>
+             Unable to generate race analysis. Please try again later.
+           </div>
+         `;
+    } finally {
+               // Reset button state
+       button.disabled = false;
+       button.innerHTML = '<i class="fas fa-robot me-1"></i>Get Race Insights';
+    }
+  }
+  
+  function formatAIPrediction(prediction) {
+    // Convert markdown-style formatting to HTML
+    return prediction
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>')
+      .replace(/^/, '<p>')
+      .replace(/$/, '</p>');
+  }
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    setupThemeToggle();
+    setupSearch();
+    populateSchedules();
+    displayUpcomingEvent();
+    fetchNews();
+    setupPushNotifications();
+  });
+
+  function setupPushNotifications() {
+    const subscribeButton = document.getElementById('subscribeButton');
+
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      console.warn('Push notifications not supported.');
+      subscribeButton.disabled = true;
+      subscribeButton.title = 'Push notifications not supported by your browser.';
+      return;
+    }
+
+    // Placeholder for a real VAPID public key from your server
+    // In a real application, this would be fetched from your backend.
+    const VAPID_PUBLIC_KEY = 'YOUR_VAPID_PUBLIC_KEY_HERE'; 
+
+    function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
+    }
+
+    async function subscribeUser() {
+      const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+      const pushSubscription = await serviceWorkerRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+
+      console.log('Push Subscription:', JSON.stringify(pushSubscription));
+      alert('Successfully subscribed to push notifications! (Subscription logged to console)');
+      // In a real app, you would send this pushSubscription to your backend server
+      // fetch('/api/save-subscription', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify(pushSubscription)
+      // });
+    }
+
+    subscribeButton.addEventListener('click', async () => {
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          await subscribeUser();
+        } else {
+          alert('Permission for notifications was denied.');
+        }
+      } catch (error) {
+        console.error('Error subscribing to push notifications:', error);
+        alert('Failed to subscribe to push notifications. See console for details.');
+      }
+    });
+
+    // Check current subscription status on load
+    navigator.serviceWorker.ready.then(registration => {
+      registration.pushManager.getSubscription().then(subscription => {
+        if (subscription) {
+          console.log('Already subscribed:', subscription);
+          subscribeButton.textContent = 'Notifications On';
+          subscribeButton.classList.remove('btn-primary');
+          subscribeButton.classList.add('btn-success');
+        } else {
+          subscribeButton.textContent = 'Subscribe to Notifications';
+          subscribeButton.classList.remove('btn-success');
+          subscribeButton.classList.add('btn-primary');
+        }
+      });
+    });
+  }
+  
+      
+
+  // Function to get current active tab events
+  function getCurrentTabEvents() {
+    const activeTabId = document.querySelector('.tab-pane.active').id;
+    switch (activeTabId) {
+      case 'f1':
+        return scheduleData.f1Events;
+      case 'indycar':
+        return scheduleData.indyEvents;
+      case 'nascar':
+        return [...scheduleData.nascarRegularEvents, ...scheduleData.nascarPlayoffEvents];
+      case 'all':
+        return enhanceEventData();
+      default:
+        return [];
+    }
+  }
+
+  // Function to get series name from active tab
+  function getActiveSeriesName() {
+    const activeTabId = document.querySelector('.tab-pane.active').id;
+    switch (activeTabId) {
+      case 'f1':
+        return 'F1';
+      case 'indycar':
+        return 'IndyCar';
+      case 'nascar':
+        return 'NASCAR';
+      case 'all':
+        return 'All-Series';
+      default:
+        return '';
+    }
+  }
+
+  // Add event listener for calendar button
+  document.getElementById('downloadICSBtn').addEventListener('click', () => {
+    const events = getCurrentTabEvents();
+    const seriesName = getActiveSeriesName();
+    if (events && events.length > 0) {
+      const totalEvents = events.length;
+      const message = `Downloading ${totalEvents} ${seriesName} events as an ICS file.\n\n` +
+                     `You can import this file into any calendar application.`;
+      alert(message);
+      downloadSeriesICS(events, seriesName);
+    }
+  });
+
+  // Update calendar button text based on active tab
+  document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+    tab.addEventListener('shown.bs.tab', () => {
+      const seriesName = getActiveSeriesName();
+      const buttonText = seriesName === 'All-Series' ? 'Download Calendar' : `Download ${seriesName} Calendar`;
+      document.getElementById('downloadICSBtn').innerHTML = `<i class="fas fa-calendar-plus me-1"></i> ${buttonText}`;
+    });
+  });
+
+  // Store the current event when opening the modal
+  const eventDetailModal = document.getElementById('eventDetailModal');
+  let previousActiveElement = null;
+
+  eventDetailModal.addEventListener('show.bs.modal', (event) => {
+    // Store the element that had focus before opening the modal
+    previousActiveElement = document.activeElement;
+  });
+
+  eventDetailModal.addEventListener('shown.bs.modal', () => {
+    // Focus the first focusable element in the modal
+    const firstFocusableElement = eventDetailModal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (firstFocusableElement) {
+      firstFocusableElement.focus();
+    }
+  });
+
+  eventDetailModal.addEventListener('hidden.bs.modal', () => {
+    // Restore focus to the previously focused element
+    if (previousActiveElement) {
+      previousActiveElement.focus();
+    }
+  });
+
+  // Add event listener for modal download button
+  document.getElementById('modalDownloadICS').addEventListener('click', () => {
+    const event = eventDetailModal.currentEvent;
+    if (event) {
+      downloadICS(event);
+    }
+  });
+</script>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or "Racing Site" }}</title>
+    <link rel="stylesheet" href="/assets/_css/main.css">
+    <link rel="stylesheet" href="/assets/_css/ai-enhancements.css">
+</head>
+<body>
+    <header>
+        <h1>{{ title or "Racing Site" }}</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <!-- Add more navigation links here -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {{ content | safe }}
+    </main>
+
+    <footer>
+        <p>&copy; {{ "now" | date("%Y") }} Racing Site</p>
+    </footer>
+
+    <script src="/assets/_js/api.js"></script>
+    <script src="/assets/_js/calendar.js"></script>
+    <script src="/assets/_js/config.js"></script>
+    <script src="/assets/_js/data.js"></script>
+</body>
+</html>

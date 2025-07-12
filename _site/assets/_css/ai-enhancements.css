@@ -1,0 +1,340 @@
+/* AI Enhancement Styles for Racing Site */
+
+/* AI Status and Controls */
+.ai-status-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+}
+
+.ai-status-banner .btn-close {
+    filter: invert(1);
+}
+
+#aiToggle {
+    transition: all 0.3s ease;
+}
+
+#aiToggle:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Chat Interface */
+.chat-messages {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    min-height: 200px;
+}
+
+.dark-mode .chat-messages {
+    background: #2f363d;
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+}
+
+.message-bubble {
+    border-radius: 18px;
+    padding: 0.75rem 1rem;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.user-message .message-bubble {
+    background: var(--primary-color);
+    color: white;
+    margin-left: auto;
+}
+
+.ai-message .message-bubble {
+    background: #e9ecef;
+    color: #333;
+}
+
+.dark-mode .ai-message .message-bubble {
+    background: #495057;
+    color: #f8f9fa;
+}
+
+/* AI Loading States */
+.ai-loading-overlay {
+    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.loading-placeholder {
+    padding: 2rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.ai-content-area {
+    min-height: 100px;
+    padding: 1rem;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.ai-content-area:hover {
+    border-color: var(--primary-color);
+    background: rgba(0, 123, 255, 0.05);
+}
+
+.ai-generated-content {
+    border-left: 4px solid #667eea;
+    padding: 1rem;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
+}
+
+.dark-mode .ai-generated-content {
+    background: rgba(102, 126, 234, 0.1);
+    border-left-color: #764ba2;
+}
+
+/* AI Button Styles */
+.ai-row-btn,
+.ai-preview-btn {
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-row-btn:hover,
+.ai-preview-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* AI Insights Popover */
+.ai-insights-popover {
+    animation: fadeInScale 0.3s ease;
+    border: 2px solid var(--primary-color);
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.dark-mode .ai-insights-popover {
+    background: var(--background-card-dark);
+    color: var(--text-dark-mode);
+    border-color: var(--accent-color);
+}
+
+/* Search Enhancements */
+.search-suggestions {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 1rem;
+    margin-top: -1px;
+}
+
+.dark-mode .search-suggestions {
+    background: var(--background-card-dark);
+    border-color: #495057;
+    color: var(--text-dark-mode);
+}
+
+.search-highlight {
+    background: rgba(102, 126, 234, 0.1) !important;
+    border-left: 4px solid var(--primary-color) !important;
+}
+
+/* AI Feature Cards */
+.ai-feature-card {
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.ai-feature-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.dark-mode .ai-feature-card {
+    background: linear-gradient(135deg, #2f363d 0%, #495057 100%);
+}
+
+/* Concept Learning Buttons */
+.concept-btn {
+    transition: all 0.3s ease;
+    margin: 0.25rem;
+}
+
+.concept-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* AI Column Styling */
+.ai-column {
+    width: 80px;
+    text-align: center;
+}
+
+/* Weather AI Insights */
+#aiWeatherInsight .alert {
+    border-left: 4px solid #17a2b8;
+    background: rgba(23, 162, 184, 0.1);
+}
+
+.dark-mode #aiWeatherInsight .alert {
+    background: rgba(23, 162, 184, 0.15);
+}
+
+/* Modal AI Tabs */
+#modalAITabs .nav-link {
+    border-radius: 8px 8px 0 0;
+    transition: all 0.3s ease;
+}
+
+#modalAITabs .nav-link.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+    border-color: transparent;
+}
+
+#modalAITabs .nav-link:hover:not(.active) {
+    background: rgba(0, 123, 255, 0.1);
+}
+
+/* AI Tips Section */
+#ai-tips .card {
+    border: 2px dashed #667eea;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+.dark-mode #ai-tips .card {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-color: #764ba2;
+}
+
+/* Quick Nav AI Enhancement */
+.quick-nav-btn i {
+    transition: transform 0.3s ease;
+}
+
+.quick-nav-btn:hover i {
+    transform: scale(1.2);
+}
+
+/* Responsive AI Features */
+@media (max-width: 768px) {
+    .ai-content-area {
+        padding: 0.75rem;
+        min-height: 80px;
+    }
+    
+    .message-bubble {
+        max-width: 90%;
+        font-size: 0.9rem;
+    }
+    
+    .ai-insights-popover {
+        max-width: 90vw;
+        margin: 1rem;
+    }
+    
+    .concept-btn {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .ai-row-btn,
+    .ai-preview-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Loading Animations */
+@keyframes aiPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.ai-loading {
+    animation: aiPulse 1.5s infinite;
+}
+
+.ai-thinking::after {
+    content: '';
+    animation: aiDots 1.5s infinite;
+}
+
+@keyframes aiDots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+    100% { content: ''; }
+}
+
+/* Enhanced Weather Section with AI */
+.weather-ai-enhanced {
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+.dark-mode .weather-ai-enhanced {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+/* Accessibility Enhancements */
+.ai-feature:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.ai-content-area[aria-busy="true"] {
+    cursor: wait;
+}
+
+/* Print Styles */
+@media print {
+    .ai-row-btn,
+    .ai-preview-btn,
+    #aiToggle,
+    #aiChatSection,
+    .ai-insights-popover {
+        display: none !important;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .ai-generated-content {
+        border-left-width: 6px;
+        background: rgba(0, 0, 0, 0.1);
+    }
+    
+    .ai-row-btn,
+    .ai-preview-btn {
+        border: 2px solid currentColor;
+    }
+}

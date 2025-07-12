@@ -4,6 +4,9 @@ module.exports = function(eleventyConfig) {
     return new Date(date).getFullYear();
   });
 
+  // Ignore readme.md from processing
+  eleventyConfig.ignores.add("readme.md");
+
   // Set input and output directories
   eleventyConfig.addPassthroughCopy("assets");
   eleventyConfig.addPassthroughCopy("CNAME");

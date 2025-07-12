@@ -27,7 +27,7 @@ async function fetchNascarSchedule() {
       };
     });
 
-    fs.writeFileSync('assets/_data/nascar.json', JSON.stringify(formattedRaces, null, 2));
+    fs.writeFileSync('_data/nascar.json', JSON.stringify(formattedRaces, null, 2));
 
     console.log('Successfully fetched and saved NASCAR schedule to assets/_data/nascar.json');
 

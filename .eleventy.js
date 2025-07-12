@@ -4,8 +4,8 @@ module.exports = function(eleventyConfig) {
     return new Date(date).getFullYear();
   });
 
-  // Ignore readme.md from processing
-  eleventyConfig.ignores.add("readme.md");
+  // Ignore README files from processing
+  eleventyConfig.ignores.add("README.md");
 
   // Set input and output directories
   eleventyConfig.addPassthroughCopy("assets");

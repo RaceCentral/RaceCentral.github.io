@@ -26,7 +26,7 @@ async function fetchF1Results() {
       third: `${race.Results[2].Driver.givenName} ${race.Results[2].Driver.familyName}`,
     };
 
-    fs.writeFileSync('assets/_data/f1-results.json', JSON.stringify(formattedResults, null, 2));
+    fs.writeFileSync('_data/f1-results.json', JSON.stringify(formattedResults, null, 2));
     console.log('Successfully fetched and saved F1 results to assets/_data/f1-results.json');
     return formattedResults;
 

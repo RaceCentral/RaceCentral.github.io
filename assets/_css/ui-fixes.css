@@ -79,6 +79,8 @@ body {
 /* Fix quick navigation */
 .quick-nav {
     margin: 1.5rem 0;
+    text-align: center;
+    width: 100%;
 }
 
 .quick-nav-btn {
@@ -92,6 +94,7 @@ body {
     margin: 0.25rem;
     transition: all 0.2s ease;
     border: 1px solid #e5e7eb;
+    text-align: center;
 }
 
 .quick-nav-btn:hover {
@@ -348,14 +351,23 @@ body {
     
     .quick-nav {
         margin: 1rem 0;
+        text-align: center;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
     }
     
     .quick-nav-btn {
-        display: inline-block;
+        flex: 1;
+        min-width: 140px;
+        max-width: 200px;
         margin: 0.25rem;
-        width: calc(50% - 0.5rem);
-        max-width: none;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .upcoming-event,
@@ -450,14 +462,21 @@ body {
     .quick-nav {
         text-align: center;
         margin: 1rem 0;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
     }
     
     .quick-nav-btn {
         padding: 0.6rem 1rem;
         font-size: 0.875rem;
-        width: calc(50% - 0.25rem);
-        margin: 0.25rem 0.125rem;
-        display: inline-block;
+        flex: 1;
+        max-width: 150px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
     }
     
@@ -560,11 +579,24 @@ body {
         gap: 0.5rem;
     }
     
+    .quick-nav {
+        display: flex;
+        justify-content: center;
+        gap: 0.25rem;
+        width: 100%;
+        margin: 0.75rem 0;
+    }
+    
     .quick-nav-btn {
-        width: calc(50% - 0.125rem);
-        margin: 0.125rem;
+        flex: 1;
+        max-width: 120px;
+        margin: 0;
         font-size: 0.8rem;
         padding: 0.5rem 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
     }
     
     .btn-group-mobile .btn {

@@ -1,4 +1,0 @@
-Contact: mailto:security@racecentral.info
-Acknowledgments: We appreciate responsible disclosure of vulnerabilities and will respond in a timely manner.
-Expires: 2025-12-31
-Preferred-Languages: en 

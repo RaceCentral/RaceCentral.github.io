@@ -1,5 +1,0 @@
-# This file instructs web crawlers not to index or scrape the site.
-User-agent: *
-Allow: /
-
-# Website analytics are performed using Microsoft Clarity for aggregated, anonymous data. Refer to privacy-policy.txt for details. 

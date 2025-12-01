@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="RaceCentral 2.0 - Your ultimate motorsport calendar with live odds, predictions, and weather for F1, NASCAR, and IndyCar races.">
+    <meta name="keywords" content="F1, NASCAR, IndyCar, racing, motorsport, schedule, odds, predictions">
+    <meta name="theme-color" content="#0f0f0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>RaceCentral 2.0 - Motorsport Calendar & Odds</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'racing-red': '#E10600',
+                        'racing-yellow': '#FFC629',
+                        'racing-blue': '#0052A5',
+                        'carbon': '#0f0f0f',
+                        'carbon-light': '#1a1a1a',
+                        'carbon-lighter': '#2a2a2a',
+                    },
+                    fontFamily: {
+                        'racing': ['Orbitron', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts - Racing Style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f0f;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        .font-racing {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Racing stripe accent */
+        .racing-stripe {
+            background: linear-gradient(90deg,
+                transparent 0%,
+                #E10600 25%,
+                #FFC629 50%,
+                #0052A5 75%,
+                transparent 100%
+            );
+            height: 3px;
+        }
+
+        /* Card hover effect - only on non-touch devices */
+        @media (hover: hover) {
+            .race-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .race-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Series badge colors */
+        .badge-f1 { background: #E10600; }
+        .badge-nascar { background: #FFC629; color: #000; }
+        .badge-indycar { background: #0052A5; }
+
+        /* Pulse animation for live races */
+        @keyframes pulse-live {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .live-badge {
+            animation: pulse-live 1.5s infinite;
+        }
+
+        /* Loading spinner */
+        .htmx-indicator {
+            display: none;
+        }
+        .htmx-request .htmx-indicator {
+            display: inline-flex;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+        /* Filter pills horizontal scroll on mobile */
+        .filter-scroll {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .filter-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Safe area padding for notched phones */
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom, 0);
+        }
+        .safe-top {
+            padding-top: env(safe-area-inset-top, 0);
+        }
+    </style>
+</head>
+<body class="bg-carbon text-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-carbon/95 backdrop-blur-md border-b border-gray-800 safe-top">
+        <div class="racing-stripe"></div>
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="text-2xl sm:text-3xl">🏁</div>
+                    <div>
+                        <h1 class="font-racing text-lg sm:text-2xl font-bold tracking-wider text-white">
+                            RACE<span class="text-racing-red">CENTRAL</span>
+                        </h1>
+                        <p class="text-[10px] sm:text-xs text-gray-500 tracking-widest">2.0</p>
+                    </div>
+                </div>
+
+                <a href="/calendar.ics"
+                   class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-carbon-lighter hover:bg-gray-700 rounded-lg transition-colors text-xs sm:text-sm font-medium">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="hidden xs:inline">Download</span> Calendar
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <!-- Series Filter Tabs - Horizontal scroll on mobile -->
+        <div class="filter-scroll flex gap-2 mb-6 sm:mb-8 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
+            <button hx-get="/filter/all"
+                    hx-target="#race-grid"
+                    hx-indicator="#loading"
+                    class="filter-btn flex-shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm transition-all
+                           bg-white text-black active:scale-95"
+                    onclick="setActiveFilter(this)">
+                All
+            </button>
+            <button hx-get="/filter/F1"
+                    hx-target="#race-grid"
+                    hx-indicator="#loading"
+                    class="filter-btn flex-shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm transition-all
+                           bg-carbon-lighter text-gray-300 active:scale-95 active:bg-racing-red"
+                    onclick="setActiveFilter(this)">
+                🏎️ F1
+            </button>
+            <button hx-get="/filter/NASCAR"
+                    hx-target="#race-grid"
+                    hx-indicator="#loading"
+                    class="filter-btn flex-shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm transition-all
+                           bg-carbon-lighter text-gray-300 active:scale-95 active:bg-racing-yellow"
+                    onclick="setActiveFilter(this)">
+                🏁 NASCAR
+            </button>
+            <button hx-get="/filter/IndyCar"
+                    hx-target="#race-grid"
+                    hx-indicator="#loading"
+                    class="filter-btn flex-shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm transition-all
+                           bg-carbon-lighter text-gray-300 active:scale-95 active:bg-racing-blue"
+                    onclick="setActiveFilter(this)">
+                🏎️ IndyCar
+            </button>
+
+            <!-- Loading indicator -->
+            <div id="loading" class="htmx-indicator flex-shrink-0 flex items-center gap-2 text-gray-400 text-sm">
+                <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                <span class="hidden sm:inline">Loading...</span>
+            </div>
+        </div>
+
+        <!-- This Week's Races Section -->
+        <section class="mb-8 sm:mb-12">
+            <h2 class="font-racing text-base sm:text-xl font-bold mb-4 sm:mb-6 text-gray-300 tracking-wide flex items-center gap-2 sm:gap-3">
+                <span class="w-1 h-5 sm:h-6 bg-racing-red rounded-full"></span>
+                THIS WEEK'S RACES
+            </h2>
+
+            <div id="race-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {% for race in upcoming_races %}
+                {% include "partials/race_card.html" %}
+                {% else %}
+                <div class="col-span-full text-center py-8 sm:py-12 text-gray-500">
+                    <div class="text-4xl mb-3">🏎️</div>
+                    <p class="text-base sm:text-lg">No races this week.</p>
+                    <p class="text-xs sm:text-sm mt-2">Data syncs every 24 hours. Check back soon!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Past Races Section -->
+        <section class="mb-8 sm:mb-12">
+            <div class="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 class="font-racing text-base sm:text-xl font-bold text-gray-300 tracking-wide flex items-center gap-2 sm:gap-3">
+                    <span class="w-1 h-5 sm:h-6 bg-gray-600 rounded-full"></span>
+                    RECENT RESULTS
+                </h2>
+                <button id="togglePastRacesBtn"
+                        data-showing="recent"
+                        onclick="togglePastRaces(this)"
+                        class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm rounded-lg transition-colors flex items-center gap-2">
+                    <svg id="toggleIcon" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                    <span id="toggleText">Show All</span>
+                </button>
+            </div>
+
+            <div id="past-races-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {% if past_races %}
+                {% for race in past_races %}
+                <div class="race-card bg-carbon-light rounded-xl overflow-hidden border border-gray-800 opacity-90">
+                    <div class="p-3 sm:p-4">
+                        <div class="flex items-center justify-between mb-2 sm:mb-3">
+                            <span class="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold
+                                {% if race.Series == 'F1' %}badge-f1
+                                {% elif race.Series == 'NASCAR' %}badge-nascar
+                                {% else %}badge-indycar{% endif %}">
+                                {{ race.Series }}
+                            </span>
+                            <span class="text-gray-500 text-xs sm:text-sm">{{ race.time_info.date }}</span>
+                        </div>
+
+                        <h3 class="font-semibold text-base sm:text-lg mb-1">{{ race.RaceName }}</h3>
+                        <p class="text-gray-400 text-xs sm:text-sm mb-3">{{ race.Venue }}{% if race.Country %}, {{ race.Country }}{% endif %}</p>
+
+                        {% if race.Winner %}
+                        <div class="p-2.5 bg-gradient-to-r from-yellow-900/30 via-gray-800/30 to-orange-900/20 rounded-lg">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-wide mb-1.5">Podium</p>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">🥇</span>
+                                    <span class="font-bold text-racing-yellow text-sm">{{ race.Winner }}</span>
+                                </div>
+                                {% if race.Podium2 %}
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">🥈</span>
+                                    <span class="text-gray-300 text-xs">{{ race.Podium2 }}</span>
+                                </div>
+                                {% endif %}
+                                {% if race.Podium3 %}
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">🥉</span>
+                                    <span class="text-gray-300 text-xs">{{ race.Podium3 }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="flex items-center gap-2 text-gray-500 text-xs">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Race Completed
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="col-span-full text-center py-8 text-gray-500">
+                    <p class="text-sm">No completed races yet this season.</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- News Section -->
+        {% if news %}
+        <section class="mb-8 sm:mb-12">
+            <h2 class="font-racing text-base sm:text-xl font-bold mb-4 sm:mb-6 text-gray-300 tracking-wide flex items-center gap-2 sm:gap-3">
+                <span class="w-1 h-5 sm:h-6 bg-racing-blue rounded-full"></span>
+                MOTORSPORT NEWS
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                {% for item in news %}
+                <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer"
+                   class="block p-3 sm:p-4 bg-carbon-light rounded-lg border border-gray-800 active:border-gray-600 transition-colors">
+                    <div class="flex items-start gap-2">
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-gray-700 rounded text-[10px] sm:text-xs font-medium text-gray-300">
+                            {{ item.source }}
+                        </span>
+                    </div>
+                    <h4 class="font-medium text-xs sm:text-sm mt-2 text-gray-200 line-clamp-2">
+                        {{ item.title }}
+                    </h4>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 mt-8 sm:mt-12 safe-bottom">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
+            <div class="flex flex-col items-center gap-3 sm:gap-4 text-center">
+                <div class="flex items-center gap-2 text-gray-500 text-xs sm:text-sm">
+                    <span class="font-racing text-base sm:text-lg text-gray-400">RACECENTRAL</span>
+                    <span>© 2025</span>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-gray-500 text-[10px] sm:text-sm">
+                    <span>The Odds API</span>
+                    <span class="hidden sm:inline">•</span>
+                    <span>Polymarket</span>
+                    <span class="hidden sm:inline">•</span>
+                    <span>NWS Weather</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Filter button active state
+        function setActiveFilter(btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('bg-white', 'text-black');
+                b.classList.add('bg-carbon-lighter', 'text-gray-300');
+            });
+            btn.classList.remove('bg-carbon-lighter', 'text-gray-300');
+            btn.classList.add('bg-white', 'text-black');
+        }
+
+        // Fetch weather for race cards
+        async function fetchWeather(lat, lon, elementId) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            if (!lat || !lon || lat === 0 || lon === 0) {
+                el.innerHTML = 'N/A';
+                return;
+            }
+
+            try {
+                const pointsResponse = await fetch(`https://api.weather.gov/points/${lat},${lon}`);
+                if (!pointsResponse.ok) throw new Error('Location not supported');
+
+                const pointsData = await pointsResponse.json();
+                const forecastUrl = pointsData.properties.forecast;
+
+                const forecastResponse = await fetch(forecastUrl);
+                if (!forecastResponse.ok) throw new Error('Forecast unavailable');
+
+                const forecastData = await forecastResponse.json();
+                const period = forecastData.properties.periods[0];
+
+                const temp = period.temperature;
+                const unit = period.temperatureUnit;
+                const shortForecast = period.shortForecast;
+
+                let emoji = '🌤️';
+                const forecast = shortForecast.toLowerCase();
+                if (forecast.includes('rain') || forecast.includes('shower')) emoji = '🌧️';
+                else if (forecast.includes('cloud')) emoji = '☁️';
+                else if (forecast.includes('sun') || forecast.includes('clear')) emoji = '☀️';
+                else if (forecast.includes('storm') || forecast.includes('thunder')) emoji = '⛈️';
+                else if (forecast.includes('snow')) emoji = '❄️';
+
+                el.innerHTML = `${emoji} ${temp}°${unit}`;
+            } catch (error) {
+                el.innerHTML = '--';
+            }
+        }
+
+        // Initialize weather on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-weather]').forEach(el => {
+                const lat = el.dataset.lat;
+                const lon = el.dataset.lon;
+                const id = el.id;
+                if (lat && lon) {
+                    fetchWeather(parseFloat(lat), parseFloat(lon), id);
+                }
+            });
+        });
+
+        // Re-initialize weather after HTMX swap
+        document.body.addEventListener('htmx:afterSwap', (event) => {
+            event.detail.target.querySelectorAll('[data-weather]').forEach(el => {
+                const lat = el.dataset.lat;
+                const lon = el.dataset.lon;
+                const id = el.id;
+                if (lat && lon) {
+                    fetchWeather(parseFloat(lat), parseFloat(lon), id);
+                }
+            });
+        });
+
+        // Toggle between showing all and recent past races
+        function togglePastRaces(btn) {
+            const isShowingRecent = btn.dataset.showing === 'recent';
+            const icon = document.getElementById('toggleIcon');
+            const text = document.getElementById('toggleText');
+            const target = document.getElementById('past-races-grid');
+
+            // Determine URL based on current state
+            const url = isShowingRecent ? '/past-races' : '/recent-races';
+
+            // Make the HTMX request
+            htmx.ajax('GET', url, {target: target, swap: 'innerHTML'});
+
+            // Update UI state for next click
+            if (isShowingRecent) {
+                btn.dataset.showing = 'all';
+                text.textContent = 'Show Recent';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                btn.dataset.showing = 'recent';
+                text.textContent = 'Show All';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+    </script>
+</body>
+</html>

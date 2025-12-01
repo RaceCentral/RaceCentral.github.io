@@ -1,0 +1,33 @@
+# RaceCentral 2.0 Dependencies
+# FastAPI & Server
+fastapi==0.109.2
+uvicorn[standard]==0.27.1
+
+# Azure Table Storage
+azure-data-tables==12.5.0
+azure-identity==1.15.0
+aiohttp==3.9.3
+
+# HTTP Client
+httpx==0.27.0
+
+# Templating
+jinja2==3.1.3
+
+# Calendar Generation
+ics==0.7.2
+
+# RSS Feed Parsing
+feedparser==6.0.11
+
+# Environment Variables
+python-dotenv==1.0.1
+
+# Date/Time Handling
+python-dateutil==2.8.2
+
+# Async Scheduling
+apscheduler==3.10.4
+
+# F1 Data (replaces deprecated Ergast API)
+fastf1==3.4.0

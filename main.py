@@ -674,6 +674,71 @@ async def homepage(request: Request):
     )
 
 
+@app.get("/calendar", response_class=HTMLResponse)
+async def calendar_page(request: Request, year: Optional[int] = None, series: Optional[str] = None):
+    """Render the full calendar page for 2025/2026."""
+    from collections import defaultdict
+
+    # Get all race events
+    races = await query_race_events()
+
+    # Enrich with formatted time
+    for race in races:
+        race["time_info"] = format_race_time(race.get("StartTime", ""))
+
+    # Filter by series if specified
+    if series and series.lower() != "all":
+        races = [r for r in races if r.get("Series", "").lower() == series.lower()]
+
+    # Filter by year if specified
+    if year:
+        races = [r for r in races if str(year) in r.get("StartTime", "")]
+
+    # Sort races by date
+    races.sort(key=lambda x: x.get("StartTime", ""))
+
+    # Group races by month
+    races_by_month = defaultdict(list)
+    for race in races:
+        try:
+            race_time = datetime.fromisoformat(race.get("StartTime", "").replace('Z', '+00:00'))
+            month_key = race_time.strftime("%Y-%m")
+            month_name = race_time.strftime("%B %Y")
+            race["month_name"] = month_name
+            race["day"] = race_time.strftime("%d")
+            race["weekday"] = race_time.strftime("%a")
+            races_by_month[month_key].append(race)
+        except Exception:
+            continue
+
+    # Convert to sorted list of (month_key, month_name, races) tuples
+    months = []
+    for month_key in sorted(races_by_month.keys()):
+        month_races = races_by_month[month_key]
+        if month_races:
+            months.append({
+                "key": month_key,
+                "name": month_races[0]["month_name"],
+                "races": month_races
+            })
+
+    # Get current year for default filtering
+    current_year = datetime.now().year
+
+    return templates.TemplateResponse(
+        "calendar.html",
+        {
+            "request": request,
+            "months": months,
+            "selected_year": year or "all",
+            "selected_series": series or "all",
+            "years": [2025, 2026],
+            "series_list": ["F1", "NASCAR", "IndyCar"],
+            "total_races": len(races),
+        }
+    )
+
+
 @app.get("/filter/{series}", response_class=HTMLResponse)
 async def filter_races(request: Request, series: str):
     """HTMX endpoint to filter races by series."""

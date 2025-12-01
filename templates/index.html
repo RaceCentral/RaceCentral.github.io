@@ -155,14 +155,23 @@
                     </div>
                 </div>
 
-                <a href="/calendar.ics"
-                   class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-carbon-lighter hover:bg-gray-700 rounded-lg transition-colors text-xs sm:text-sm font-medium">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    <span class="hidden xs:inline">Download</span> Calendar
-                </a>
+                <div class="flex items-center gap-2">
+                    <a href="/calendar"
+                       class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-racing-red hover:bg-red-700 rounded-lg transition-colors text-xs sm:text-sm font-medium text-white">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="hidden sm:inline">Full</span> Calendar
+                    </a>
+                    <a href="/calendar.ics"
+                       class="flex items-center gap-1.5 p-2 bg-carbon-lighter hover:bg-gray-700 rounded-lg transition-colors" title="Download iCal">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </header>

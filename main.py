@@ -458,12 +458,21 @@ async def get_async_table_client():
     return service.get_table_client(TABLE_NAME)
 
 
-async def upsert_race_event(table_client, event: dict) -> None:
-    """Upsert a race event to Azure Table Storage."""
+async def upsert_race_event(table_client, event: dict, merge: bool = True) -> None:
+    """Upsert a race event to Azure Table Storage.
+
+    Args:
+        table_client: Azure Table client
+        event: The event data to upsert
+        merge: If True, uses MERGE mode (only updates provided fields).
+               If False, uses REPLACE mode (replaces entire entity).
+    """
     if not table_client:
         return
     try:
-        await table_client.upsert_entity(event)
+        from azure.data.tables import UpdateMode
+        mode = UpdateMode.MERGE if merge else UpdateMode.REPLACE
+        await table_client.upsert_entity(event, mode=mode)
         logger.info(f"Upserted event: {event.get('RaceName', 'Unknown')}")
     except Exception as e:
         logger.error(f"Failed to upsert event: {e}")
@@ -796,10 +805,15 @@ async def update_odds_data():
 
                 logger.info(f"{series} odds: {odds_str}")
 
-                # Update all upcoming races for this series
+                # Update all upcoming races for this series - only send the fields we need
                 for race in series_races:
-                    race["Odds_Data"] = odds_str
-                    await upsert_race_event(table_client, dict(race))
+                    # Only send minimal fields to update - MERGE mode will preserve other fields
+                    update_entity = {
+                        "PartitionKey": race.get("PartitionKey"),
+                        "RowKey": race.get("RowKey"),
+                        "Odds_Data": odds_str
+                    }
+                    await upsert_race_event(table_client, update_entity, merge=True)
                     logger.info(f"Updated odds for {race.get('RaceName')}")
             else:
                 logger.warning(f"Could not get {series} odds from DraftKings")

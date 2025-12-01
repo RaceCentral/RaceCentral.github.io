@@ -24,6 +24,9 @@ COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
+# Install Playwright browsers
+RUN playwright install chromium --with-deps
+
 # ============================================
 # Production image
 # ============================================
@@ -34,13 +37,33 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/opt/venv/bin:$PATH" \
     PORT=8000 \
-    ENV=production
+    ENV=production \
+    PLAYWRIGHT_BROWSERS_PATH=/opt/venv/lib/python3.11/site-packages/playwright/driver/package/.local-browsers
+
+# Install Chromium runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libnss3 \
+    libnspr4 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2 \
+    libpango-1.0-0 \
+    libcairo2 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
 RUN groupadd --gid 1000 appgroup && \
     useradd --uid 1000 --gid appgroup --shell /bin/bash --create-home appuser
 
-# Copy virtual environment from builder
+# Copy virtual environment from builder (includes Playwright browsers)
 COPY --from=builder /opt/venv /opt/venv
 
 # Set working directory

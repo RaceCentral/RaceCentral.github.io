@@ -272,7 +272,7 @@
                                 {% else %}badge-indycar{% endif %}">
                                 {{ race.Series }}
                             </span>
-                            <span class="text-gray-500 text-xs sm:text-sm">{{ race.time_info.date }}</span>
+                            <span class="text-gray-500 text-xs sm:text-sm local-date" data-iso="{{ race.time_info.iso }}">{{ race.time_info.date }}</span>
                         </div>
 
                         <h3 class="font-semibold text-base sm:text-lg mb-1">{{ race.RaceName }}</h3>
@@ -418,8 +418,43 @@
             }
         }
 
+        // Convert UTC times to local timezone
+        function convertToLocalTime(container = document) {
+            // Convert dates
+            container.querySelectorAll('.local-date[data-iso]').forEach(el => {
+                const iso = el.dataset.iso;
+                if (iso) {
+                    const date = new Date(iso);
+                    el.textContent = date.toLocaleDateString(undefined, {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+            });
+
+            // Convert times
+            container.querySelectorAll('.local-time[data-iso]').forEach(el => {
+                const iso = el.dataset.iso;
+                if (iso) {
+                    const date = new Date(iso);
+                    const timeStr = date.toLocaleTimeString(undefined, {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                    // Get timezone abbreviation
+                    const tz = date.toLocaleTimeString(undefined, { timeZoneName: 'short' }).split(' ').pop();
+                    el.textContent = `${timeStr} ${tz}`;
+                }
+            });
+        }
+
         // Initialize weather on page load
         document.addEventListener('DOMContentLoaded', () => {
+            // Convert times to local timezone
+            convertToLocalTime();
+
             document.querySelectorAll('[data-weather]').forEach(el => {
                 const lat = el.dataset.lat;
                 const lon = el.dataset.lon;
@@ -430,8 +465,11 @@
             });
         });
 
-        // Re-initialize weather after HTMX swap
+        // Re-initialize after HTMX swap
         document.body.addEventListener('htmx:afterSwap', (event) => {
+            // Convert times for swapped content
+            convertToLocalTime(event.detail.target);
+
             event.detail.target.querySelectorAll('[data-weather]').forEach(el => {
                 const lat = el.dataset.lat;
                 const lon = el.dataset.lon;

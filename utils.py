@@ -585,14 +585,16 @@ def format_race_time(iso_time: str) -> dict:
             "date": date_str,
             "time": time_str,
             "countdown": countdown,
-            "timestamp": dt.timestamp()
+            "timestamp": dt.timestamp(),
+            "iso": dt.isoformat()
         }
     except Exception:
         return {
             "date": "TBD",
             "time": "TBD",
             "countdown": "TBD",
-            "timestamp": 0
+            "timestamp": 0,
+            "iso": ""
         }
 
 

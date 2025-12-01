@@ -31,6 +31,7 @@ from utils import (
     RSS_FEEDS,
     TRACK_DATA,
 )
+from odds_scraper import scrape_draftkings_odds, format_odds_for_display
 
 # Load environment variables
 load_dotenv()
@@ -740,13 +741,89 @@ async def sync_race_data():
         logger.error(f"Data sync failed: {e}")
 
 
+async def update_odds_data():
+    """Scrape and update odds for upcoming F1 and NASCAR races."""
+    logger.info("Starting odds update...")
+
+    try:
+        table_client = await get_async_table_client()
+        if not table_client:
+            logger.warning("No table client available - skipping odds update")
+            return
+        now = datetime.now(timezone.utc)
+
+        # Get upcoming races (future races for each series)
+        all_races = []
+        async for entity in table_client.query_entities(
+            query_filter=f"PartitionKey eq '{PARTITION_KEY}'"
+        ):
+            start_time = entity.get("StartTime", "")
+            if start_time:
+                try:
+                    dt = datetime.fromisoformat(start_time.replace('Z', '+00:00'))
+                    # Get future races
+                    if dt > now:
+                        all_races.append(entity)
+                except Exception:
+                    pass
+
+        # Sort by date
+        all_races.sort(key=lambda r: r.get("StartTime", ""))
+
+        # Get next upcoming race for each series (limit to first 3 for odds)
+        races = []
+        for series in ["F1", "NASCAR"]:
+            series_races = [r for r in all_races if r.get("Series") == series][:3]
+            races.extend(series_races)
+
+        # Update odds for F1 and NASCAR races
+        for series in ["F1", "NASCAR"]:
+            series_races = [r for r in races if r.get("Series") == series]
+            if not series_races:
+                logger.info(f"No upcoming {series} races to update odds for")
+                continue
+
+            # Scrape odds from DraftKings
+            logger.info(f"Scraping {series} odds from DraftKings...")
+            odds = await scrape_draftkings_odds(series, headless=True)
+
+            if odds and odds.drivers:
+                # Format top 3 favorites as string
+                top_drivers = format_odds_for_display(odds, top_n=3)
+                odds_str = ", ".join([
+                    f"{d['driver']} {d['odds']}" for d in top_drivers
+                ])
+
+                logger.info(f"{series} odds: {odds_str}")
+
+                # Update all upcoming races for this series
+                for race in series_races:
+                    race["Odds_Data"] = odds_str
+                    await upsert_race_event(table_client, dict(race))
+                    logger.info(f"Updated odds for {race.get('RaceName')}")
+            else:
+                logger.warning(f"Could not get {series} odds from DraftKings")
+
+        await table_client.close()
+        logger.info("Odds update completed!")
+
+    except Exception as e:
+        logger.error(f"Odds update failed: {e}")
+
+
 async def background_worker():
-    """Background worker that syncs data every 24 hours."""
+    """Background worker that syncs data and odds every 24 hours."""
     while True:
         try:
             await sync_race_data()
         except Exception as e:
-            logger.error(f"Background worker error: {e}")
+            logger.error(f"Data sync error: {e}")
+
+        # Update odds after data sync
+        try:
+            await update_odds_data()
+        except Exception as e:
+            logger.error(f"Odds update error: {e}")
 
         # Sleep for 24 hours
         logger.info(f"Next sync in {DATA_SYNC_INTERVAL_HOURS} hours...")
@@ -1140,6 +1217,17 @@ async def sitemap():
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "version": "2.0.0"}
+
+
+@app.post("/update-odds")
+async def trigger_odds_update():
+    """Manually trigger odds update from DraftKings."""
+    try:
+        await update_odds_data()
+        return {"status": "success", "message": "Odds update completed"}
+    except Exception as e:
+        logger.error(f"Manual odds update failed: {e}")
+        return {"status": "error", "message": str(e)}
 
 
 # =============================================================================

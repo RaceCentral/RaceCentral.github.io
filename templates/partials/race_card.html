@@ -12,8 +12,8 @@
                 {{ race.Series }}
             </span>
             <div class="text-right">
-                <p class="text-xs sm:text-sm font-medium text-gray-300">{{ race.time_info.date }}</p>
-                <p class="text-[10px] sm:text-xs text-gray-500">{{ race.time_info.time }}</p>
+                <p class="text-xs sm:text-sm font-medium text-gray-300 local-date" data-iso="{{ race.time_info.iso }}">{{ race.time_info.date }}</p>
+                <p class="text-[10px] sm:text-xs text-gray-500 local-time" data-iso="{{ race.time_info.iso }}">{{ race.time_info.time }}</p>
             </div>
         </div>
     </div>
@@ -154,8 +154,8 @@
                 {{ race.Series }}
             </span>
             <div class="text-right">
-                <p class="text-xs sm:text-sm font-medium text-gray-300">{{ race.time_info.date }}</p>
-                <p class="text-[10px] sm:text-xs text-gray-500">{{ race.time_info.time }}</p>
+                <p class="text-xs sm:text-sm font-medium text-gray-300 local-date" data-iso="{{ race.time_info.iso }}">{{ race.time_info.date }}</p>
+                <p class="text-[10px] sm:text-xs text-gray-500 local-time" data-iso="{{ race.time_info.iso }}">{{ race.time_info.time }}</p>
             </div>
         </div>
     </div>

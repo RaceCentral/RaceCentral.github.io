@@ -206,7 +206,7 @@
                                         {% else %}badge-indycar{% endif %}">
                                         {{ race.Series }}
                                     </span>
-                                    <span class="text-xs text-gray-400">{{ race.time_info.time }}</span>
+                                    <span class="text-xs text-gray-400 local-time" data-iso="{{ race.time_info.iso }}">{{ race.time_info.time }}</span>
                                 </div>
                                 {% if race.Winner %}
                                 <span class="text-xs text-racing-yellow flex items-center gap-1">
@@ -291,8 +291,43 @@
             window.location.href = '/calendar' + (params.length ? '?' + params.join('&') : '');
         }
 
+        // Convert UTC times to local timezone
+        function convertToLocalTime() {
+            // Convert dates
+            document.querySelectorAll('.local-date[data-iso]').forEach(el => {
+                const iso = el.dataset.iso;
+                if (iso) {
+                    const date = new Date(iso);
+                    el.textContent = date.toLocaleDateString(undefined, {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+            });
+
+            // Convert times
+            document.querySelectorAll('.local-time[data-iso]').forEach(el => {
+                const iso = el.dataset.iso;
+                if (iso) {
+                    const date = new Date(iso);
+                    const timeStr = date.toLocaleTimeString(undefined, {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                    // Get timezone abbreviation
+                    const tz = date.toLocaleTimeString(undefined, { timeZoneName: 'short' }).split(' ').pop();
+                    el.textContent = `${timeStr} ${tz}`;
+                }
+            });
+        }
+
         // Auto-scroll to current month on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Convert times to local timezone
+            convertToLocalTime();
+
             const currentMonthKey = '{{ current_month_key }}';
             const currentMonthElement = document.getElementById('month-' + currentMonthKey);
 

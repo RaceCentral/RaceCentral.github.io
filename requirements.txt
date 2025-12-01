@@ -31,3 +31,6 @@ apscheduler==3.10.4
 
 # F1 Data (replaces deprecated Ergast API)
 fastf1==3.4.0
+
+# Web Scraping (for DraftKings odds)
+playwright==1.49.0

@@ -170,7 +170,7 @@
         <!-- Calendar Timeline -->
         <div class="space-y-8">
             {% for month in months %}
-            <section>
+            <section id="month-{{ month.key }}">
                 <!-- Month Header -->
                 <div class="sticky top-[65px] z-10 bg-carbon py-2 mb-4">
                     <h3 class="font-racing text-lg font-bold text-racing-yellow flex items-center gap-2">
@@ -290,6 +290,21 @@
 
             window.location.href = '/calendar' + (params.length ? '?' + params.join('&') : '');
         }
+
+        // Auto-scroll to current month on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentMonthKey = '{{ current_month_key }}';
+            const currentMonthElement = document.getElementById('month-' + currentMonthKey);
+
+            if (currentMonthElement) {
+                // Small delay to ensure page is fully rendered
+                setTimeout(function() {
+                    currentMonthElement.scrollIntoView({ behavior: 'instant', block: 'start' });
+                    // Adjust for sticky header
+                    window.scrollBy(0, -80);
+                }, 100);
+            }
+        });
     </script>
 </body>
 </html>

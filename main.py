@@ -316,6 +316,124 @@ INDYCAR_2026_SCHEDULE = [
     {"name": "Laguna Seca", "circuit": "WeatherTech Raceway Laguna Seca", "date": "2026-09-06T20:00:00Z", "network": "NBC"},
 ]
 
+# 2026 Formula 1 Schedule
+# Source: https://www.formula1.com/en/racing/2026
+F1_2026_SCHEDULE = [
+    {"name": "Australian Grand Prix", "circuit": "Albert Park Circuit", "date": "2026-03-08T05:00:00Z", "network": "ESPN", "country": "Australia"},
+    {"name": "Chinese Grand Prix", "circuit": "Shanghai International Circuit", "date": "2026-03-15T07:00:00Z", "network": "ESPN", "country": "China"},
+    {"name": "Japanese Grand Prix", "circuit": "Suzuka International Racing Course", "date": "2026-03-29T05:00:00Z", "network": "ESPN", "country": "Japan"},
+    {"name": "Bahrain Grand Prix", "circuit": "Bahrain International Circuit", "date": "2026-04-12T15:00:00Z", "network": "ESPN", "country": "Bahrain"},
+    {"name": "Saudi Arabian Grand Prix", "circuit": "Jeddah Corniche Circuit", "date": "2026-04-19T17:00:00Z", "network": "ESPN", "country": "Saudi Arabia"},
+    {"name": "Miami Grand Prix", "circuit": "Miami International Autodrome", "date": "2026-05-03T20:00:00Z", "network": "ESPN", "country": "USA"},
+    {"name": "Canadian Grand Prix", "circuit": "Circuit Gilles Villeneuve", "date": "2026-05-24T18:00:00Z", "network": "ESPN", "country": "Canada"},
+    {"name": "Monaco Grand Prix", "circuit": "Circuit de Monaco", "date": "2026-06-07T13:00:00Z", "network": "ESPN", "country": "Monaco"},
+    {"name": "Barcelona-Catalunya Grand Prix", "circuit": "Circuit de Barcelona-Catalunya", "date": "2026-06-14T13:00:00Z", "network": "ESPN", "country": "Spain"},
+    {"name": "Austrian Grand Prix", "circuit": "Red Bull Ring", "date": "2026-06-28T13:00:00Z", "network": "ESPN", "country": "Austria"},
+    {"name": "British Grand Prix", "circuit": "Silverstone Circuit", "date": "2026-07-05T14:00:00Z", "network": "ESPN", "country": "United Kingdom"},
+    {"name": "Belgian Grand Prix", "circuit": "Circuit de Spa-Francorchamps", "date": "2026-07-19T13:00:00Z", "network": "ESPN", "country": "Belgium"},
+    {"name": "Hungarian Grand Prix", "circuit": "Hungaroring", "date": "2026-07-26T13:00:00Z", "network": "ESPN", "country": "Hungary"},
+    {"name": "Dutch Grand Prix", "circuit": "Circuit Zandvoort", "date": "2026-08-23T13:00:00Z", "network": "ESPN", "country": "Netherlands"},
+    {"name": "Italian Grand Prix", "circuit": "Monza Circuit", "date": "2026-09-06T13:00:00Z", "network": "ESPN", "country": "Italy"},
+    {"name": "Spanish Grand Prix", "circuit": "Madrid Street Circuit", "date": "2026-09-13T13:00:00Z", "network": "ESPN", "country": "Spain"},
+    {"name": "Azerbaijan Grand Prix", "circuit": "Baku City Circuit", "date": "2026-09-26T11:00:00Z", "network": "ESPN", "country": "Azerbaijan"},
+    {"name": "Singapore Grand Prix", "circuit": "Marina Bay Street Circuit", "date": "2026-10-11T12:00:00Z", "network": "ESPN", "country": "Singapore"},
+    {"name": "United States Grand Prix", "circuit": "Circuit of the Americas", "date": "2026-10-25T19:00:00Z", "network": "ESPN", "country": "USA"},
+    {"name": "Mexican Grand Prix", "circuit": "Autódromo Hermanos Rodríguez", "date": "2026-11-01T20:00:00Z", "network": "ESPN", "country": "Mexico"},
+    {"name": "São Paulo Grand Prix", "circuit": "Autódromo José Carlos Pace", "date": "2026-11-08T17:00:00Z", "network": "ESPN", "country": "Brazil"},
+    {"name": "Las Vegas Grand Prix", "circuit": "Las Vegas Street Circuit", "date": "2026-11-21T06:00:00Z", "network": "ESPN", "country": "USA"},
+    {"name": "Qatar Grand Prix", "circuit": "Lusail International Circuit", "date": "2026-11-29T16:00:00Z", "network": "ESPN", "country": "Qatar"},
+    {"name": "Abu Dhabi Grand Prix", "circuit": "Yas Marina Circuit", "date": "2026-12-06T13:00:00Z", "network": "ESPN", "country": "United Arab Emirates"},
+]
+
+# =============================================================================
+# 2024 HISTORICAL DATA
+# =============================================================================
+
+# 2024 Formula 1 Season Results
+# Source: Official F1 records
+F1_2024_SCHEDULE = [
+    {"name": "Bahrain Grand Prix", "circuit": "Bahrain International Circuit", "date": "2024-03-02T15:00:00Z", "network": "ESPN", "country": "Bahrain", "winner": "Max Verstappen", "podium2": "Sergio Perez", "podium3": "Carlos Sainz"},
+    {"name": "Saudi Arabian Grand Prix", "circuit": "Jeddah Corniche Circuit", "date": "2024-03-09T17:00:00Z", "network": "ESPN", "country": "Saudi Arabia", "winner": "Max Verstappen", "podium2": "Sergio Perez", "podium3": "Charles Leclerc"},
+    {"name": "Australian Grand Prix", "circuit": "Albert Park Circuit", "date": "2024-03-24T04:00:00Z", "network": "ESPN", "country": "Australia", "winner": "Carlos Sainz", "podium2": "Charles Leclerc", "podium3": "Lando Norris"},
+    {"name": "Japanese Grand Prix", "circuit": "Suzuka International Racing Course", "date": "2024-04-07T05:00:00Z", "network": "ESPN", "country": "Japan", "winner": "Max Verstappen", "podium2": "Sergio Perez", "podium3": "Carlos Sainz"},
+    {"name": "Chinese Grand Prix", "circuit": "Shanghai International Circuit", "date": "2024-04-21T07:00:00Z", "network": "ESPN", "country": "China", "winner": "Max Verstappen", "podium2": "Lando Norris", "podium3": "Sergio Perez"},
+    {"name": "Miami Grand Prix", "circuit": "Miami International Autodrome", "date": "2024-05-05T20:00:00Z", "network": "ESPN", "country": "USA", "winner": "Lando Norris", "podium2": "Max Verstappen", "podium3": "Charles Leclerc"},
+    {"name": "Emilia Romagna Grand Prix", "circuit": "Autodromo Enzo e Dino Ferrari", "date": "2024-05-19T13:00:00Z", "network": "ESPN", "country": "Italy", "winner": "Max Verstappen", "podium2": "Lando Norris", "podium3": "Charles Leclerc"},
+    {"name": "Monaco Grand Prix", "circuit": "Circuit de Monaco", "date": "2024-05-26T13:00:00Z", "network": "ESPN", "country": "Monaco", "winner": "Charles Leclerc", "podium2": "Oscar Piastri", "podium3": "Carlos Sainz"},
+    {"name": "Canadian Grand Prix", "circuit": "Circuit Gilles Villeneuve", "date": "2024-06-09T18:00:00Z", "network": "ESPN", "country": "Canada", "winner": "Max Verstappen", "podium2": "Lando Norris", "podium3": "George Russell"},
+    {"name": "Spanish Grand Prix", "circuit": "Circuit de Barcelona-Catalunya", "date": "2024-06-23T13:00:00Z", "network": "ESPN", "country": "Spain", "winner": "Max Verstappen", "podium2": "Lando Norris", "podium3": "Lewis Hamilton"},
+    {"name": "Austrian Grand Prix", "circuit": "Red Bull Ring", "date": "2024-06-30T13:00:00Z", "network": "ESPN", "country": "Austria", "winner": "George Russell", "podium2": "Oscar Piastri", "podium3": "Carlos Sainz"},
+    {"name": "British Grand Prix", "circuit": "Silverstone Circuit", "date": "2024-07-07T14:00:00Z", "network": "ESPN", "country": "United Kingdom", "winner": "Lewis Hamilton", "podium2": "Max Verstappen", "podium3": "Lando Norris"},
+    {"name": "Hungarian Grand Prix", "circuit": "Hungaroring", "date": "2024-07-21T13:00:00Z", "network": "ESPN", "country": "Hungary", "winner": "Oscar Piastri", "podium2": "Lando Norris", "podium3": "Lewis Hamilton"},
+    {"name": "Belgian Grand Prix", "circuit": "Circuit de Spa-Francorchamps", "date": "2024-07-28T13:00:00Z", "network": "ESPN", "country": "Belgium", "winner": "Lewis Hamilton", "podium2": "Oscar Piastri", "podium3": "Charles Leclerc"},
+    {"name": "Dutch Grand Prix", "circuit": "Circuit Zandvoort", "date": "2024-08-25T13:00:00Z", "network": "ESPN", "country": "Netherlands", "winner": "Lando Norris", "podium2": "Max Verstappen", "podium3": "Charles Leclerc"},
+    {"name": "Italian Grand Prix", "circuit": "Monza Circuit", "date": "2024-09-01T13:00:00Z", "network": "ESPN", "country": "Italy", "winner": "Charles Leclerc", "podium2": "Oscar Piastri", "podium3": "Lando Norris"},
+    {"name": "Azerbaijan Grand Prix", "circuit": "Baku City Circuit", "date": "2024-09-15T11:00:00Z", "network": "ESPN", "country": "Azerbaijan", "winner": "Oscar Piastri", "podium2": "Charles Leclerc", "podium3": "George Russell"},
+    {"name": "Singapore Grand Prix", "circuit": "Marina Bay Street Circuit", "date": "2024-09-22T12:00:00Z", "network": "ESPN", "country": "Singapore", "winner": "Lando Norris", "podium2": "Max Verstappen", "podium3": "Oscar Piastri"},
+    {"name": "United States Grand Prix", "circuit": "Circuit of the Americas", "date": "2024-10-20T19:00:00Z", "network": "ESPN", "country": "USA", "winner": "Charles Leclerc", "podium2": "Carlos Sainz", "podium3": "Max Verstappen"},
+    {"name": "Mexican Grand Prix", "circuit": "Autódromo Hermanos Rodríguez", "date": "2024-10-27T20:00:00Z", "network": "ESPN", "country": "Mexico", "winner": "Carlos Sainz", "podium2": "Lando Norris", "podium3": "Charles Leclerc"},
+    {"name": "São Paulo Grand Prix", "circuit": "Autódromo José Carlos Pace", "date": "2024-11-03T17:00:00Z", "network": "ESPN", "country": "Brazil", "winner": "Max Verstappen", "podium2": "Esteban Ocon", "podium3": "Pierre Gasly"},
+    {"name": "Las Vegas Grand Prix", "circuit": "Las Vegas Street Circuit", "date": "2024-11-23T06:00:00Z", "network": "ESPN", "country": "USA", "winner": "George Russell", "podium2": "Lewis Hamilton", "podium3": "Carlos Sainz"},
+    {"name": "Qatar Grand Prix", "circuit": "Lusail International Circuit", "date": "2024-12-01T16:00:00Z", "network": "ESPN", "country": "Qatar", "winner": "Max Verstappen", "podium2": "Charles Leclerc", "podium3": "Oscar Piastri"},
+    {"name": "Abu Dhabi Grand Prix", "circuit": "Yas Marina Circuit", "date": "2024-12-08T13:00:00Z", "network": "ESPN", "country": "United Arab Emirates", "winner": "Lando Norris", "podium2": "Carlos Sainz", "podium3": "Charles Leclerc"},
+]
+
+# 2024 NASCAR Cup Series Results
+NASCAR_2024_SCHEDULE = [
+    {"name": "Daytona 500", "circuit": "Daytona International Speedway", "date": "2024-02-18T19:00:00Z", "network": "FOX", "winner": "William Byron"},
+    {"name": "Ambetter Health 400", "circuit": "Atlanta Motor Speedway", "date": "2024-02-25T20:00:00Z", "network": "FOX", "winner": "Daniel Suarez"},
+    {"name": "Pennzoil 400", "circuit": "Las Vegas Motor Speedway", "date": "2024-03-03T20:30:00Z", "network": "FOX", "winner": "Kyle Larson"},
+    {"name": "Shriners Children's 500", "circuit": "Phoenix Raceway", "date": "2024-03-10T20:30:00Z", "network": "FOX", "winner": "Martin Truex Jr."},
+    {"name": "Food City 500", "circuit": "Bristol Motor Speedway", "date": "2024-03-17T20:00:00Z", "network": "FOX", "winner": "Denny Hamlin"},
+    {"name": "EchoPark Automotive Grand Prix", "circuit": "Circuit of the Americas", "date": "2024-03-24T20:30:00Z", "network": "FOX", "winner": "Tyler Reddick"},
+    {"name": "Toyota Owners 400", "circuit": "Richmond Raceway", "date": "2024-03-31T20:00:00Z", "network": "FOX", "winner": "Denny Hamlin"},
+    {"name": "Cook Out 400", "circuit": "Martinsville Speedway", "date": "2024-04-07T20:00:00Z", "network": "FOX", "winner": "William Byron"},
+    {"name": "AutoTrader EchoPark 400", "circuit": "Texas Motor Speedway", "date": "2024-04-14T19:30:00Z", "network": "FOX", "winner": "Brad Keselowski"},
+    {"name": "GEICO 500", "circuit": "Talladega Superspeedway", "date": "2024-04-21T19:00:00Z", "network": "FOX", "winner": "Tyler Reddick"},
+    {"name": "Würth 400", "circuit": "Dover Motor Speedway", "date": "2024-04-28T18:00:00Z", "network": "FS1", "winner": "Martin Truex Jr."},
+    {"name": "AdventHealth 400", "circuit": "Kansas Speedway", "date": "2024-05-05T19:00:00Z", "network": "FS1", "winner": "Kyle Larson"},
+    {"name": "Goodyear 400", "circuit": "Darlington Raceway", "date": "2024-05-12T19:00:00Z", "network": "FS1", "winner": "Kyle Busch"},
+    {"name": "NASCAR All-Star Race", "circuit": "North Wilkesboro Speedway", "date": "2024-05-19T20:00:00Z", "network": "FS1", "winner": "Kyle Larson"},
+    {"name": "Coca-Cola 600", "circuit": "Charlotte Motor Speedway", "date": "2024-05-26T22:00:00Z", "network": "FOX", "winner": "Christopher Bell"},
+    {"name": "Enjoy Illinois 300", "circuit": "World Wide Technology Raceway", "date": "2024-06-02T19:30:00Z", "network": "FS1", "winner": "Austin Cindric"},
+    {"name": "Toyota/Save Mart 350", "circuit": "Sonoma Raceway", "date": "2024-06-09T19:00:00Z", "network": "FOX", "winner": "Kyle Larson"},
+    {"name": "Iowa Corn 350", "circuit": "Iowa Speedway", "date": "2024-06-16T19:00:00Z", "network": "USA", "winner": "Ryan Blaney"},
+    {"name": "USA Today 301", "circuit": "New Hampshire Motor Speedway", "date": "2024-06-23T18:30:00Z", "network": "USA", "winner": "Christopher Bell"},
+    {"name": "Grant Park 165", "circuit": "Chicago Street Course", "date": "2024-07-07T18:00:00Z", "network": "NBC", "winner": "Shane van Gisbergen"},
+    {"name": "Quaker State 400", "circuit": "Atlanta Motor Speedway", "date": "2024-07-07T19:00:00Z", "network": "USA", "winner": "Chase Elliott"},
+    {"name": "Brickyard 400", "circuit": "Indianapolis Motor Speedway", "date": "2024-07-21T18:30:00Z", "network": "NBC", "winner": "Kyle Larson"},
+    {"name": "Crayon 301", "circuit": "Pocono Raceway", "date": "2024-07-14T18:30:00Z", "network": "USA", "winner": "Denny Hamlin"},
+    {"name": "Coke Zero Sugar 400", "circuit": "Daytona International Speedway", "date": "2024-08-24T23:30:00Z", "network": "NBC", "winner": "Harrison Burton"},
+    {"name": "FireKeepers Casino 400", "circuit": "Michigan International Speedway", "date": "2024-08-18T18:30:00Z", "network": "USA", "winner": "Tyler Reddick"},
+    {"name": "Cook Out Southern 500", "circuit": "Darlington Raceway", "date": "2024-09-01T22:00:00Z", "network": "USA", "winner": "Chase Briscoe"},
+    {"name": "Quaker State 400", "circuit": "Atlanta Motor Speedway", "date": "2024-09-08T19:00:00Z", "network": "USA", "winner": "Joey Logano"},
+    {"name": "Bass Pro Shops Night Race", "circuit": "Bristol Motor Speedway", "date": "2024-09-21T23:30:00Z", "network": "USA", "winner": "Kyle Larson"},
+    {"name": "Kansas Lottery 400", "circuit": "Kansas Speedway", "date": "2024-09-29T19:00:00Z", "network": "USA", "winner": "William Byron"},
+    {"name": "Bank of America ROVAL 400", "circuit": "Charlotte Motor Speedway Road Course", "date": "2024-10-13T18:00:00Z", "network": "NBC", "winner": "Kyle Larson"},
+    {"name": "South Point 400", "circuit": "Las Vegas Motor Speedway", "date": "2024-10-20T18:30:00Z", "network": "NBC", "winner": "Joey Logano"},
+    {"name": "Xfinity 500", "circuit": "Martinsville Speedway", "date": "2024-11-03T18:00:00Z", "network": "NBC", "winner": "Ryan Blaney"},
+    {"name": "NASCAR Cup Series Championship", "circuit": "Phoenix Raceway", "date": "2024-11-10T19:00:00Z", "network": "NBC", "winner": "Joey Logano"},
+]
+
+# 2024 NTT IndyCar Series Results
+INDYCAR_2024_SCHEDULE = [
+    {"name": "Firestone Grand Prix of St. Petersburg", "circuit": "Streets of St. Petersburg", "date": "2024-03-10T17:00:00Z", "network": "NBC", "winner": "Josef Newgarden"},
+    {"name": "Acura Grand Prix of Long Beach", "circuit": "Streets of Long Beach", "date": "2024-04-21T20:30:00Z", "network": "NBC", "winner": "Colton Herta"},
+    {"name": "Children's of Alabama Indy Grand Prix", "circuit": "Barber Motorsports Park", "date": "2024-04-28T18:00:00Z", "network": "NBC", "winner": "Alex Palou"},
+    {"name": "Indianapolis 500", "circuit": "Indianapolis Motor Speedway", "date": "2024-05-26T16:45:00Z", "network": "NBC", "winner": "Josef Newgarden"},
+    {"name": "Chevrolet Detroit Grand Prix", "circuit": "Streets of Detroit", "date": "2024-06-02T19:00:00Z", "network": "NBC", "winner": "Will Power"},
+    {"name": "Sonsio Grand Prix", "circuit": "Road America", "date": "2024-06-09T18:00:00Z", "network": "NBC", "winner": "Colton Herta"},
+    {"name": "Hy-Vee INDYCAR Race Weekend Race 1", "circuit": "Iowa Speedway", "date": "2024-07-13T20:00:00Z", "network": "NBC", "winner": "Will Power"},
+    {"name": "Hy-Vee INDYCAR Race Weekend Race 2", "circuit": "Iowa Speedway", "date": "2024-07-14T18:00:00Z", "network": "NBC", "winner": "Josef Newgarden"},
+    {"name": "Honda Indy 200 at Mid-Ohio", "circuit": "Mid-Ohio Sports Car Course", "date": "2024-07-07T17:30:00Z", "network": "NBC", "winner": "Scott Dixon"},
+    {"name": "Honda Indy Toronto", "circuit": "Streets of Toronto", "date": "2024-07-21T19:00:00Z", "network": "NBC", "winner": "Colton Herta"},
+    {"name": "Gallagher Grand Prix", "circuit": "Indianapolis Motor Speedway Road Course", "date": "2024-07-27T19:00:00Z", "network": "NBC", "winner": "Colton Herta"},
+    {"name": "Bommarito 500", "circuit": "World Wide Technology Raceway", "date": "2024-08-17T20:00:00Z", "network": "NBC", "winner": "Alex Palou"},
+    {"name": "Grand Prix of Portland", "circuit": "Portland International Raceway", "date": "2024-08-25T22:00:00Z", "network": "NBC", "winner": "Pato O'Ward"},
+    {"name": "Big Machine Music City Grand Prix", "circuit": "Nashville Superspeedway", "date": "2024-09-15T19:00:00Z", "network": "NBC", "winner": "Colton Herta"},
+    {"name": "Firestone Grand Prix of Monterey", "circuit": "WeatherTech Raceway Laguna Seca", "date": "2024-09-22T20:00:00Z", "network": "NBC", "winner": "Alex Palou"},
+]
+
 
 # =============================================================================
 # AZURE TABLE STORAGE HELPERS
@@ -523,6 +641,98 @@ async def sync_race_data():
             await upsert_race_event(table_client, entity)
         logger.info(f"Synced {len(INDYCAR_2026_SCHEDULE)} IndyCar races")
 
+        # Sync F1 2026 races
+        logger.info("Syncing F1 2026 data...")
+        for race in F1_2026_SCHEDULE:
+            track_info = get_track_info("F1", race["circuit"])
+            entity = {
+                "PartitionKey": PARTITION_KEY,
+                "RowKey": generate_row_key(race["date"], "F1", race["name"].replace(" ", "")),
+                "Series": "F1",
+                "RaceName": race["name"],
+                "Venue": race["circuit"],
+                "StartTime": race["date"],
+                "Network": race.get("network", "ESPN"),
+                "Latitude": track_info.get("latitude", 0.0) if track_info else 0.0,
+                "Longitude": track_info.get("longitude", 0.0) if track_info else 0.0,
+                "Odds_Data": "N/A",
+                "Polymarket_Prob": "N/A",
+                "Winner": "",
+                "Podium2": "",
+                "Podium3": "",
+                "Country": race.get("country", ""),
+            }
+            await upsert_race_event(table_client, entity)
+        logger.info(f"Synced {len(F1_2026_SCHEDULE)} F1 2026 races")
+
+        # Sync F1 2024 historical data
+        logger.info("Syncing F1 2024 historical data...")
+        for race in F1_2024_SCHEDULE:
+            track_info = get_track_info("F1", race["circuit"])
+            entity = {
+                "PartitionKey": PARTITION_KEY,
+                "RowKey": generate_row_key(race["date"], "F1", race["name"].replace(" ", "")),
+                "Series": "F1",
+                "RaceName": race["name"],
+                "Venue": race["circuit"],
+                "StartTime": race["date"],
+                "Network": race.get("network", "ESPN"),
+                "Latitude": track_info.get("latitude", 0.0) if track_info else 0.0,
+                "Longitude": track_info.get("longitude", 0.0) if track_info else 0.0,
+                "Odds_Data": "N/A",
+                "Polymarket_Prob": "N/A",
+                "Winner": race.get("winner", ""),
+                "Podium2": race.get("podium2", ""),
+                "Podium3": race.get("podium3", ""),
+                "Country": race.get("country", ""),
+            }
+            await upsert_race_event(table_client, entity)
+        logger.info(f"Synced {len(F1_2024_SCHEDULE)} F1 2024 races")
+
+        # Sync NASCAR 2024 historical data
+        logger.info("Syncing NASCAR 2024 historical data...")
+        for race in NASCAR_2024_SCHEDULE:
+            track_info = get_track_info("NASCAR", race["circuit"])
+            entity = {
+                "PartitionKey": PARTITION_KEY,
+                "RowKey": generate_row_key(race["date"], "NASCAR", race["name"].replace(" ", "")),
+                "Series": "NASCAR",
+                "RaceName": race["name"],
+                "Venue": race["circuit"],
+                "StartTime": race["date"],
+                "Network": race.get("network", "FOX"),
+                "Latitude": track_info.get("latitude", 0.0) if track_info else 0.0,
+                "Longitude": track_info.get("longitude", 0.0) if track_info else 0.0,
+                "Odds_Data": "N/A",
+                "Polymarket_Prob": "N/A",
+                "Winner": race.get("winner", ""),
+                "Country": track_info.get("country", "USA") if track_info else "USA",
+            }
+            await upsert_race_event(table_client, entity)
+        logger.info(f"Synced {len(NASCAR_2024_SCHEDULE)} NASCAR 2024 races")
+
+        # Sync IndyCar 2024 historical data
+        logger.info("Syncing IndyCar 2024 historical data...")
+        for race in INDYCAR_2024_SCHEDULE:
+            track_info = get_track_info("IndyCar", race["circuit"])
+            entity = {
+                "PartitionKey": PARTITION_KEY,
+                "RowKey": generate_row_key(race["date"], "IndyCar", race["name"].replace(" ", "")),
+                "Series": "IndyCar",
+                "RaceName": race["name"],
+                "Venue": race["circuit"],
+                "StartTime": race["date"],
+                "Network": race.get("network", "NBC"),
+                "Latitude": track_info.get("latitude", 0.0) if track_info else 0.0,
+                "Longitude": track_info.get("longitude", 0.0) if track_info else 0.0,
+                "Odds_Data": "N/A",
+                "Polymarket_Prob": "N/A",
+                "Winner": race.get("winner", ""),
+                "Country": track_info.get("country", "USA") if track_info else "USA",
+            }
+            await upsert_race_event(table_client, entity)
+        logger.info(f"Synced {len(INDYCAR_2024_SCHEDULE)} IndyCar 2024 races")
+
         await table_client.close()
         logger.info("Data sync completed successfully!")
 
@@ -722,8 +932,9 @@ async def calendar_page(request: Request, year: Optional[int] = None, series: Op
                 "races": month_races
             })
 
-    # Get current year for default filtering
-    current_year = datetime.now().year
+    # Get current month key for auto-scroll
+    now = datetime.now(timezone.utc)
+    current_month_key = now.strftime("%Y-%m")
 
     return templates.TemplateResponse(
         "calendar.html",
@@ -732,9 +943,10 @@ async def calendar_page(request: Request, year: Optional[int] = None, series: Op
             "months": months,
             "selected_year": year or "all",
             "selected_series": series or "all",
-            "years": [2025, 2026],
+            "years": [2024, 2025, 2026],
             "series_list": ["F1", "NASCAR", "IndyCar"],
             "total_races": len(races),
+            "current_month_key": current_month_key,
         }
     )
 

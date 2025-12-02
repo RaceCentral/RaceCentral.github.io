@@ -254,6 +254,128 @@ def fetch_f1_race_results_sync(year: int, round_number: int) -> dict:
         logger.error(f"Failed to fetch FastF1 results for round {round_number}: {e}")
         return {}
 
+
+# =============================================================================
+# F1 STANDINGS (JOLPICA API - ERGAST SUCCESSOR)
+# =============================================================================
+
+JOLPICA_BASE_URL = "https://api.jolpi.ca/ergast/f1"
+
+async def fetch_f1_standings(year: int = 2024) -> dict:
+    """
+    Fetch F1 driver and constructor standings from Jolpica API.
+    Returns dict with 'drivers' and 'constructors' lists.
+    """
+    standings = {"drivers": [], "constructors": [], "season": year}
+
+    try:
+        async with httpx.AsyncClient() as client:
+            # Fetch driver standings
+            drivers_url = f"{JOLPICA_BASE_URL}/{year}/driverStandings.json"
+            drivers_resp = await client.get(drivers_url, timeout=10.0)
+            if drivers_resp.status_code == 200:
+                data = drivers_resp.json()
+                driver_list = data.get("MRData", {}).get("StandingsTable", {}).get("StandingsLists", [])
+                if driver_list:
+                    for d in driver_list[0].get("DriverStandings", []):
+                        driver = d.get("Driver", {})
+                        constructor = d.get("Constructors", [{}])[0] if d.get("Constructors") else {}
+                        standings["drivers"].append({
+                            "position": int(d.get("position", 0)),
+                            "name": f"{driver.get('givenName', '')} {driver.get('familyName', '')}",
+                            "code": driver.get("code", ""),
+                            "points": float(d.get("points", 0)),
+                            "wins": int(d.get("wins", 0)),
+                            "team": constructor.get("name", ""),
+                            "nationality": driver.get("nationality", ""),
+                        })
+
+            # Fetch constructor standings
+            constructors_url = f"{JOLPICA_BASE_URL}/{year}/constructorStandings.json"
+            constructors_resp = await client.get(constructors_url, timeout=10.0)
+            if constructors_resp.status_code == 200:
+                data = constructors_resp.json()
+                constructor_list = data.get("MRData", {}).get("StandingsTable", {}).get("StandingsLists", [])
+                if constructor_list:
+                    for c in constructor_list[0].get("ConstructorStandings", []):
+                        constructor = c.get("Constructor", {})
+                        standings["constructors"].append({
+                            "position": int(c.get("position", 0)),
+                            "name": constructor.get("name", ""),
+                            "points": float(c.get("points", 0)),
+                            "wins": int(c.get("wins", 0)),
+                            "nationality": constructor.get("nationality", ""),
+                        })
+
+            logger.info(f"Fetched F1 standings: {len(standings['drivers'])} drivers, {len(standings['constructors'])} constructors")
+
+    except Exception as e:
+        logger.error(f"Failed to fetch F1 standings: {e}")
+
+    return standings
+
+
+async def sync_f1_standings_to_storage() -> None:
+    """Sync F1 standings from Jolpica API to Azure Table Storage."""
+    current_year = datetime.now().year
+    standings = await fetch_f1_standings(current_year)
+
+    if not standings["drivers"]:
+        logger.warning("No F1 standings data to sync")
+        return
+
+    try:
+        table_client = await get_async_table_client()
+        if not table_client:
+            return
+
+        # Store standings as a single entity with JSON data
+        entity = {
+            "PartitionKey": "Standings",
+            "RowKey": f"F1_{current_year}",
+            "Series": "F1",
+            "Season": current_year,
+            "DriversJson": json.dumps(standings["drivers"]),
+            "ConstructorsJson": json.dumps(standings["constructors"]),
+            "LastUpdated": datetime.now(timezone.utc).isoformat(),
+        }
+
+        await table_client.upsert_entity(entity, mode=UpdateMode.REPLACE)
+        logger.info(f"Synced F1 {current_year} standings to Table Storage")
+
+        await table_client.close()
+
+    except Exception as e:
+        logger.error(f"Failed to sync F1 standings to storage: {e}")
+
+
+async def get_f1_standings_from_storage() -> dict:
+    """Retrieve F1 standings from Azure Table Storage."""
+    current_year = datetime.now().year
+    standings = {"drivers": [], "constructors": [], "season": current_year}
+
+    try:
+        table_client = await get_async_table_client()
+        if not table_client:
+            return standings
+
+        try:
+            entity = await table_client.get_entity("Standings", f"F1_{current_year}")
+            standings["drivers"] = json.loads(entity.get("DriversJson", "[]"))
+            standings["constructors"] = json.loads(entity.get("ConstructorsJson", "[]"))
+            standings["season"] = entity.get("Season", current_year)
+        except Exception:
+            # Entity doesn't exist yet, will be populated by sync
+            pass
+
+        await table_client.close()
+
+    except Exception as e:
+        logger.error(f"Failed to get F1 standings from storage: {e}")
+
+    return standings
+
+
 # 2026 NASCAR Cup Series Schedule
 # Source: https://dailydownforce.com/all-confirmed-dates-on-the-2026-nascar-schedule-so-far/
 NASCAR_2026_SCHEDULE = [
@@ -839,6 +961,12 @@ async def background_worker():
         except Exception as e:
             logger.error(f"Odds update error: {e}")
 
+        # Sync F1 standings
+        try:
+            await sync_f1_standings_to_storage()
+        except Exception as e:
+            logger.error(f"F1 standings sync error: {e}")
+
         # Sleep for 24 hours
         logger.info(f"Next sync in {DATA_SYNC_INTERVAL_HOURS} hours...")
         await asyncio.sleep(DATA_SYNC_INTERVAL_HOURS * 3600)
@@ -959,8 +1087,16 @@ async def homepage(request: Request):
     # Sort past races by date descending (most recent first)
     past.sort(key=lambda x: x.get("StartTime", ""), reverse=True)
 
-    # Fetch news
-    news = await fetch_news()
+    # Fetch news and F1 standings concurrently
+    current_year = datetime.now().year
+    news, f1_standings = await asyncio.gather(
+        fetch_news(),
+        get_f1_standings_from_storage()
+    )
+
+    # Fallback to API if storage is empty (first run or sync hasn't happened)
+    if not f1_standings.get("drivers"):
+        f1_standings = await fetch_f1_standings(current_year)
 
     return templates.TemplateResponse(
         "index.html",
@@ -969,6 +1105,7 @@ async def homepage(request: Request):
             "upcoming_races": upcoming[:20],
             "past_races": past[:3],  # Show last 3 completed races by default
             "news": news,
+            "f1_standings": f1_standings,
             "series_list": ["F1", "NASCAR", "IndyCar"],
             "current_filter": "all",
         }
@@ -1054,14 +1191,15 @@ async def filter_races(request: Request, series: str):
     for race in races:
         race["time_info"] = format_race_time(race.get("StartTime", ""))
 
-    # Filter to upcoming races
+    # Filter to upcoming races (this week only - matching homepage behavior)
     now = datetime.now(timezone.utc)
+    one_week_later = now + timedelta(days=7)
     upcoming = []
 
     for race in races:
         try:
             race_time = datetime.fromisoformat(race.get("StartTime", "").replace('Z', '+00:00'))
-            if race_time > now:
+            if race_time > now and race_time <= one_week_later:
                 upcoming.append(race)
         except Exception:
             continue
